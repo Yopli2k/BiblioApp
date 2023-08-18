@@ -1,0 +1,24 @@
+# Ignore Software Folders
+/.idea/
+/doc/
+/nbproject/
+/node_modules/
+/vendor/
+
+# Ignore special files
+.DS_Store
+.htaccess
+.vscode
+*.cache
+*.lock
+
+# Ignore Core Components
+Assets/CSS/template_error.css
+Core
+View/Error
+View/Master
+config.php
+package-lock.json
+
+# Ignore HTM Temp Templare
+/Bookland/

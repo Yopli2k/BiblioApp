@@ -1,0 +1,6 @@
+{% extends "Master/BaseTemplate.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+    <h1>{{ controller.getTitle() }}</h1>
+{% endblock %}
