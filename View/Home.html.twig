@@ -1,6 +1,37 @@
 {% extends "Master/BaseTemplate.html.twig" %}
 
+{% block meta %}
+    {{ parent() }}
+    <meta name="author" content="BiblioApp" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Biblioteca para alquiler de libros"/>
+    <meta name="keywords" content="biblioteca, alquiler, libros" />
+    <meta property="og:title" content="Biblioteca para alquiler de libros"/>
+    <meta property="og:description" content="Biblioteca para alquiler de libros"/>
+    <meta property="og:image" content="Assets/Images/biblio-card.png"/>
+
+    <title>Biblioteca para alquiler de libros</title>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     {{ parent() }}
-    <h1>{{ controller.getTitle() }}</h1>
+    <div class="page-wraper">
+        <!-- Header -->
+        <header class="site-header mo-left header style-1">
+        </header>
+
+        <div class="page-content bg-white">
+        </div>
+
+        <footer class="site-footer style-1">
+        </footer>
+    </div>
 {% endblock %}

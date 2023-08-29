@@ -38,8 +38,10 @@
   "autoload": {
     "psr-4": {
       "WebApp\\Core\\": "Core/",
-      "WebApp\\Controller\\": "Controller/",
-      "WebApp\\View\\": "View/"
+      "WebApp\\View\\Master\\": "View/Master/",
+      "WebApp\\View\\Error\\": "View/Error/",
+      "BiblioApp\\Controller\\": "Controller/",
+      "BiblioApp\\View\\": "View/"
     }
   },
   "keywords": [
