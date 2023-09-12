@@ -15,7 +15,7 @@
  */
 namespace BiblioApp\Controller;
 
-use WebApp\Core\App\PageController;
+use BiblioApp\Core\App\PageController;
 
 class Home extends PageController
 {

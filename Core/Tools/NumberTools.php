@@ -13,9 +13,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace WebApp\Core\Tools;
+namespace BiblioApp\Core\Tools;
 
-use WebApp\Core\Tools\Tools;
+use BiblioApp\Core\Tools\Tools;
 
 /**
  * Class Tools for number formatting

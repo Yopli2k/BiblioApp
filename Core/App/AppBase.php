@@ -13,14 +13,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace WebApp\Core\App;
+namespace BiblioApp\Core\App;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WebApp\Core\DataBase\DataBase;
+use BiblioApp\Core\DataBase\DataBase;
 
 /**
- * Class used for encapsulate common parts of code for the normal WebApp execution.
+ * Class used for encapsulate common parts of code for the normal BiblioApp execution.
  *
  * @author Carlos García Gómez <carlos@facturascripts.com>
  * @author José Antonio Cuello Principal <yopli2000@gmail.com>

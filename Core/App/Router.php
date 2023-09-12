@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace WebApp\Core\App;
+namespace BiblioApp\Core\App;
 
 /**
  * Class for manage the routes of the application.

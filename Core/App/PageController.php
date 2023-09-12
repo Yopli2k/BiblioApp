@@ -13,9 +13,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace WebApp\Core\App;
+namespace BiblioApp\Core\App;
 
-use WebApp\Core\DataBase\DataBase;
+use BiblioApp\Core\DataBase\DataBase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
