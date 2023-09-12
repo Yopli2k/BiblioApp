@@ -1,13 +1,13 @@
 {
-  "name": "webapp/core",
-  "description": "Open source web application software. Built on modern PHP and bootstrap 5. Easy and powerful.",
+  "name": "biblioapp",
+  "description": "Web application for managing and lending books.",
   "main": "index.php",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/ERPDeveloper/GranCosecha/core"
+    "url": "git+https://github.com/Yopli2k/BiblioApp"
   },
   "keywords": [
   ],

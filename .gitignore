@@ -11,13 +11,11 @@
 .vscode
 *.cache
 *.lock
+*.bak
 
-# Ignore Core Components
-Assets/CSS/template_error.css
-Core
-View/Error
-View/Master
+# Ignore Configuration Components
 config.php
+composer.lock
 package-lock.json
 
 # Ignore HTM Temp Templare

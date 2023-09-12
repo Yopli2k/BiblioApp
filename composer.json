@@ -1,7 +1,7 @@
 {
-  "name": "webapp/core",
-  "description": "Open source web application software. Built on modern PHP and bootstrap 5. Easy and powerful.",
-  "homepage": "https://erpdeveloper.es",
+  "name": "biblioapp",
+  "description": "Web application for managing and lending books.",
+  "homepage": "https://github.com/Yopli2k/BiblioApp",
   "license": "LGPL-3.0-or-later",
   "authors": [
     {
@@ -37,11 +37,11 @@
   },
   "autoload": {
     "psr-4": {
-      "WebApp\\Core\\": "Core/",
-      "WebApp\\View\\Master\\": "View/Master/",
-      "WebApp\\View\\Error\\": "View/Error/",
+      "BiblioApp\\Core\\": "Core/",
       "BiblioApp\\Controller\\": "Controller/",
-      "BiblioApp\\View\\": "View/"
+      "BiblioApp\\View\\": "View/",
+      "BiblioApp\\View\\Master\\": "View/Master/",
+      "BiblioApp\\View\\Error\\": "View/Error/"
     }
   },
   "keywords": [
