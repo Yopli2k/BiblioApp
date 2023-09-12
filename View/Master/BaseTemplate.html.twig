@@ -1,0 +1,49 @@
+{#
+/**
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ constant('APP_LANG') | slice(0, 2) }}" xml:lang="{{ constant('APP_LANG') | slice(0, 2) }}" >
+    <head>
+        {% block meta %}
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <meta name="generator" content="WebApp" />
+        {% endblock %}
+        {% block icons %}
+            <link rel="icon" type="image/x-icon" href="{{ asset('Assets/Images/favicon.png') }}" />
+            <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('Assets/Images/apple-icon-180x180.png') }}" />
+            {# TODO: add apple icons for ipad and iphone #}
+        {% endblock %}
+        {% block css %}
+            <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('node_modules/@fortawesome/fontawesome-free/css/all.min.css') }}"/>
+        {% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+            <script src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('node_modules/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
+        {% endblock %}
+    </head>
+    {% block fullBody %}
+        <body>
+            {% block messages %}
+            {% endblock %}
+            {% block body %}
+            {% endblock %}
+        </body>
+    {% endblock %}
+</html>
