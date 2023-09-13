@@ -53,7 +53,7 @@ final class Router
         }
 
         // Allowed folder?
-        $allowedFolders = ['node_modules', 'vendor', 'Core'];
+        $allowedFolders = ['node_modules', 'vendor', 'Core', 'Assets'];
         foreach ($allowedFolders as $folder) {
             if ('/' . $folder === substr($uri, 0, 1 + strlen($folder))) {
                 $this->download($filePath);

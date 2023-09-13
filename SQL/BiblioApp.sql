@@ -34,15 +34,14 @@ CREATE DATABASE biblioapp
 CREATE TABLE users (
     email varchar(100),
     enabled bool NOT NULL DEFAULT true,
-    id int NOT NULL AUTO_INCREMENT,
     name varchar(100) NOT NULL,
     username varchar(50) NOT NULL,
     password varchar(255) NOT NULL,
-    CONSTRAINT users_pk PRIMARY KEY (id)
+    CONSTRAINT users_pk PRIMARY KEY (username)
 );
 
-CREATE UNIQUE INDEX users_idx_email ON users (email);
-CREATE UNIQUE INDEX users_idx_username ON users (username);
+INSERT INTO users (name, username, password) VALUES ('Administrador', 'admin', '');
+
 
 /**
  * Create members table.

@@ -15,9 +15,13 @@
  */
 namespace BiblioApp\Core\App;
 
+use BiblioApp\Model\User;
 use Exception;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class to manage selected controller.
@@ -27,21 +31,24 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AppController extends AppBase
 {
-    const USER_UPDATE_ACTIVITY_PERIOD = 3600;
-
     /**
      * Controller loaded
      *
-     * @var Controller
+     * @var PageController
      */
-    private $controller = null;
+    private PageController $controller;
 
     /**
      * Contains the page name.
      *
      * @var string
      */
-     private $pageName = '';
+     private string $pageName;
+
+    /**
+     * @var ?User
+     */
+    private ?User $user;
 
     /**
      * Initializes the app.
@@ -59,6 +66,9 @@ class AppController extends AppBase
      * Select and run the corresponding controller.
      *
      * @return bool
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function run(): bool
     {
@@ -79,7 +89,7 @@ class AppController extends AppBase
      */
     protected function die(int $status, string $message = ''): void
     {
-        $this->response->setContent(nl2br($content));
+        $this->response->setContent(nl2br($message));
         $this->response->setStatusCode($status);
     }
 
@@ -105,6 +115,9 @@ class AppController extends AppBase
      * Load and process the $pageName controller.
      *
      * @param string $pageName
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     protected function loadController(string $pageName): void
     {
@@ -127,6 +140,9 @@ class AppController extends AppBase
      *
      * @param string $template
      * @param string $controllerName
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     protected function renderHtml(string $template, string $controllerName = ''): void
     {
