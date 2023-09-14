@@ -17,7 +17,6 @@ namespace BiblioApp\Core\App;
 
 use BiblioApp\Model\User;
 use Exception;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -76,6 +75,17 @@ class AppController extends AppBase
             return false;
         }
 
+        if ($this->request->query->get('logout')) {
+            AppCookies::clear($this->response);
+            $this->response->headers->set('Refresh', '0; ' . 'index.php/Login');
+            return false;
+        }
+
+        $userName = $this->request->request->get('biblioUserName', '');
+        $this->user = empty($userName)
+            ? $this->cookieAuth()
+            : $this->userAuth($userName);
+
         $pageName = $this->getPageName();
         $this->loadController($pageName);
         return true;
@@ -91,24 +101,6 @@ class AppController extends AppBase
     {
         $this->response->setContent(nl2br($message));
         $this->response->setStatusCode($status);
-    }
-
-    /**
-     * Returns the name of the default controller for the current user or for all users.
-     *
-     * @return string
-     */
-    private function getPageName(): string
-    {
-        if (false === empty($this->pageName)) {
-            return $this->pageName;
-        }
-
-        if (false === empty($this->getUriParam(0)) && $this->getUriParam(0) !== 'index.php') {
-            return $this->getUriParam(0);
-        }
-
-        return 'Home';
     }
 
     /**
@@ -149,7 +141,7 @@ class AppController extends AppBase
         // HTML template variables
         $templateVars = [
             'controllerName' => $controllerName,
-            'controller' => $this->controller,
+            'controller' => $this->controller ?? null,
             'template' => $template
         ];
 
@@ -163,14 +155,80 @@ class AppController extends AppBase
     }
 
     /**
+     * Authenticate the user using the cookie.
+     *
+     * @param User $user
+     * @return ?User
+     */
+    private function cookieAuth(): ?User
+    {
+        $userName = AppCookies::getUser($this->request);
+        if (empty($userName)) {
+            return null;
+        }
+
+        $user = new User();
+        if ($user->loadFromCode($userName)
+            && $user->enabled
+            && $user->logkey === AppCookies::getLogkey($this->request)
+        ) {
+            AppCookies::update($this->response, $user);
+            return $user;
+        }
+
+        AppCookies::clear($this->response);
+        return null;
+    }
+
+    /**
      * Returns the controllers full name
      *
      * @param string $pageName
-     *
      * @return string
      */
     private function getControllerFullName(string $pageName): string
     {
         return '\\' . APP_NAME . '\\Controller\\' . $pageName;
+    }
+
+    /**
+     * Returns the name of the default controller for the current user or for all users.
+     *
+     * @return string
+     */
+    private function getPageName(): string
+    {
+        if (false === empty($this->pageName)) {
+            return $this->pageName;
+        }
+
+        if (false === empty($this->getUriParam(0)) && $this->getUriParam(0) !== 'index.php') {
+            return $this->getUriParam(0);
+        }
+
+        return isset($this->user) ? 'Main' : 'Home';
+    }
+
+    /**
+     * User authentication from login form.
+     * Returns the user when successful auth, or null when not.
+     *
+     * @param string $userName
+     * @return ?User
+     */
+    private function userAuth(string $userName): ?User
+    {
+        $user = new User();
+        if ($user->loadFromCode($userName)
+            && $user->enabled
+            && $user->verifyPassword($this->request->request->get('biblioPassword'))
+        ) {
+            $user->newLogkey();
+            AppCookies::update($this->response, $user);
+            return $user;
+        }
+
+        AppCookies::clear($this->response);
+        return null;
     }
 }

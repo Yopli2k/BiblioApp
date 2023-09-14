@@ -34,13 +34,14 @@ CREATE DATABASE biblioapp
 CREATE TABLE users (
     email varchar(100),
     enabled bool NOT NULL DEFAULT true,
+    logkey varchar(100),
     name varchar(100) NOT NULL,
     username varchar(50) NOT NULL,
     password varchar(255) NOT NULL,
     CONSTRAINT users_pk PRIMARY KEY (username)
 );
 
-INSERT INTO users (name, username, password) VALUES ('Administrador', 'admin', '');
+INSERT INTO users (name, username, password) VALUES ('Administrador', 'admin', '$2y$10$/dO7uCXqeqVe32O1GRDFT.f6tN3VCSaKvF9oFwLfOsxzn9NF7HDJy');
 
 
 /**

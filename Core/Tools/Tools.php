@@ -15,6 +15,12 @@
  */
 namespace BiblioApp\Core\Tools;
 
+/**
+ * Class with general tools.
+ *
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+ * @author José Antonio Cuello Principal <yopli2000@gmail.com>
+ */
 class Tools
 {
     const HTML_CHARS = ['<', '>', '"', "'"];
@@ -51,6 +57,17 @@ class Tools
             return $text;
         }
         return str_replace(self::HTML_CHARS, self::HTML_REPLACEMENTS, trim($text));
+    }
+
+    /**
+     * Returns a random text string of length $length.
+     *
+     * @param int $length
+     * @return string
+     */
+    public static function randomString(int $length = 10): string
+    {
+        return mb_substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
     }
 
     public static function textBreak(string $text, int $length = 50, string $break = '...'): string

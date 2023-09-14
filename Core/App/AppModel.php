@@ -83,7 +83,7 @@ abstract class AppModel
      */
     public function __construct(array $data = [])
     {
-        if (self::$dataBase === null) {
+        if (false === isset(self::$dataBase)) {
             self::$dataBase = new DataBase();
         }
 

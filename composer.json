@@ -39,6 +39,7 @@
     "psr-4": {
       "BiblioApp\\Core\\": "Core/",
       "BiblioApp\\Controller\\": "Controller/",
+      "BiblioApp\\Model\\": "Model/",
       "BiblioApp\\View\\": "View/",
       "BiblioApp\\View\\Master\\": "View/Master/",
       "BiblioApp\\View\\Error\\": "View/Error/"

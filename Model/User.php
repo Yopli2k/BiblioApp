@@ -19,6 +19,8 @@ use BiblioApp\Core\App\AppModel;
 use BiblioApp\Core\Tools\Tools;
 
 /**
+ * Class to manage the user data.
+ *
  * @author Carlos García Gómez <carlos@facturascripts.com>
  * @author José Antonio Cuello Principal <yopli2000@gmail.com>
  */
@@ -30,6 +32,9 @@ class User extends AppModel
 
     /** @var bool */
     public bool $enabled;
+
+    /** @var string */
+    public string $logkey;
 
     /** @var string */
     public string $name;
@@ -81,23 +86,50 @@ class User extends AppModel
      */
     public function loadFromData(array $data = []): void
     {
-        $this->email = $data['email'] ?? null;
+        $this->email = $data['email'] ?? '';
         $this->enabled = (bool)$data['enabled'] ?? false;
-        $this->name = $data['name'] ?? null;
-        $this->password = $data['password'] ?? null;
-        $this->username = $data['username'] ?? null;
+        $this->name = $data['name'] ?? '';
+        $this->password = $data['password'] ?? '';
+        $this->username = $data['username'] ?? '';
     }
 
+    /**
+     * Set new logkey to user.
+     *
+     * @return void
+     */
+    public function newLogkey()
+    {
+        $this->logkey = Tools::randomString(99);
+        $this->save();
+    }
+
+    /**
+     * Returns the name of the column that is the model's primary key.
+     *
+     * @return string
+     */
     public static function primaryColumn(): string
     {
         return 'username';
     }
 
+    /**
+     * Returns the name of the table that uses this model.
+     *
+     * @return string
+     */
     public static function tableName(): string
     {
         return 'users';
     }
 
+    /**
+     * Returns true if there are no errors in the values of the model properties.
+     * It runs inside the save method.
+     *
+     * @return bool
+     */
     public function test(): bool
     {
         $this->username = trim($this->username);
@@ -111,6 +143,36 @@ class User extends AppModel
         }
 
         return parent::test();
+    }
+
+    /**
+     * Asigns the new password to the user.
+     *
+     * @param string $value
+     */
+    public function setPassword($value)
+    {
+        $this->password = password_hash($value, PASSWORD_DEFAULT);
+    }
+
+    /**
+     * Verifies password. It also rehashes the password if needed.
+     *
+     * @param string $value
+     * @return bool
+     */
+    public function verifyPassword($value)
+    {
+        $paso = password_hash($value, PASSWORD_DEFAULT);
+        if (password_verify($value, $this->password)) {
+            if (password_needs_rehash($this->password, PASSWORD_DEFAULT)) {
+                $this->setPassword($value);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
