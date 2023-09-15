@@ -132,3 +132,17 @@ CREATE TABLE ratings (
     CONSTRAINT ratings_book_fk FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT ratings_member_fk FOREIGN KEY (member_id) REFERENCES members (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+/**
+ * Create filters table.
+ * This table stores filters made by users into views.
+ */
+CREATE TABLE filters (
+    description varchar(50) NOT NULL,
+    filters text,
+    id int NOT NULL AUTO_INCREMENT,
+    name varchar(40) NOT NULL,
+    username varchar(50) DEFAULT NULL,
+    CONSTRAINT filters_pk PRIMARY KEY (id),
+    CONSTRAINT filters_users FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE
+);

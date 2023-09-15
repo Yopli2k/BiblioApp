@@ -77,7 +77,7 @@ class AppController extends AppBase
 
         if ($this->request->query->get('logout')) {
             AppCookies::clear($this->response);
-            $this->response->headers->set('Refresh', '0; ' . 'index.php/Login');
+            $this->response->headers->set('Refresh', '0; ' . 'Login');
             return false;
         }
 
@@ -120,7 +120,7 @@ class AppController extends AppBase
             return;
         }
 
-        $this->controller = new $controllerName($pageName, $this->uri);
+        $this->controller = new $controllerName($pageName, $this->user, $this->uri);
         $this->controller->exec($this->response);
         $template = $this->controller->getTemplate();
         $this->renderHtml($template, $controllerName);
@@ -167,10 +167,11 @@ class AppController extends AppBase
             return null;
         }
 
+        $logkey = AppCookies::getLogkey($this->request);
         $user = new User();
         if ($user->loadFromCode($userName)
             && $user->enabled
-            && $user->logkey === AppCookies::getLogkey($this->request)
+            && $user->logkey === $logkey
         ) {
             AppCookies::update($this->response, $user);
             return $user;
@@ -202,11 +203,13 @@ class AppController extends AppBase
             return $this->pageName;
         }
 
-        if (false === empty($this->getUriParam(0)) && $this->getUriParam(0) !== 'index.php') {
-            return $this->getUriParam(0);
-        }
-
-        return isset($this->user) ? 'Main' : 'Home';
+        $param = $this->getUriParam(0);
+        return match ($param) {
+            '',
+            'index.php' => isset($this->user) ? 'Main' : 'Home',
+            'Login'     => isset($this->user) ? 'Main' : 'Login',
+            default     => $param,
+        };
     }
 
     /**

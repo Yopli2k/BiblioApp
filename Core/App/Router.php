@@ -48,7 +48,7 @@ final class Router
 
         // Not a file? Not a safe file?
         $filePath = APP_FOLDER . urldecode($uri);
-        if (false === is_file($filePath) || false === $this->isFileSafe($filePath)) {
+        if (false === $this->isFileSafe($filePath)) {
             return false;
         }
 
@@ -77,7 +77,9 @@ final class Router
             'json', 'map', 'mdb', 'mkv', 'mp3', 'mp4', 'ndg', 'ods', 'odt', 'ogg', 'pdf', 'png', 'pptx', 'sql', 'svg',
             'ttf', 'txt', 'webm', 'woff', 'woff2', 'xls', 'xlsx', 'xml', 'xsig', 'zip'
         ];
-        return empty($parts) || count($parts) === 1 || in_array(end($parts), $safe, true);
+        return empty($parts)
+            || count($parts) === 1
+            || in_array(end($parts), $safe, true);
     }
 
     /**
@@ -101,7 +103,9 @@ final class Router
             header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
         }
 
-        readfile($filePath);
+        if (is_file($filePath)) {
+            readfile($filePath);
+        }
     }
 
     /**
@@ -114,19 +118,16 @@ final class Router
     {
         $info = pathinfo($filePath);
         $extension = strtolower($info['extension']);
-        switch ($extension) {
-            case 'css':
-                return 'text/css';
+        return match ($extension) {
+            'map',
+            'css'   => 'text/css',
 
-            case 'js':
-                return 'application/javascript';
+            'xml',
+            'xsig'  => 'text/xml',
 
-            case 'xml':
-            case 'xsig':
-                return 'text/xml';
-        }
-
-        return mime_content_type($filePath);
+            'js'    => 'application/javascript',
+            default => mime_content_type($filePath),
+        };
     }
 
     /**

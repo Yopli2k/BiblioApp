@@ -3,7 +3,7 @@
 {% block meta %}
     {{ parent() }}
     <meta name="author" content="BiblioApp" />
-    <meta name="robots" content="" />
+    <meta name="robots" content="noindex"/>
     <meta name="description" content="Biblioteca para alquiler de libros"/>
     <meta name="keywords" content="biblioteca, alquiler, libros" />
     <meta property="og:title" content="Biblioteca para alquiler de libros"/>
@@ -29,11 +29,9 @@
     <div class="container">
         <div class="row justify-content-md-center">
             <div class="col-md-6">
-                <form action="{{ asset('') }}" method="post" class="form">
+                <form action="{{ asset('Login') }}" method="post" class="form">
                     <div class="card mt-4">
-                        <a href="{{ asset('') }}">
-                            <img class="card-img-top" src="{{ asset('Assets/Images/logo-horizontal.png') }}" alt="BiblioApp"/>
-                        </a>
+                        <img class="card-img-top" src="{{ asset('Assets/Images/logo-horizontal.png') }}" alt="BiblioApp"/>
                         <div class="card-body">
                             <p class="card-text text-center">Escriba su nombre de usuario y contraseña para iniciar sesión</p>
                             <div class="form-group">
@@ -76,7 +74,7 @@
             </div>
         </div>
     </div>
-    <form action="{{ asset('') }}" method="post" class="form">
+    <form action="{{ asset('Login') }}" method="post" class="form">
         <div class="modal fade" id="newPasswordModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -124,7 +122,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
                     </div>
                 </div>
             </div>

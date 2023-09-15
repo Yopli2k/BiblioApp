@@ -16,6 +16,7 @@
 namespace BiblioApp\Core\App;
 
 use BiblioApp\Core\DataBase\DataBase;
+use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,61 +29,79 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class PageController
 {
     /**
+     * Title of the page.
+     *
+     * @var string título de la página.
+     */
+    public string $title;
+
+    /**
+     * User logged in.
+     * When the user is not logged in, it is null.
+     *
+     * @var User|null
+     */
+    public ?User $user;
+
+    /**
      * It provides direct access to the database.
      *
      * @var DataBase
      */
-    protected $dataBase;
+    protected DataBase $dataBase;
 
     /**
      * Given uri, default is empty.
      *
      * @var string
      */
-    protected $uri;
+    protected string $uri;
 
     /**
      * HTTP Response object.
      *
      * @var Response
      */
-    protected $response;
+    protected Response $response;
 
     /**
      * Request on which we can get data.
      *
      * @var Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * Name of the class of the controller (although its in inheritance from this class,
      * the name of the final class we will have here)
      *
-     * @var string __CLASS__
+     * @var string
      */
-    private $className;
+    private string $className;
 
     /**
      * Name of the file for the template.
      *
-     * @var string|false template.html.twig
+     * @var string
      */
-    private $template;
+    private string $template;
 
     /**
      * Initialize all objects and properties.
      *
      * @param string $className
+     * @param ?User $user
      * @param string $uri
      */
-    public function __construct(string $className, string $uri = '')
+    public function __construct(string $className, ?User $user, string $uri = '')
     {
         $this->className = $className;
         $this->dataBase = new DataBase();
         $this->request = Request::createFromGlobals();
         $this->template = $this->className . '.html.twig';
+        $this->title = $this->getPageData()['title'] ?? $this->className;
         $this->uri = $uri;
+        $this->user = $user;
     }
 
     /**
@@ -119,11 +138,11 @@ abstract class PageController
     }
 
     /**
-     * Execute the public part of the controller.
+     * Runs the controller's logic.
      *
      * @param Response $response
      */
-    public function exec(Response &$response)
+    public function exec(Response &$response): void
     {
         $this->response = &$response;
     }
@@ -134,7 +153,7 @@ abstract class PageController
      * @param string $url
      * @param int $delay
      */
-    public function redirect(string $url, int $delay = 0)
+    public function redirect(string $url, int $delay = 0): void
     {
         $this->response->headers->set('Refresh', $delay . '; ' . $url);
         if ($delay === 0) {

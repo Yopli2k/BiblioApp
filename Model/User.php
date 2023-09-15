@@ -60,6 +60,7 @@ class User extends AppModel
     {
         $this->email = '';
         $this->enabled = true;
+        $this->logkey = '';
         $this->name = '';
         $this->password = '';
         $this->username = '';
@@ -88,6 +89,7 @@ class User extends AppModel
     {
         $this->email = $data['email'] ?? '';
         $this->enabled = (bool)$data['enabled'] ?? false;
+        $this->logkey = $data['logkey'] ?? '';
         $this->name = $data['name'] ?? '';
         $this->password = $data['password'] ?? '';
         $this->username = $data['username'] ?? '';
@@ -201,9 +203,10 @@ class User extends AppModel
      */
     protected function update(): bool
     {
-        $sql = 'UPDATE ' . static::tableName() . 'SET '
+        $sql = 'UPDATE ' . static::tableName() . ' SET '
                 . 'email = ' . self::$dataBase->var2str($this->email) . ','
                 . 'enabled = ' . self::$dataBase->var2str($this->enabled) . ','
+                . 'logkey = ' . self::$dataBase->var2str($this->logkey) . ','
                 . 'name = ' . self::$dataBase->var2str($this->name) . ','
                 . 'password = ' . self::$dataBase->var2str($this->password)
             . ' WHERE username = ' . self::$dataBase->var2str($this->username);

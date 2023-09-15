@@ -74,7 +74,7 @@ class AppCookies
     public static function update(Response $response, User $user): void
     {
         $expire = time() + APP_COOKIES_EXPIRE;
-        $response->headers->setCookie(new Cookie('biblioUserName', $user->username, $expire, APP_ROUTE, null, false));
-        $response->headers->setCookie(new Cookie('biblioLogkey', $user->logkey, $expire, APP_ROUTE, null, false));
+        $response->headers->setCookie(new Cookie('biblioUserName', $user->username, $expire, APP_ROUTE, null, false, false, false, null));
+        $response->headers->setCookie(new Cookie('biblioLogkey', $user->logkey, $expire, APP_ROUTE, null, false, false, false, null));
     }
 }
