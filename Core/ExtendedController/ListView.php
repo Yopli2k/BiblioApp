@@ -18,17 +18,8 @@ namespace BiblioApp\Core\ExtendedController;
 use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\Tools\Tools;
 use BiblioApp\Core\Widget\ColumnItem;
+use BiblioApp\Core\Widget\RowStatus;
 use Symfony\Component\HttpFoundation\Request;
-
-/*
-use FacturaScripts\Core\Cache;
-use FacturaScripts\Core\Model\Base\BusinessDocument;
-use FacturaScripts\Core\Model\Base\ModelClass;
-use FacturaScripts\Dinamic\Lib\AssetManager;
-use FacturaScripts\Dinamic\Lib\Widget\ColumnItem;
-use FacturaScripts\Dinamic\Lib\Widget\RowStatus;
-use FacturaScripts\Dinamic\Model\TotalModel;
-*/
 
 /**
  * View definition for its use in ListController
@@ -79,7 +70,7 @@ class ListView extends BaseView
      * @param string $label
      * @param int $default
      */
-    public function addOrderBy(array $fields, string $label, int $default = 0)
+    public function addOrderBy(array $fields, string $label, int $default = 0): void
     {
         $key1 = count($this->orderOptions);
         $this->orderOptions[$key1] = [
@@ -225,7 +216,7 @@ class ListView extends BaseView
     protected function assets()
     {
         // TODO: add custom assets to view template
-        AssetManager::add('js', APP_ROUTE . '/Assets/JS/ListView.js?v=2');
+        // AssetManager::add('js', APP_ROUTE . '/Assets/JS/ListView.js?v=2');
     }
 
     private function processFormDataLoad(Request $request): void

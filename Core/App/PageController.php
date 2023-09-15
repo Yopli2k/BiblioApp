@@ -39,7 +39,7 @@ abstract class PageController
      * User logged in.
      * When the user is not logged in, it is null.
      *
-     * @var User|null
+     * @var ?User
      */
     public ?User $user;
 

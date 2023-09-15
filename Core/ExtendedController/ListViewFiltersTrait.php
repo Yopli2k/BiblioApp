@@ -16,19 +16,17 @@
 namespace BiblioApp\Core\ExtendedController;
 
 use BiblioApp\Core\DataBase\DataBaseWhere;
+use BiblioApp\Core\ListFilter\AutocompleteFilter;
+use BiblioApp\Core\ListFilter\BaseFilter;
+use BiblioApp\Core\ListFilter\CheckboxFilter;
+use BiblioApp\Core\ListFilter\DateFilter;
+use BiblioApp\Core\ListFilter\NumberFilter;
+use BiblioApp\Core\ListFilter\PeriodFilter;
+use BiblioApp\Core\ListFilter\SelectFilter;
+use BiblioApp\Core\ListFilter\SelectWhereFilter;
 use BiblioApp\Model\PageFilter;
+use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Request;
-
-/*
-use FacturaScripts\Core\Lib\ListFilter\BaseFilter;
-use FacturaScripts\Dinamic\Lib\ListFilter\AutocompleteFilter;
-use FacturaScripts\Dinamic\Lib\ListFilter\CheckboxFilter;
-use FacturaScripts\Dinamic\Lib\ListFilter\DateFilter;
-use FacturaScripts\Dinamic\Lib\ListFilter\NumberFilter;
-use FacturaScripts\Dinamic\Lib\ListFilter\PeriodFilter;
-use FacturaScripts\Dinamic\Lib\ListFilter\SelectFilter;
-use FacturaScripts\Dinamic\Lib\ListFilter\SelectWhereFilter;
-*/
 
 /**
  * Description of ListViewFiltersTrait
@@ -43,26 +41,26 @@ trait ListViewFiltersTrait
      *
      * @var BaseFilter[]
      */
-    public $filters = [];
+    public array $filters = [];
 
     /**
      * Predefined filter values selected
      *
      * @var int
      */
-    public $pageFilterKey = 0;
+    public int $pageFilterKey = 0;
 
     /**
      * List of predefined filter values
      *
      * @var PageFilter[]
      */
-    public $pageFilters = [];
+    public array $pageFilters = [];
 
     /**
      * @var bool
      */
-    public $showFilters = false;
+    public bool $showFilters = false;
 
     abstract public function getViewName(): string;
 
@@ -77,7 +75,7 @@ trait ListViewFiltersTrait
      * @param string $fieldtitle
      * @param array $where
      */
-    public function addFilterAutocomplete(string $key, string $label, string $field, string $table, string $fieldcode = '', string $fieldtitle = '', array $where = [])
+    public function addFilterAutocomplete(string $key, string $label, string $field, string $table, string $fieldcode = '', string $fieldtitle = '', array $where = []): void
     {
         $this->filters[$key] = new AutocompleteFilter($key, $field, $label, $table, $fieldcode, $fieldtitle, $where);
     }
@@ -92,7 +90,7 @@ trait ListViewFiltersTrait
      * @param mixed $matchValue
      * @param array $default
      */
-    public function addFilterCheckbox(string $key, string $label = '', string $field = '', string $operation = '=', $matchValue = true, array $default = [])
+    public function addFilterCheckbox(string $key, string $label = '', string $field = '', string $operation = '=', mixed $matchValue = true, array $default = []): void
     {
         $this->filters[$key] = new CheckboxFilter($key, $field, $label, $operation, $matchValue, $default);
     }
@@ -105,7 +103,7 @@ trait ListViewFiltersTrait
      * @param string $field
      * @param string $operation
      */
-    public function addFilterDatePicker(string $key, string $label = '', string $field = '', string $operation = '>=')
+    public function addFilterDatePicker(string $key, string $label = '', string $field = '', string $operation = '>='): void
     {
         $this->filters[$key] = new DateFilter($key, $field, $label, $operation);
     }
@@ -118,7 +116,7 @@ trait ListViewFiltersTrait
      * @param string $field
      * @param string $operation
      */
-    public function addFilterNumber(string $key, string $label = '', string $field = '', string $operation = '>=')
+    public function addFilterNumber(string $key, string $label = '', string $field = '', string $operation = '>='): void
     {
         $this->filters[$key] = new NumberFilter($key, $field, $label, $operation);
     }
@@ -131,7 +129,7 @@ trait ListViewFiltersTrait
      * @param string $label
      * @param string $field
      */
-    public function addFilterPeriod(string $key, string $label, string $field)
+    public function addFilterPeriod(string $key, string $label, string $field): void
     {
         $this->filters[$key] = new PeriodFilter($key, $field, $label);
     }
@@ -144,7 +142,7 @@ trait ListViewFiltersTrait
      * @param string $field
      * @param array $values
      */
-    public function addFilterSelect(string $key, string $label, string $field, array $values = [])
+    public function addFilterSelect(string $key, string $label, string $field, array $values = []): void
     {
         $this->filters[$key] = new SelectFilter($key, $field, $label, $values);
     }
@@ -163,7 +161,7 @@ trait ListViewFiltersTrait
      *    ['label' => 'All records', 'where' => []],
      *   ]
      */
-    public function addFilterSelectWhere(string $key, array $values, string $label = '')
+    public function addFilterSelectWhere(string $key, array $values, string $label = ''): void
     {
         $this->filters[$key] = new SelectWhereFilter($key, $values, $label);
     }
@@ -192,11 +190,11 @@ trait ListViewFiltersTrait
      * Save filter values for user/s.
      *
      * @param Request $request
-     * @param User $user
+     * @param ?User $user
      *
      * @return int
      */
-    public function savePageFilter(Request $request, User $user): int
+    public function savePageFilter(Request $request, ?User $user): int
     {
         $pageFilter = new PageFilter();
         // Set values data filter
@@ -217,30 +215,27 @@ trait ListViewFiltersTrait
         $pageFilter->id = $request->request->get('filter-id');
         $pageFilter->description = $request->request->get('filter-description', '');
         $pageFilter->name = explode('-', $this->getViewName())[0];
-        $pageFilter->nick = $user->nick;
-
-        // Save and return it's all ok
-        if ($pageFilter->save()) {
-            $this->pageFilters[] = $pageFilter;
-            return $pageFilter->id;
+        $pageFilter->username = $user?->username;
+        if (false === $pageFilter->save()) {
+            return 0;
         }
-
-        return 0;
+        $this->pageFilters[] = $pageFilter;
+        return $pageFilter->id;
     }
 
     /**
      * @param DataBaseWhere[] $where
      */
-    private function loadSavedFilters(array $where)
+    private function loadSavedFilters(array $where): void
     {
         $pageFilter = new PageFilter();
-        $orderBy = ['nick' => 'ASC', 'description' => 'ASC'];
-        foreach ($pageFilter->all($where, $orderBy) as $filter) {
+        $orderBy = ['username' => 'ASC', 'description' => 'ASC'];
+        foreach ($pageFilter->select($where, $orderBy) as $filter) {
             $this->pageFilters[$filter->id] = $filter;
         }
     }
 
-    private function sortFilters()
+    private function sortFilters(): void
     {
         uasort($this->filters, function ($filter1, $filter2) {
             if ($filter1->ordernum === $filter2->ordernum) {

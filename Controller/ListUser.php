@@ -33,6 +33,9 @@ class ListUser extends ListController
         $this->createViewsUsers();
     }
 
+    /**
+     * @param string $viewName
+     */
     private function createViewsUsers(string $viewName = 'ListUser'): void
     {
         $this->addView($viewName, 'User', 'Usuarios', 'fas fa-users');

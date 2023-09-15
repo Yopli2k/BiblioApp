@@ -249,6 +249,7 @@ abstract class ListController extends BaseController
             return;
         }
 
+        // TODO: show user message
         // $this->toolBox()->i18nLog()->warning('record-deleted-error');
     }
 

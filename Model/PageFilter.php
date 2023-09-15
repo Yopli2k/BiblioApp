@@ -56,11 +56,11 @@ class PageFilter extends AppModel
     public string $name;
 
     /**
-     * User Identifier.
+     * Link to User model.
      *
-     * @var string
+     * @var ?string
      */
-    public string $username;
+    public ?string $username;
 
     /**
      * Reset the values of all model properties.
@@ -71,7 +71,7 @@ class PageFilter extends AppModel
         $this->filters = [];
         $this->id = null;
         $this->name = '';
-        $this->username = '';
+        $this->username = null;
     }
 
     /**
