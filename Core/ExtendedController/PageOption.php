@@ -55,6 +55,15 @@ class PageOption
     public array $rows;
 
     /**
+     * Class constructor. Initialize the properties.
+     */
+    public function __construct()
+    {
+        $this->name = '';
+        $this->clear();
+    }
+
+    /**
      * Clear and initialize the properties
      *
      * @return void

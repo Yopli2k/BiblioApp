@@ -1,10 +1,137 @@
-.dark-mode .sidebar-divider {
-  border-color: #6c757d;
+/**
+ * GENERAL
+ */
+.img-circle {
+  border-radius: 50%;
 }
 
-.sidebar-divider {
+
+/**
+ * LOGOTIPO
+ */
+.logo {
+  display: block;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  padding: 0.8125rem 0.3rem;
+  transition: width .3s ease-in-out;
+  white-space: nowrap;
+}
+
+.logo .logo-image {
+  float: left;
+  line-height: .8;
+  margin-left: 0.8rem;
+  margin-right: 0.5rem;
+  margin-top: -3px;
+  max-height: 33px;
+  width: auto;
+}
+
+.logo .logo-text {
+  color: #fff;
+  font-weight: 700;
+}
+
+/**
+ * LEFT PANEL SIDEBAR
+ */
+#sidebar {
+  background-color: #333;
+  overflow: hidden;
+  z-index: 3;
+}
+
+#sidebar .list-group {
+  min-width: 400px;
+  background-color: #333;
+  min-height: 100vh;
+}
+
+#sidebar i {
+  margin-right: 6px;
+}
+
+#sidebar .list-group-item {
+  border-radius: 0;
+  background-color: #333;
+  color: #ccc;
+  border-left: 0;
+  border-right: 0;
+  border-color: #2c2c2c;
+  white-space: nowrap;
+}
+
+#sidebar .list-group-item:hover {
+  color: navajowhite;
+  text-decoration: none;
+}
+
+/* dividers */
+#sidebar .sidebar-divider {
   height: 0;
   margin: 0.5rem 0;
   overflow: hidden;
   border-top: 1px solid #4f5962;
+}
+
+#sidebar .dark-mode .sidebar-divider {
+  border-color: #6c757d;
+}
+
+/**
+ * DISPLAY: MAX-WIDTH 768PX
+ */
+@media (max-width:768px) {
+
+  /** LEFT PANEL SIDEBAR */
+  #sidebar {
+    min-width: 35px;
+    max-width: 40px;
+    overflow-y: auto;
+    overflow-x: visible;
+    transition: all 0.25s ease;
+    transform: translateX(-45px);
+    position: fixed;
+  }
+
+  #sidebar.show {
+    transform: translateX(0);
+  }
+
+  #sidebar::-webkit-scrollbar{
+    width: 0;
+  }
+
+  #sidebar, #sidebar .list-group {
+    min-width: 1px;
+    overflow: visible;
+  }
+
+  #sidebar .list-group > .list-group-item {
+    text-align: center;
+    padding: .75rem .5rem;
+  }
+}
+
+.collapse.show {
+  visibility: visible;
+}
+
+.collapsing {
+  visibility: visible;
+  height: 0;
+  -webkit-transition-property: height, visibility;
+  transition-property: height, visibility;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+
+.collapsing.width {
+  -webkit-transition-property: width, visibility;
+  transition-property: width, visibility;
+  width: 0;
+  height: 100%;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
 }

@@ -160,7 +160,7 @@ class ListView extends BaseView
 
         $this->cursor = [];
         if ($this->count > 0) {
-            $this->cursor = $this->model->all($this->where, $this->order, $this->offset, $limit);
+            $this->cursor = $this->model->select($this->where, $this->order, $this->offset, $limit);
         }
     }
 
