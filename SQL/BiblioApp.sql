@@ -49,6 +49,7 @@ INSERT INTO users (name, username, password) VALUES ('Administrador', 'admin', '
  * The members are the people who can borrow books.
  */
 CREATE TABLE members (
+     enabled bool NOT NULL DEFAULT true,
      id int NOT NULL AUTO_INCREMENT,
      name varchar(100) NOT NULL,
      phone varchar(10) NOT NULL,
@@ -66,6 +67,37 @@ CREATE TABLE categories (
     name varchar(100) NOT NULL,
     CONSTRAINT categories_pk PRIMARY KEY (id)
 );
+
+INSERT INTO categories (name) VALUES ('Devocionales');
+INSERT INTO categories (name) VALUES ('Escuela Dominical (3-18 años)');
+INSERT INTO categories (name) VALUES ('Niños');
+INSERT INTO categories (name) VALUES ('Estudios Bíblicos');
+INSERT INTO categories (name) VALUES ('Familia');
+INSERT INTO categories (name) VALUES ('Teología');
+INSERT INTO categories (name) VALUES ('Comentarios bíblicos');
+INSERT INTO categories (name) VALUES ('Mujer');
+INSERT INTO categories (name) VALUES ('Vida Cristiana');
+INSERT INTO categories (name) VALUES ('Jóvenes/Adolescentes');
+INSERT INTO categories (name) VALUES ('Ayudas para el ministerio y Liderazgo');
+INSERT INTO categories (name) VALUES ('Evangelismo');
+INSERT INTO categories (name) VALUES ('Apologética');
+INSERT INTO categories (name) VALUES ('Guerra Espiritual');
+INSERT INTO categories (name) VALUES ('Finanzas');
+INSERT INTO categories (name) VALUES ('Referencia');
+INSERT INTO categories (name) VALUES ('Hombres');
+INSERT INTO categories (name) VALUES ('Testimonios y biografias');
+INSERT INTO categories (name) VALUES ('Oración/Adoración');
+INSERT INTO categories (name) VALUES ('Profecía');
+INSERT INTO categories (name) VALUES ('Estudios para grupo');
+INSERT INTO categories (name) VALUES ('Misiones');
+INSERT INTO categories (name) VALUES ('Salud');
+INSERT INTO categories (name) VALUES ('Actualidad');
+INSERT INTO categories (name) VALUES ('Historia');
+INSERT INTO categories (name) VALUES ('Novelas');
+INSERT INTO categories (name) VALUES ('Poesía');
+INSERT INTO categories (name) VALUES ('Psicología');
+INSERT INTO categories (name) VALUES ('Teatro');
+INSERT INTO categories (name) VALUES ('Tratados');
 
 /**
  * Create books table.
