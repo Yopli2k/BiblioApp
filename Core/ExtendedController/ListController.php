@@ -49,22 +49,16 @@ abstract class ListController extends BaseController
     {
         parent::exec($response);
 
-        // Get action to execute
+        // Get action and execute if not empty
         $action = $this->request->request->get('action', $this->request->query->get('action', ''));
-
-        // Execute actions before loading data
         if (false === $this->execPreviousAction($action)) {
             return;
         }
 
         // Load filter saved and data for every view
         foreach ($this->views as $viewName => $view) {
-            if ($this->active == $viewName) {
-                $view->processFormData($this->request, 'load');
-            } else {
-                $view->processFormData($this->request, 'preload');
-            }
-
+            $case = $this->active == $viewName ? 'load' : 'preload';
+            $view->processFormData($this->request, $case);
             $this->loadData($viewName, $view);
         }
 

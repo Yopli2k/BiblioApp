@@ -163,6 +163,7 @@ abstract class BaseView
 
         $this->icon = $icon;
         $this->name = $name;
+        $this->newCode = '';
         $this->pageOption = new PageOption();
         $this->settings = [
             'active' => true,

@@ -1,0 +1,94 @@
+{#
+/**
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#}
+{% extends "Master/BackTemplate.html.twig" %}
+
+{% block meta %}
+    {{ parent() }}
+    <meta name="author" content="BiblioApp" />
+    <meta name="description" content="Biblioteca para alquiler de libros"/>
+    <title>{{ controller.title }}</title>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) == false) {
+                $("input:visible,textarea:visible").filter(":not([readonly='readonly']):not([disabled='disabled']):not([type='hidden']):not([type='checkbox']):not([type='radio'])").first().focus();
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                {# -- First view -- #}
+                {% set firstView = controllerviews | first %}
+                {% set firstViewName = firstView.getViewName() %}
+                {% do controllersetCurrentView(firstViewName) %}
+                {{ include(firstView.template) }}
+            </div>
+        </div>
+        {% if controllerviews | length > 1 and firstView.model.exists() %}
+            {% set activeViewName = (controlleractive is empty) or (controlleractive == firstViewName)
+                ? controllerviews[1:]|keys|first
+                : controlleractive
+            %}
+            <div class="row">
+                {# -- Left Panel -- #}
+                <div class="col-lg-2">
+                    <div class="nav nav-pills flex-row flex-lg-column pb-3" id="mainTabs" role="tablist">
+                        {# -- All views but we skipped the first one -- #}
+                        {% for viewName, view in controllerviews[1:] %}
+                            {% set active = (viewName == activeViewName) ? ' active' : '' %}
+                            {% set disable = view.settings.active ? '' : ' disabled' %}
+                                <a class="nav-link{{ active }}{{ disable }}" id="{{ viewName }}-tab" data-toggle="pill"
+                                href="#{{ viewName }}" role="tab" aria-controls="{{ viewName }}" aria-expanded="true">
+                                 <i class="{{ view.icon }} fa-fw mr-1 d-none d-xl-inline-block"
+                                    aria-hidden="true"></i>{{ view.title }}
+                                 {% if view.count >= 1 and viewName != firstView.getViewName() %}
+                                     <span class='badge badge-secondary mt-lg-1 mb-lg-1 float-lg-right'>{{ view.count }}</span>
+                                 {% endif %}
+                             </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {# -- Right Panel -- #}
+                <div class="col">
+                    <div class="tab-content" id="mainTabsContent">
+                        {# -- All views but we skipped the first one -- #}
+                        {% for viewName, view in controllerviews[1:] %}
+                            {% set active = (viewName == activeViewName) ? ' show active' : '' %}
+                            <div class="tab-pane fade{{ active }}" id="{{ viewName }}" role="tabpanel"
+                                 aria-labelledby="{{ viewName }}-tab">
+                                {% do controllersetCurrentView(viewName) %}
+                                {{ include(view.template) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

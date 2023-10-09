@@ -21,13 +21,6 @@ use BiblioApp\Model\CodeModel;
 use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 
-/*
-use FacturaScripts\Core\Lib\Widget\VisualItem;
-use FacturaScripts\Core\Model\Base\ModelClass;
-use FacturaScripts\Core\Tools;
-use FacturaScripts\Dinamic\Lib\ExportManager;
-*/
-
 /**
  * Base controller for all extended controllers.
  *
@@ -129,6 +122,20 @@ abstract class BaseController extends PageController
     public function getCurrentView()
     {
         return $this->views[$this->current];
+    }
+
+    /**
+     * Returns the name assigned to the main view
+     *
+     * @return string
+     */
+    public function getMainViewName(): string
+    {
+        foreach (array_keys($this->views) as $key) {
+            return $key;
+        }
+
+        return '';
     }
 
     /**
