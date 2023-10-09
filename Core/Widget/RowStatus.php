@@ -48,7 +48,7 @@ class RowStatus extends VisualItem
         foreach ($this->options as $opt) {
             if (false === empty($opt['title'])) {
                 $trs .= '<tr class="' . $this->colorToClass($opt['color'], 'table-') . '">'
-                    . '<td class="text-center">' . $opt['title'] . '</td>'
+                    . '<td class="text-center">' . ucfirst($opt['title']) . '</td>'
                     . '</tr>';
             }
         }

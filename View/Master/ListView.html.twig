@@ -60,6 +60,8 @@
                 <div class="col-sm-auto text-right mb-2">
                     {# -- Filters button -- #}
                     {{ _self.filterButton(currentView, controller) }}
+                    {# -- Colors button -- #}
+                    {{ _self.colorsButton(currentView) }}
                     {# -- OrderBy button -- #}
                     {{ _self.sortButton(currentView) }}
                 </div>
@@ -154,10 +156,7 @@
                 <div class="btn-group">
                     {% for page in currentView.getPagination() %}
                         {% set btnClass = page.active ? 'btn btn-outline-dark active' : 'btn btn-outline-dark' %}
-                        <button type="button" class="{{ btnClass }}"
-                                onclick="listViewSetOffset('{{ currentView.getViewName() }}', '{{ page.offset }}');">
-                            {{ page.num }}
-                        </button>
+                        <button type="button" class="{{ btnClass }}" onclick="listViewSetOffset('{{ currentView.getViewName() }}', '{{ page.offset }}');"> {{ page.num }} </button>
                     {% endfor %}
                 </div>
             </div>
@@ -165,35 +164,117 @@
     </div>
     <br/>
     {# -- Row footer -- #}
-    {#
     <div class="container-fluid">
         <div class="row">
             {{ currentView.getRow('footer').render(currentView.getViewName(), 'listViewSetAction', controller) | raw }}
         </div>
     </div>
-    #}
     {# -- Save Filter modal window -- #}
-    {#
     {% if currentView.showFilters %}
         {{ _self.filterSaveModal(currentView) }}
     {% endif %}
-    #}
 </form>
 
 {# -- Modals -- #}
-{#
 {% for group in currentView.getModals() %}
     {{ group.modal(currentView.model, currentView.getViewName()) | raw }}
 {% endfor %}
-#}
 
-{% macro filterButton(currentView, fsc) %}
+{# Macros #}
+{% macro colorsButton(currentView) %}
+    {% set legend = currentView.getRow('status').legend() %}
+    {% if legend %}
+        {% set viewName = currentView.getViewName() %}
+        <div class="btn-group">
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-fill-drip fa-fw" aria-hidden="true"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right pb-0">
+                    <h6 class="dropdown-header">Colores</h6>
+                    {{ legend | raw }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro filterButton(currentView, controller) %}
     {% if currentView.filters is not empty %}
         {% set viewName = currentView.getViewName() %}
-        <button type="button" class="btn btn-light" onclick="listViewShowFilters('{{ viewName }}');">
-            <i class="fas fa-filter fa-fw"></i> Filtros
-        </button>
+        {% if currentView.pageFilterKey %}
+            {# -- Disable user filters -- #}
+            <a href="{{ controller.url() }}?activetab={{ viewName }}" class="btn btn-light" title="Todos">
+                <i class="fas fa-filter fa-fw"></i> Todos
+            </a>
+        {% else %}
+            <button type="button" class="btn btn-light" onclick="listViewShowFilters('{{ viewName }}');">
+                <i class="fas fa-filter fa-fw"></i> Filtros
+            </button>
+            {% if currentView.showFilters %}
+                {# -- Save user filters -- #}
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#savefilter{{ viewName }}" title="Guardar Filtro">
+                    <i class="fas fa-save fa-fw"></i> Guardar
+                </button>
+            {% endif %}
+        {% endif %}
+        {% set saveFilters = currentView.pageFilters %}
+        {% if saveFilters is not empty %}
+            {% for pageFilter in saveFilters %}
+                {% set icon = (pageFilter.nick is empty) ? 'fa-users' : 'fa-user' %}
+                {% set filterDesc = pageFilter.description|length > 10 ? pageFilter.description|slice(0,10) ~ '...' : pageFilter.description %}
+                {% if pageFilter.id == currentView.pageFilterKey %}
+                    <div class="btn-group">
+                        {# -- Selected user filter -- #}
+                        <button title="{{ pageFilter.description }}" class="btn btn-light active" onclick="listViewSetLoadFilter('{{ viewName }}', '{{ pageFilter.id }}');">
+                            <i class="fas fa-filter fa-fw"></i> {{ filterDesc }}
+                        </button>
+                        {# -- Delete user filter -- #}
+                        <button type="button" class="btn btn-light text-danger" title="Eliminar Filtro" onclick="listViewSetAction('{{ viewName }}', 'delete-filter');">
+                            <i class="fas fa-trash-alt fa-fw"></i>
+                        </button>
+                    </div>
+                {% else %}
+                    {# -- Select user filters -- #}
+                    <button title="{{ pageFilter.description }}" class="btn btn-light" onclick="listViewSetLoadFilter('{{ viewName }}', '{{ pageFilter.id }}');">
+                        <i class="fas fa-filter fa-fw"></i> {{ filterDesc }}
+                    </button>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     {% endif %}
+{% endmacro %}
+
+{% macro filterSaveModal(currentView) %}
+    {% set viewName = currentView.getViewName() %}
+    <div class="modal" id="savefilter{{ viewName }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-filter fa-fw"></i> Guardar
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <input type="text" name="filter-description" class="form-control noEnterKey" autofocus=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="listViewSetAction('{{ viewName }}', 'save-filter');">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endmacro %}
 
 {% macro searchControl(currentView) %}
