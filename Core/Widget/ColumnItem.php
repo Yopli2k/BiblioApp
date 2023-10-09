@@ -78,7 +78,7 @@ class ColumnItem extends VisualItem
         $this->display = $data['display'] ?? 'left';
         $this->numcolumns = isset($data['numcolumns']) ? (int)$data['numcolumns'] : 0;
         $this->order = isset($data['order']) ? (int)$data['order'] : 0;
-        $this->title = $data['title'] ?? $this->name;
+        $this->title = ucwords($data['title'] ?? $this->name);
         $this->titleurl = $data['titleurl'] ?? '';
         $this->loadWidget($data['children']);
     }

@@ -73,9 +73,9 @@
     </div>
     {# -- Tabs -- #}
     <ul class="nav nav-tabs d-print-none" id="mainTabs" role="tablist">
-        {% for viewName, view in fsc.views %}
+        {% for viewName, view in controller.views %}
             <li class="nav-item">
-                {% set active = (viewName == fsc.active) ? ' active' : '' %}
+                {% set active = (viewName == controller.active) ? ' active' : '' %}
                 <a href="#{{ viewName }}" class="nav-link{{ active }}" data-toggle="tab" role="tab"
                    aria-controls="{{ viewName }}" title="{{ view.title }}">
                     <i class="{{ view.icon }}" aria-hidden="true"></i>
@@ -85,7 +85,7 @@
                         <span class="d-none d-sm-inline-block">{{ view.title }}</span>
                     {% endif %}
                     {% if view.count > 0 %}
-                        <span class="badge badge-secondary">{{ fsc.toolBox().numbers().format(view.count, 0) }}</span>
+                        <span class="badge badge-secondary">{{ view.count|number_format }}</span>
                     {% endif %}
                 </a>
             </li>
@@ -94,10 +94,10 @@
 
     {# -- Tab content -- #}
     <div class="tab-content pt-3" id="mainTabsContent">
-        {% for viewName, view in fsc.views %}
-            {% set active = (viewName == fsc.active) ? ' show active' : '' %}
+        {% for viewName, view in controller.views %}
+            {% set active = (viewName == controller.active) ? ' show active' : '' %}
             <div class="tab-pane fade{{ active }}" id="{{ viewName }}" role="tabpanel">
-                {% do fsc.setCurrentView(viewName) %}
+                {% do controller.setCurrentView(viewName) %}
                 {{ include(view.template) }}
             </div>
         {% endfor %}

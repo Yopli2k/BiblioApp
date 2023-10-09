@@ -253,6 +253,32 @@ abstract class AppModel
     }
 
     /**
+     * Returns the url where to see / modify the data.
+     *
+     * @param string $type
+     * @param string $list
+     * @return string
+     */
+    public function url(string $type = 'auto', string $list = 'List'): string
+    {
+        $value = $this->primaryColumnValue();
+        $model = $this->modelClassName();
+        switch ($type) {
+            case 'edit':
+                return is_null($value) ? 'Edit' . $model : 'Edit' . $model . '?code=' . rawurlencode($value);
+
+            case 'list':
+                return $list . $model;
+
+            case 'new':
+                return 'Edit' . $model;
+        }
+
+        // default
+        return empty($value) ? $list . $model : 'Edit' . $model . '?code=' . rawurlencode($value);
+    }
+
+    /**
      * Convert an array of filters to order by clausule.
      *
      * @param array $order
@@ -268,6 +294,17 @@ abstract class AppModel
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the name of the class of the model.
+     *
+     * @return string
+     */
+    protected function modelClassName(): string
+    {
+        $result = explode('\\', get_class($this));
+        return end($result);
     }
 
     /**

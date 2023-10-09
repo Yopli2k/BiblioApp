@@ -43,5 +43,7 @@ class ListUser extends ListController
         $this->addOrderBy($viewName, ['name'], 'Nombre');
         $this->addOrderBy($viewName, ['username'], 'Usuario');
         $this->addOrderBy($viewName, ['email'], 'Correo');
+        $this->setSettings($viewName, 'btnDelete', false);
+        $this->setSettings($viewName, 'checkBoxes', false);
     }
 }

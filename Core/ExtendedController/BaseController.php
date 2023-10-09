@@ -60,6 +60,13 @@ abstract class BaseController extends PageController
     public array $views = [];
 
     /**
+     * Indicates view that is being processed.
+     *
+     * @var string
+     */
+    private string $current;
+
+    /**
      * Inserts the views or tabs to display.
      */
     abstract protected function createViews(): void;
@@ -117,6 +124,14 @@ abstract class BaseController extends PageController
     }
 
     /**
+     * @return BaseView|ListView
+     */
+    public function getCurrentView()
+    {
+        return $this->views[$this->current];
+    }
+
+    /**
      * Returns the configuration value for the indicated view.
      *
      * @param string $viewName
@@ -131,6 +146,17 @@ abstract class BaseController extends PageController
         }
 
         return null;
+    }
+
+    /**
+     * set the view that is being processed.
+     *
+     * @param string $viewName
+     * @return void
+     */
+    public function setCurrentView(string $viewName)
+    {
+        $this->current = $viewName;
     }
 
     /**
