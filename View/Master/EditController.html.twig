@@ -29,6 +29,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('Assets/JS/WidgetAutocomplete.js') }}"></script>
     <script>
         $(document).ready(function () {
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) == false) {

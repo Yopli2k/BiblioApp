@@ -128,10 +128,13 @@ CREATE INDEX books_idx_title ON books (title);
 CREATE TABLE books_categories (
     book_id int NOT NULL,
     category_id int NOT NULL,
-    CONSTRAINT books_categories_pk PRIMARY KEY (book_id, category_id),
+    id int NOT NULL AUTO_INCREMENT,
+    CONSTRAINT books_categories_pk PRIMARY KEY (id),
     CONSTRAINT books_categories_book_fk FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT books_categories_category_fk FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE UNIQUE INDEX books_categories_idx_1 ON books_categories (book_id, category_id);
 
 /**
  * Create loans table.

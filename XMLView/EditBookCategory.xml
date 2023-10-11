@@ -16,11 +16,14 @@
 -->
 <view>
     <columns>
+        <column name="codigo" title="código" numcolumns="2" display="none" order="110">
+            <widget type="number" fieldname="id" readonly="true" required="true" />
+        </column>
         <column name="libro" numcolumns="2" display="none" order="100">
-            <widget type="text" fieldname="id" readonly="true" required="true" />
+            <widget type="text" fieldname="book_id" readonly="true" required="true" />
         </column>
         <column name="categoria" title="categoría" order="110">
-            <widget type="autocomplete" fieldname="idcategory" required="true">
+            <widget type="autocomplete" fieldname="category_id" required="true">
                 <values source="categories" fieldcode="id" fieldtitle="name"></values>
             </widget>
         </column>

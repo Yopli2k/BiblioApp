@@ -124,13 +124,17 @@ class CodeModel
      *
      * @param string $tableName
      * @param string $fieldCode
-     * @param string $code
+     * @param ?string $code
      * @param string $fieldDescription
      *
      * @return static
      */
-    public function get(string $tableName, string $fieldCode, string $code, string $fieldDescription): static
+    public function get(string $tableName, string $fieldCode, ?string $code, string $fieldDescription): static
     {
+        if (empty($code)) {
+            return new static();
+        }
+
         self::initDataBase();
         $sql = 'SELECT ' . $fieldCode . ' AS code, ' . $fieldDescription . ' AS description FROM '
             . $tableName . ' WHERE ' . $fieldCode . ' = ' . self::$dataBase->var2str($code);
@@ -143,11 +147,11 @@ class CodeModel
      *
      * @param string $tableName
      * @param string $fieldCode
-     * @param string $code
+     * @param ?string $code
      * @param string $fieldDescription
-     * @return string
+     * @return ?string
      */
-    public function getDescription(string $tableName, string $fieldCode, string $code, string $fieldDescription): string
+    public function getDescription(string $tableName, string $fieldCode, ?string $code, string $fieldDescription): ?string
     {
         $model = $this->get($tableName, $fieldCode, $code, $fieldDescription);
         return empty($model->description) ? $code : $model->description;

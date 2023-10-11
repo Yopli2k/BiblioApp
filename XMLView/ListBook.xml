@@ -22,8 +22,8 @@
         <column name="titulo" title="título" order="110">
             <widget type="text" fieldname="title" />
         </column>
-        <column name="ibsn" order="120">
-            <widget type="text" fieldname="ibsn" />
+        <column name="isbn" title="ISBN" order="120">
+            <widget type="text" fieldname="isbn" />
         </column>
         <column name="autor" order="130">
             <widget type="text" fieldname="author" />

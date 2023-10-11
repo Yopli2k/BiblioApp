@@ -253,7 +253,7 @@ abstract class EditController extends BaseController
 
         // redirect to new model url only if this is the first view
         if ($this->active === $this->getMainViewName()) {
-            $this->redirect($this->views[$this->active]->model->url() . '&action=save-ok');
+            $this->redirect($this->views[$this->active]->model->url('edit') . '&action=save-ok');
         }
 
         $this->views[$this->active]->newCode = $this->views[$this->active]->model->primaryColumnValue();

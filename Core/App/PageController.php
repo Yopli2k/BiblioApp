@@ -29,6 +29,11 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class PageController
 {
     /**
+     * @var MultiRequestProtection
+     */
+    public MultiRequestProtection $multiRequestProtection;
+
+    /**
      * Title of the page.
      *
      * @var string título de la página.
@@ -97,6 +102,7 @@ abstract class PageController
     {
         $this->className = $className;
         $this->dataBase = new DataBase();
+        $this->multiRequestProtection = new MultiRequestProtection();
         $this->request = Request::createFromGlobals();
         $this->template = $this->className . '.html.twig';
         $this->title = $this->getPageData()['title'] ?? $this->className;
@@ -145,6 +151,9 @@ abstract class PageController
     public function exec(Response &$response): void
     {
         $this->response = &$response;
+        if (isset($this->user)) {
+            $this->multiRequestProtection->addSeed($this->user->username);
+        }
     }
 
     /**
@@ -191,5 +200,32 @@ abstract class PageController
     protected function getClassName(): string
     {
         return $this->className;
+    }
+
+    /**
+     * Check request token. Returns an error if:
+     *   - the token does not exist
+     *   - the token is invalid
+     *   - the token is duplicated
+     *
+     * @return bool
+     */
+    protected function validateFormToken(): bool
+    {
+        // valid request?
+        $urlToken = $this->request->query->get('multireqtoken', '');
+        $token = $this->request->request->get('multireqtoken', $urlToken);
+        if (empty($token) || false === $this->multiRequestProtection->validate($token)) {
+            // $this->toolBox()->i18nLog()->warning('invalid-request');
+            return false;
+        }
+
+        // duplicated request?
+        if ($this->multiRequestProtection->tokenExist($token)) {
+            // $this->toolBox()->i18nLog()->warning('duplicated-request');
+            return false;
+        }
+
+        return true;
     }
 }
