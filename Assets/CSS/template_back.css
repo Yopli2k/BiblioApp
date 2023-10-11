@@ -1,10 +1,16 @@
 /**
  * GENERAL
  */
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  color: #000;
+}
+
 .img-circle {
   border-radius: 50%;
 }
-
 
 /**
  * LOGOTIPO
@@ -77,6 +83,17 @@
 
 #sidebar .dark-mode .sidebar-divider {
   border-color: #6c757d;
+}
+
+/**
+ * TOP NAVBAR
+ */
+.navbar-nav.buttons > li {
+  margin-left: 5px;
+}
+
+.navbar-nav.buttons > li:first-child {
+  margin-left: 20px;
 }
 
 /**

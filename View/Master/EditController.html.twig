@@ -38,57 +38,99 @@
     </script>
 {% endblock %}
 
+{% block navbarButtons %}
+    {% set pageData = controller.getPageData() %}
+    {% set firstView = controller.views | first %}
+    <ul class="navbar-nav buttons">
+        <li class="nav-item">
+            <a href="{{ firstView.model.url('list') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="{{ pageData.icon }} fa-fw" aria-hidden="true"></i>
+                <span class="d-none d-lg-inline-block">Todos</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ firstView.model.url('edit') }}" class="btn btn-sm btn-outline-secondary" title="Refrescar">
+                <i class="fas fa-redo" aria-hidden="true"></i>
+                <span class="d-none d-lg-inline-block">Refrescar</span>
+            </a>
+        </li>
+        {# -- New button -- #}
+        {% if controller.hasData and firstView.settings.btnNew %}
+        <li class="nav-item">
+            <a href="{{ firstView.model.url('new') }}" class="btn btn-sm btn-success">
+                <i class="fas fa-plus fa-fw" aria-hidden="true"></i>
+                <span class="d-none d-lg-inline-block">Nuevo</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+{% endblock %}
+
 {% block body %}
     {{ parent() }}
-    <div class="container-fluid">
+    {% set pageData = controller.getPageData() %}
+    {% set firstView = controller.views | first %}
+    {% set firstViewName = firstView.getViewName() %}
+    <div class="container-fluid mb-3 d-print-none">
         <div class="row">
-            <div class="col">
-                {# -- First view -- #}
-                {% set firstView = controllerviews | first %}
-                {% set firstViewName = firstView.getViewName() %}
-                {% do controllersetCurrentView(firstViewName) %}
-                {{ include(firstView.template) }}
+            <div class="col-md-7">
+            </div>
+            <div class="col-md-5 text-right">
+                <i class="{{ pageData.icon }} fa-3x pl-3 float-right" aria-hidden="true"></i>
+                <h1 class="h5 mb-0">{{ pageData.title }}</h1>
+                {% if fsc.hasData %}
+                    <p class="text-info mb-3">{{ firstView.model.primaryDescription() | raw }}</p>
+                {% else %}
+                    <p class="text-info mb-3">Nuevo</p>
+                {% endif %}
             </div>
         </div>
-        {% if controllerviews | length > 1 and firstView.model.exists() %}
-            {% set activeViewName = (controlleractive is empty) or (controlleractive == firstViewName)
-                ? controllerviews[1:]|keys|first
-                : controlleractive
-            %}
-            <div class="row">
-                {# -- Left Panel -- #}
-                <div class="col-lg-2">
-                    <div class="nav nav-pills flex-row flex-lg-column pb-3" id="mainTabs" role="tablist">
-                        {# -- All views but we skipped the first one -- #}
-                        {% for viewName, view in controllerviews[1:] %}
-                            {% set active = (viewName == activeViewName) ? ' active' : '' %}
-                            {% set disable = view.settings.active ? '' : ' disabled' %}
-                                <a class="nav-link{{ active }}{{ disable }}" id="{{ viewName }}-tab" data-toggle="pill"
-                                href="#{{ viewName }}" role="tab" aria-controls="{{ viewName }}" aria-expanded="true">
-                                 <i class="{{ view.icon }} fa-fw mr-1 d-none d-xl-inline-block"
-                                    aria-hidden="true"></i>{{ view.title }}
-                                 {% if view.count >= 1 and viewName != firstView.getViewName() %}
-                                     <span class='badge badge-secondary mt-lg-1 mb-lg-1 float-lg-right'>{{ view.count }}</span>
-                                 {% endif %}
-                             </a>
-                        {% endfor %}
-                    </div>
-                </div>
-                {# -- Right Panel -- #}
-                <div class="col">
-                    <div class="tab-content" id="mainTabsContent">
-                        {# -- All views but we skipped the first one -- #}
-                        {% for viewName, view in controllerviews[1:] %}
-                            {% set active = (viewName == activeViewName) ? ' show active' : '' %}
-                            <div class="tab-pane fade{{ active }}" id="{{ viewName }}" role="tabpanel"
-                                 aria-labelledby="{{ viewName }}-tab">
-                                {% do controllersetCurrentView(viewName) %}
-                                {{ include(view.template) }}
-                            </div>
-                        {% endfor %}
-                    </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12">
+            {# -- First edit view -- #}
+            {% do controller.setCurrentView(firstViewName) %}
+            {{ include(firstView.template) }}
+        </div>
+    </div>
+    {% if controller.views | length > 1 and firstView.model.exists() %}
+        {% set activeViewName = (controller.active is empty) or (controller.active == firstViewName)
+            ? controller.views[1:]|keys|first
+            : controller.active
+        %}
+        <div class="row">
+            {# -- Left Panel -- #}
+            <div class="col-lg-2">
+                <div class="nav nav-pills flex-row flex-lg-column pb-3" id="mainTabs" role="tablist">
+                    {# -- All views but we skipped the first one -- #}
+                    {% for viewName, view in controller.views[1:] %}
+                        {% set active = (viewName == activeViewName) ? ' active' : '' %}
+                        {% set disable = view.settings.active ? '' : ' disabled' %}
+                            <a class="nav-link{{ active }}{{ disable }}" id="{{ viewName }}-tab" data-toggle="pill"
+                            href="#{{ viewName }}" role="tab" aria-controls="{{ viewName }}" aria-expanded="true">
+                             <i class="{{ view.icon }} fa-fw mr-1 d-none d-xl-inline-block"
+                                aria-hidden="true"></i>{{ view.title }}
+                             {% if view.count >= 1 and viewName != firstView.getViewName() %}
+                                 <span class='badge badge-secondary mt-lg-1 mb-lg-1 float-lg-right'>{{ view.count }}</span>
+                             {% endif %}
+                         </a>
+                    {% endfor %}
                 </div>
             </div>
-        {% endif %}
-    </div>
+            {# -- Right Panel -- #}
+            <div class="col">
+                <div class="tab-content" id="mainTabsContent">
+                    {# -- All views but we skipped the first one -- #}
+                    {% for viewName, view in controller.views[1:] %}
+                        {% set active = (viewName == activeViewName) ? ' show active' : '' %}
+                        <div class="tab-pane fade{{ active }}" id="{{ viewName }}" role="tabpanel"
+                             aria-labelledby="{{ viewName }}-tab">
+                            {% do controller.setCurrentView(viewName) %}
+                            {{ include(view.template) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

@@ -16,11 +16,6 @@
 #}
 {% set currentView = controller.getCurrentView() %}
 {% set action = currentView.model.exists() ? 'edit' : 'insert' %}
-{% set fieldCount = 0 %}
-{% for group in currentView.getColumns() %}
-    {% set fieldCount = fieldCount + group.columns | length %}
-{% endfor %}
-
 <script>
     function editViewDelete(viewName) {
         bootbox.confirm({
@@ -61,22 +56,12 @@
     <input type="hidden" name="multireqtoken" value="{{ controller.multiRequestProtection.newToken() }}"/>
     <div class="card shadow">
         <div class="card-body">
-            <div class="row">
-                <div class="col-12 text-right">
-                    {% if fieldCount > 30 and currentView.settings.btnSave %}
-                        <button class="btn btn-sm btn-primary" type="submit">
-                            <i class="fas fa-save fa-fw" aria-hidden="true"></i>
-                            <span class="d-none d-sm-inline-block">Guardar</span>
-                        </button>
-                    {% endif %}
-                </div>
-            </div>
             <div class="form-row">
                 {% for group in currentView.getColumns() %}
                     {{ group.edit(currentView.model) | raw }}
                 {% endfor %}
             </div>
-            <div class="row">
+            <div class="row mt-2">
                 {% if controller.hasData and currentView.settings.btnDelete %}
                     <div class="col-auto">
                         <button type="button" class="btn btn-sm btn-danger" onclick="editViewDelete('{{ currentView.getViewName() }}');">

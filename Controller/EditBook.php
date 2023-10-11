@@ -15,21 +15,22 @@
  */
 namespace BiblioApp\Controller;
 
+use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\ExtendedController\BaseView;
 use BiblioApp\Core\ExtendedController\EditController;
 
 /**
- * Controller to edit a User record data.
+ * Controller to edit a book record data.
  *
  * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
  */
-class EditUser extends EditController
+class EditBook extends EditController
 {
     public function getPageData(): array
     {
         $data = parent::getPageData();
-        $data['title'] = 'Usuario';
-        $data['icon'] = 'fas fa-users';
+        $data['title'] = 'Libro';
+        $data['icon'] = 'fa-solid fa-book-bookmark';
         return $data;
     }
 
@@ -38,7 +39,8 @@ class EditUser extends EditController
      */
     protected function createViews(): void
     {
-        $this->addEditView('EditUser', 'User', 'Usuario', 'fas fa-user-edit');
+        $this->addEditView('EditBook', 'Book', 'Libro', 'fa-solid fa-book-bookmark');
+        $this->addEditListView('EditBookCategory', 'BookCategory', 'Categorías', 'fa-solid fa-object-group');
     }
 
     /**
@@ -49,11 +51,20 @@ class EditUser extends EditController
      */
     protected function loadData(string $viewName, mixed $view): void
     {
-        if ($viewName == 'EditUser') {
-            $primaryKey = $this->request->request->get('username', '');
-            $code = $this->request->query->get('code', $primaryKey);
-            $view->loadData($code);
-            $this->title .= ' ' . $view->model->primaryDescription();
+        switch ($viewName) {
+            case 'EditBook':
+                $primaryKey = $this->request->request->get('id', '');
+                $code = $this->request->query->get('code', $primaryKey);
+                $view->loadData($code);
+                $this->title .= ' ' . $view->model->primaryDescription();
+                break;
+
+            case 'EditBookCategory':
+                $mvn = $this->getMainViewName();
+                $idBook = $this->views[$mvn]->model->id;
+                $where = [ new DataBaseWhere('idBook', $idBook) ];
+                $view->loadData(false, $where);
+                break;
         }
     }
 }

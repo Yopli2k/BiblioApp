@@ -16,17 +16,11 @@
 -->
 <view>
     <columns>
-        <column name="codigo" title="código" display="none" order="100">
-            <widget type="text" fieldname="id" />
+        <column name="nombre" order="100">
+            <widget type="text" fieldname="name" maxlenght="100" required="true" />
         </column>
-        <column name="titulo" title="título" order="110">
-            <widget type="text" fieldname="title" />
-        </column>
-        <column name="ibsn" order="120">
-            <widget type="text" fieldname="ibsn" />
-        </column>
-        <column name="autor" order="130">
-            <widget type="text" fieldname="author" />
+        <column name="codigo" numcolumns="1" order="110">
+            <widget type="number" fieldname="id" readonly="true" required="true" />
         </column>
     </columns>
 </view>

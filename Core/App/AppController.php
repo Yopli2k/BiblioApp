@@ -157,7 +157,6 @@ class AppController extends AppBase
     /**
      * Authenticate the user using the cookie.
      *
-     * @param User $user
      * @return ?User
      */
     private function cookieAuth(): ?User

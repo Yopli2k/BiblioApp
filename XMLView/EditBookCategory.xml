@@ -16,17 +16,13 @@
 -->
 <view>
     <columns>
-        <column name="codigo" title="código" display="none" order="100">
-            <widget type="text" fieldname="id" />
+        <column name="libro" numcolumns="2" display="none" order="100">
+            <widget type="text" fieldname="id" readonly="true" required="true" />
         </column>
-        <column name="titulo" title="título" order="110">
-            <widget type="text" fieldname="title" />
-        </column>
-        <column name="ibsn" order="120">
-            <widget type="text" fieldname="ibsn" />
-        </column>
-        <column name="autor" order="130">
-            <widget type="text" fieldname="author" />
+        <column name="categoria" title="categoría" order="110">
+            <widget type="autocomplete" fieldname="idcategory" required="true">
+                <values source="categories" fieldcode="id" fieldtitle="name"></values>
+            </widget>
         </column>
     </columns>
 </view>

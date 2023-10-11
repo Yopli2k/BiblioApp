@@ -93,6 +93,18 @@ class Category extends AppModel
     }
 
     /**
+     * Returns the url where to see / modify the data.
+     *
+     * @param string $type
+     * @param string $list
+     * @return string
+     */
+    public function url(string $type = 'auto', string $list = 'List'): string
+    {
+        return parent::url($type, 'ListBook?activetab=' . $list);
+    }
+
+    /**
      * Insert the model data in the database.
      *
      * @return bool

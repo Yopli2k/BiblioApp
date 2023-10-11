@@ -57,7 +57,6 @@
 
 {% block body %}
     {{ parent() }}
-
     {% set pageData = controller.getPageData() %}
     {% set firstView = controller.views | first %}
     <div class="container-fluid mb-3 d-print-none">
@@ -66,7 +65,8 @@
             </div>
             <div class="col-md-5 text-right">
                 <h1 class="h4 mb-0 d-none d-md-inline-block">
-                    {{ controller.title }}<i class="{{ pageData.icon }} ml-3" aria-hidden="true"></i>
+                    {{ controller.title }}
+                    <i class="{{ pageData.icon }} ml-3" aria-hidden="true"></i>
                 </h1>
             </div>
         </div>

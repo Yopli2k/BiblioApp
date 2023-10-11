@@ -19,17 +19,17 @@ use BiblioApp\Core\ExtendedController\BaseView;
 use BiblioApp\Core\ExtendedController\EditController;
 
 /**
- * Controller to edit a User record data.
+ * Controller to edit a book category record data.
  *
  * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
  */
-class EditUser extends EditController
+class EditCategory extends EditController
 {
     public function getPageData(): array
     {
         $data = parent::getPageData();
-        $data['title'] = 'Usuario';
-        $data['icon'] = 'fas fa-users';
+        $data['title'] = 'Categoría';
+        $data['icon'] = 'fa-solid fa-object-group';
         return $data;
     }
 
@@ -38,7 +38,7 @@ class EditUser extends EditController
      */
     protected function createViews(): void
     {
-        $this->addEditView('EditUser', 'User', 'Usuario', 'fas fa-user-edit');
+        $this->addEditView('EditCategory', 'Category', 'Categoría', 'fa-solid fa-object-group');
     }
 
     /**
@@ -49,8 +49,8 @@ class EditUser extends EditController
      */
     protected function loadData(string $viewName, mixed $view): void
     {
-        if ($viewName == 'EditUser') {
-            $primaryKey = $this->request->request->get('username', '');
+        if ($viewName == 'EditCategory') {
+            $primaryKey = $this->request->request->get('id', '');
             $code = $this->request->query->get('code', $primaryKey);
             $view->loadData($code);
             $this->title .= ' ' . $view->model->primaryDescription();

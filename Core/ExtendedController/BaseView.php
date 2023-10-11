@@ -64,9 +64,9 @@ abstract class BaseView
     /**
      * Stores the new code from the save() procedure, to use in loadData().
      *
-     * @var string
+     * @var ?string
      */
-    public string $newCode;
+    public ?string $newCode;
 
     /**
      * Stores the offset for the cursor
@@ -163,7 +163,7 @@ abstract class BaseView
 
         $this->icon = $icon;
         $this->name = $name;
-        $this->newCode = '';
+        $this->newCode = null;
         $this->pageOption = new PageOption();
         $this->settings = [
             'active' => true,
