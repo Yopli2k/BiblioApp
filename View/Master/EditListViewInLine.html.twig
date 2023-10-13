@@ -24,18 +24,6 @@
 </script>
 
 <div class="{{ currentView.settings.card ? '' : 'container-fluid' }}">
-    {# -- Row header -- #}
-    <div class="row">
-        {% set row = currentView.getRow('header') %}
-        {{ row.render(currentView.getViewName(), '', controller) | raw }}
-    </div>
-
-    {# -- Row statistics -- #}
-    <div>
-        {% set row = currentView.getRow('statistics') %}
-        {{ row.render(controller) | raw }}
-    </div>
-
     {# -- New form -- #}
     {% if currentView.settings.btnNew %}
         {% set formName = 'form' ~ currentView.getViewName() ~ 'New' %}

@@ -25,10 +25,12 @@
 
 {% block css %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}" />
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('Assets/JS/WidgetAutocomplete.js') }}"></script>
     <script>
         $(document).ready(function () {
@@ -86,52 +88,51 @@
                 {% endif %}
             </div>
         </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-12">
-            {# -- First edit view -- #}
-            {% do controller.setCurrentView(firstViewName) %}
-            {{ include(firstView.template) }}
-        </div>
-    </div>
-    {% if controller.views | length > 1 and firstView.model.exists() %}
-        {% set activeViewName = (controller.active is empty) or (controller.active == firstViewName)
-            ? controller.views[1:]|keys|first
-            : controller.active
-        %}
-        <div class="row">
-            {# -- Left Panel -- #}
-            <div class="col-lg-2">
-                <div class="nav nav-pills flex-row flex-lg-column pb-3" id="mainTabs" role="tablist">
-                    {# -- All views but we skipped the first one -- #}
-                    {% for viewName, view in controller.views[1:] %}
-                        {% set active = (viewName == activeViewName) ? ' active' : '' %}
-                        {% set disable = view.settings.active ? '' : ' disabled' %}
-                            <a class="nav-link{{ active }}{{ disable }}" id="{{ viewName }}-tab" data-toggle="pill"
-                            href="#{{ viewName }}" role="tab" aria-controls="{{ viewName }}" aria-expanded="true">
-                             <i class="{{ view.icon }} fa-fw mr-1 d-none d-xl-inline-block"
-                                aria-hidden="true"></i>{{ view.title }}
-                             {% if view.count >= 1 and viewName != firstView.getViewName() %}
-                                 <span class='badge badge-secondary mt-lg-1 mb-lg-1 float-lg-right'>{{ view.count }}</span>
-                             {% endif %}
-                         </a>
-                    {% endfor %}
-                </div>
-            </div>
-            {# -- Right Panel -- #}
-            <div class="col">
-                <div class="tab-content" id="mainTabsContent">
-                    {# -- All views but we skipped the first one -- #}
-                    {% for viewName, view in controller.views[1:] %}
-                        {% set active = (viewName == activeViewName) ? ' show active' : '' %}
-                        <div class="tab-pane fade{{ active }}" id="{{ viewName }}" role="tabpanel"
-                             aria-labelledby="{{ viewName }}-tab">
-                            {% do controller.setCurrentView(viewName) %}
-                            {{ include(view.template) }}
-                        </div>
-                    {% endfor %}
-                </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                {# -- First edit view -- #}
+                {% do controller.setCurrentView(firstViewName) %}
+                {{ include(firstView.template) }}
             </div>
         </div>
-    {% endif %}
+        {% if controller.views | length > 1 and firstView.model.exists() %}
+            {% set activeViewName = (controller.active is empty) or (controller.active == firstViewName)
+                ? controller.views[1:]|keys|first
+                : controller.active
+            %}
+            <div class="row">
+                {# -- Left Panel -- #}
+                <div class="col-lg-2">
+                    <div class="nav nav-pills flex-row flex-lg-column pb-3" id="mainTabs" role="tablist">
+                        {# -- All views but we skipped the first one -- #}
+                        {% for viewName, view in controller.views[1:] %}
+                            {% set active = (viewName == activeViewName) ? ' active' : '' %}
+                            {% set disable = view.settings.active ? '' : ' disabled' %}
+                                <a class="nav-link{{ active }}{{ disable }}" id="{{ viewName }}-tab" data-toggle="pill"
+                                href="#{{ viewName }}" role="tab" aria-controls="{{ viewName }}" aria-expanded="true">
+                                 <i class="{{ view.icon }} fa-fw mr-1 d-none d-xl-inline-block"
+                                    aria-hidden="true"></i>{{ view.title }}
+                                 {% if view.count >= 1 and viewName != firstView.getViewName() %}
+                                     <span class='badge badge-secondary mt-lg-1 mb-lg-1 float-lg-right'>{{ view.count }}</span>
+                                 {% endif %}
+                             </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {# -- Right Panel -- #}
+                <div class="col">
+                    <div class="tab-content" id="mainTabsContent">
+                        {# -- All views but we skipped the first one -- #}
+                        {% for viewName, view in controller.views[1:] %}
+                            {% set active = (viewName == activeViewName) ? ' show active' : '' %}
+                            <div class="tab-pane fade{{ active }}" id="{{ viewName }}" role="tabpanel" aria-labelledby="{{ viewName }}-tab">
+                                {% do controller.setCurrentView(viewName) %}
+                                {{ include(view.template) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

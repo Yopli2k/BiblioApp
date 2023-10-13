@@ -31,9 +31,9 @@ class CodeModel
     /**
      * It provides direct access to the database.
      *
-     * @var DataBase
+     * @var ?DataBase
      */
-    protected static DataBase $dataBase;
+    protected static ?DataBase $dataBase = null;
 
     /**
      * Value of the code field of the model read.

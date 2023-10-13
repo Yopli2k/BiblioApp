@@ -45,7 +45,7 @@ final class Html
     public static function render(string $template, array $params = []): string
     {
         $templateVars = [
-            /* example 'appSettings' => new AppSettings(), */
+            'message' => new Message(),
         ];
         return self::twig()->render($template, array_merge($params, $templateVars));
     }

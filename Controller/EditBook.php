@@ -62,7 +62,7 @@ class EditBook extends EditController
             case 'EditBookCategory':
                 $mvn = $this->getMainViewName();
                 $idBook = $this->views[$mvn]->model->id;
-                $where = [ new DataBaseWhere('idBook', $idBook) ];
+                $where = [ new DataBaseWhere('book_id', $idBook) ];
                 $view->loadData(false, $where);
                 break;
         }

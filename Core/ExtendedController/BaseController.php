@@ -17,6 +17,7 @@ namespace BiblioApp\Core\ExtendedController;
 
 use BiblioApp\Core\App\PageController;
 use BiblioApp\Core\DataBase\DataBaseWhere;
+use BiblioApp\Core\Tools\Tools;
 use BiblioApp\Model\CodeModel;
 use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Response;
@@ -208,7 +209,7 @@ abstract class BaseController extends PageController
         if (empty($results) && '0' == $data['strict']) {
             $results[] = ['key' => $data['term'], 'value' => $data['term']];
         } elseif (empty($results)) {
-            $results[] = ['key' => null, 'value' => Tools::lang()->trans('no-data')];
+            $results[] = ['key' => null, 'value' => 'No hay datos'];
         }
 
         return $results;
@@ -280,7 +281,7 @@ abstract class BaseController extends PageController
         $column = $this->views[$viewName]->columnForField($fieldName);
         if (!empty($column)) {
             foreach ($column->widget->values as $value) {
-                $result[] = ['key' => Tools::lang()->trans($value['title']), 'value' => $value['value']];
+                $result[] = ['key' => $value['title'], 'value' => $value['value']];
             }
         }
         return $result;

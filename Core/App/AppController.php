@@ -123,7 +123,9 @@ class AppController extends AppBase
         $this->controller = new $controllerName($pageName, $this->user, $this->uri);
         $this->controller->exec($this->response);
         $template = $this->controller->getTemplate();
-        $this->renderHtml($template, $controllerName);
+        if (false === empty($template)) {
+            $this->renderHtml($template, $controllerName);
+        }
     }
 
     /**
@@ -142,13 +144,15 @@ class AppController extends AppBase
         $templateVars = [
             'controllerName' => $controllerName,
             'controller' => $this->controller ?? null,
-            'template' => $template
+            'template' => $template,
         ];
 
         try {
             $this->response->setContent(Html::render($template, $templateVars));
         } catch (Exception $exc) {
-            // ToolBox::log()->critical($exc->getMessage());
+            if (isset($this->controller)) {
+                $this->controller->message->error($exc->getMessage());
+            }
             $this->response->setContent(Html::render('Error/TemplateError.html.twig', $templateVars));
             $this->response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         }

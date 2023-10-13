@@ -35,6 +35,8 @@ abstract class AppModel
      */
     protected static DataBase $dataBase;
 
+    protected static Message $message;
+
     /**
      * Reset the values of all model properties.
      */
@@ -87,9 +89,12 @@ abstract class AppModel
             self::$dataBase = new DataBase();
         }
 
-        if (empty($data)) {
-            $this->clear();
-        } else {
+        if (false === isset(self::$message)) {
+            self::$message = new Message();
+        }
+
+        $this->clear();
+        if (false === empty($data)) {
             $this->loadFromData($data);
         }
     }
@@ -263,19 +268,12 @@ abstract class AppModel
     {
         $value = $this->primaryColumnValue();
         $model = $this->modelClassName();
-        switch ($type) {
-            case 'edit':
-                return is_null($value) ? 'Edit' . $model : 'Edit' . $model . '?code=' . rawurlencode($value);
-
-            case 'list':
-                return $list . $model;
-
-            case 'new':
-                return 'Edit' . $model;
-        }
-
-        // default
-        return empty($value) ? $list . $model : 'Edit' . $model . '?code=' . rawurlencode($value);
+        return match ($type) {
+            'edit' => is_null($value) ? 'Edit' . $model : 'Edit' . $model . '?code=' . rawurlencode($value),
+            'list' => $list . $model,
+            'new' => 'Edit' . $model,
+            default => empty($value) ? $list . $model : 'Edit' . $model . '?code=' . rawurlencode($value),
+        };
     }
 
     /**

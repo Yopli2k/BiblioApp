@@ -34,7 +34,7 @@ class EditListView extends BaseView
      *
      * @var bool
      */
-    public bool $selected;
+    public ?bool $selected;
 
     /**
      * Load the data in the cursor property, according to the where filter specified.
@@ -55,7 +55,7 @@ class EditListView extends BaseView
         $this->count = is_null($this->model) ? 0 : $this->model->count($finalWhere);
 
         if ($this->count > 0) {
-            $this->cursor = $this->model->all($finalWhere, $this->order, $this->offset, $limit);
+            $this->cursor = $this->model->select($finalWhere, $this->order, $this->offset, $limit);
         }
 
         $this->where = $finalWhere;

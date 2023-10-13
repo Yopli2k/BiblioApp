@@ -24,7 +24,6 @@ function widgetAutocompleteGetData(formId, formData, term) {
 
 $(document).ready(function () {
     $(".widget-autocomplete").each(function () {
-        console.log($(this));
         let data = {
             field: $(this).attr("data-field"),
             fieldcode: $(this).attr("data-fieldcode"),
@@ -61,11 +60,7 @@ $(document).ready(function () {
                 if (ui.item.key !== null) {
                     $("form[id=" + formId + "] input[name=" + data.field + "]").val(ui.item.key);
                     let value = ui.item.value.split(" | ");
-                    if (value.length > 1) {
-                        ui.item.value = value[1];
-                    } else {
-                        ui.item.value = value[0];
-                    }
+                    ui.item.value = value.length > 1 ? value[1] : value[0];
                 }
             },
             open: function (event, ui) {

@@ -105,6 +105,7 @@ class Book extends AppModel
         $this->synopsis = Tools::noHtml(mb_strtolower($this->synopsis ?? '', 'UTF8'));
 
         if (false ===  is_numeric($this->isbn)) {
+            self::$message->error('El ISBN debe ser un número.');
             return false;
         }
         return parent::test();

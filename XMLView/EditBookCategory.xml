@@ -20,7 +20,7 @@
             <widget type="number" fieldname="id" readonly="true" required="true" />
         </column>
         <column name="libro" numcolumns="2" display="none" order="100">
-            <widget type="text" fieldname="book_id" readonly="true" required="true" />
+            <widget type="number" fieldname="book_id" readonly="true" required="true" />
         </column>
         <column name="categoria" title="categoría" order="110">
             <widget type="autocomplete" fieldname="category_id" required="true">

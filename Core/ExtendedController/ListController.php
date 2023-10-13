@@ -238,13 +238,12 @@ abstract class ListController extends BaseController
     {
         $idfilter = $this->request->request->get('loadfilter', 0);
         if ($this->views[$this->active]->deletePageFilter($idfilter)) {
-            // $this->toolBox()->i18nLog()->notice('record-deleted-correctly');
+            $this->message->info('Registro eliminado correctamente.');
             $this->request->request->remove('loadfilter');
             return;
         }
 
-        // TODO: show user message
-        // $this->toolBox()->i18nLog()->warning('record-deleted-error');
+        $this->message->warning('No se pudo eliminar el registro.');
     }
 
     /**
@@ -255,7 +254,7 @@ abstract class ListController extends BaseController
     protected function execAfterAction(string $action): void
     {
         if ($action == 'delete-ok') {
-            // $this->toolBox()->i18nLog()->notice('record-deleted-correctly');
+            $this->message->info('Registro eliminado correctamente.');
         }
     }
 
@@ -305,8 +304,8 @@ abstract class ListController extends BaseController
     protected function saveFilterAction(): void
     {
         $idFilter = $this->views[$this->active]->savePageFilter($this->request, $this->user);
-        if (!empty($idFilter)) {
-            // $this->toolBox()->i18nLog()->notice('record-updated-correctly');
+        if (false === empty($idFilter)) {
+            $this->message->info('Registro actualizado correctamente.');
 
             // load filters in request
             $this->request->request->set('loadfilter', $idFilter);

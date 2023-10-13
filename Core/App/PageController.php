@@ -28,9 +28,10 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class PageController
 {
-    /**
-     * @var MultiRequestProtection
-     */
+    /** @var Message $message */
+    public Message $message;
+
+    /** @var MultiRequestProtection */
     public MultiRequestProtection $multiRequestProtection;
 
     /**
@@ -102,6 +103,7 @@ abstract class PageController
     {
         $this->className = $className;
         $this->dataBase = new DataBase();
+        $this->message = new Message();
         $this->multiRequestProtection = new MultiRequestProtection();
         $this->request = Request::createFromGlobals();
         $this->template = $this->className . '.html.twig';
@@ -216,13 +218,13 @@ abstract class PageController
         $urlToken = $this->request->query->get('multireqtoken', '');
         $token = $this->request->request->get('multireqtoken', $urlToken);
         if (empty($token) || false === $this->multiRequestProtection->validate($token)) {
-            // $this->toolBox()->i18nLog()->warning('invalid-request');
+            $this->message->warning('Petición inválida o no autorizada.');
             return false;
         }
 
         // duplicated request?
         if ($this->multiRequestProtection->tokenExist($token)) {
-            // $this->toolBox()->i18nLog()->warning('duplicated-request');
+            $this->message->warning('Petición duplicada.');
             return false;
         }
 

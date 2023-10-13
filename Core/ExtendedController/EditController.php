@@ -15,13 +15,9 @@
  */
 namespace BiblioApp\Core\ExtendedController;
 
+use BiblioApp\Core\App\Message;
 use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Response;
-
-/*
-use FacturaScripts\Core\Base\ControllerPermissions;
-use FacturaScripts\Dinamic\Model\User;
-*/
 
 /**
  * Controller to edit data.
@@ -79,7 +75,7 @@ abstract class EditController extends BaseController
             // exclude inactive views
             if (false === $view->settings['active']) {
                 continue;
-            };
+            }
 
             $case = $this->active == $viewName ? 'load' : 'preload';
             $view->processFormData($this->request, $case);
@@ -158,11 +154,11 @@ abstract class EditController extends BaseController
 
         // save in database
         if ($this->views[$this->active]->model->save()) {
-            // $this->toolBox()->i18nLog()->notice('record-updated-correctly');
+            $this->message->info('Registro actualizado correctamente.');
             return true;
         }
 
-        // $this->toolBox()->i18nLog()->error('record-save-error');
+        $this->message->error('Error guardando los datos.');
         return false;
     }
 
@@ -175,7 +171,7 @@ abstract class EditController extends BaseController
     {
         switch ($action) {
             case 'save-ok':
-                $this->toolBox()->i18nLog()->notice('record-updated-correctly');
+                $this->message->info('Registro guardado correctamente.');
                 break;
         }
     }
@@ -183,10 +179,10 @@ abstract class EditController extends BaseController
     /**
      * Run the actions that alter data before reading it.
      *
-     * @param string $action
+     * @param ?string $action
      * @return bool
      */
-    protected function execPreviousAction($action): bool
+    protected function execPreviousAction(?string $action): bool
     {
         switch ($action) {
             case 'autocomplete':
@@ -241,13 +237,13 @@ abstract class EditController extends BaseController
         // loads form data
         $this->views[$this->active]->processFormData($this->request, 'edit');
         if ($this->views[$this->active]->model->exists()) {
-            // $this->toolBox()->i18nLog()->error('duplicate-record');
+            $this->message->error('Registro duplicado.');
             return false;
         }
 
         // save in database
         if (false === $this->views[$this->active]->model->save()) {
-            // $this->toolBox()->i18nLog()->error('record-save-error');
+            $this->message->error('Error guardando los datos.');
             return false;
         }
 
@@ -257,7 +253,7 @@ abstract class EditController extends BaseController
         }
 
         $this->views[$this->active]->newCode = $this->views[$this->active]->model->primaryColumnValue();
-        // $this->toolBox()->i18nLog()->notice('record-updated-correctly');
+        $this->message->info('Registro guardado correctamente.');
         return true;
     }
 }

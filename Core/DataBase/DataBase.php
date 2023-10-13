@@ -15,6 +15,7 @@
  */
 namespace BiblioApp\Core\DataBase;
 
+use BiblioApp\Core\App\Message;
 use mysqli;
 
 /**
@@ -77,6 +78,7 @@ final class DataBase
         }
 
         if (self::$engine->inTransaction(self::$link) && !$this->rollback()) {
+            Message::error($this->lastErrorMessage());
             return false;
         }
 
@@ -164,6 +166,9 @@ final class DataBase
         $inTransaction = $this->inTransaction();
         $this->beginTransaction();
         $result = self::$engine->exec(self::$link, $sql);
+        if (false === $result) {
+            Message::error($this->lastErrorMessage());
+        }
 
         if ($inTransaction) {
             return $result;                 // If it was already in a transaction, return result of execution

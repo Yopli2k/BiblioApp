@@ -31,21 +31,21 @@ class BookCategory extends AppModel
      *
      * @var ?int
      */
-    public ?int $book_id;
+    public $book_id;
 
     /**
      * Link to Category Model.
      *
      * @var ?int
      */
-    public ?int $category_id;
+    public $category_id;
 
     /**
      * Primary Key.
      *
      * @var ?int
      */
-    public ?int $id;
+    public $id;
 
     /**
      * Reset the values of all model properties.
@@ -87,6 +87,21 @@ class BookCategory extends AppModel
     public static function tableName(): string
     {
         return 'books_categories';
+    }
+
+    /**
+     * Returns true if there are no errors in the values of the model properties.
+     * It runs inside the save method.
+     *
+     * @return bool
+     */
+    public function test(): bool
+    {
+        if (empty($this->book_id) ||empty($this->category_id)) {
+            return false;
+        }
+
+        return parent::test();
     }
 
     /**
