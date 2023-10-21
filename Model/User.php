@@ -75,6 +75,7 @@ class User extends AppModel
     public function delete(): bool
     {
         if ($this->username === 'admin') {
+            $this->message->warning('No se puede eliminar el usuario administrador.');
             return false;
         }
         return parent::delete();
@@ -144,7 +145,7 @@ class User extends AppModel
             return false;
         }
 
-        return parent::test();
+        return $this->testPassword() && parent::test();
     }
 
     /**
@@ -194,6 +195,31 @@ class User extends AppModel
             . self::$dataBase->var2str($this->username)
             . ')';
         return self::$dataBase->exec($sql);
+    }
+
+    /**
+     * Check if user have been change the password.
+     * If so, it checks that the two passwords are the same and updates the password.
+     *
+     * @return bool
+     */
+    protected function testPassword(): bool
+    {
+        if (false === empty($this->newPassword) && false === empty($this->newPassword2)) {
+            if ($this->newPassword !== $this->newPassword2) {
+                $this->message->warning('La nueva contraseña no coincide con su comprobación.');
+                return false;
+            }
+
+            $this->setPassword($this->newPassword);
+        }
+
+        if (empty($this->password)) {
+            $this->message->warning('La contraseña no puede estar vacía.');
+            return false;
+        }
+
+        return true;
     }
 
     /**

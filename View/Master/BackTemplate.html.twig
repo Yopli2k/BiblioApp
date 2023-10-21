@@ -41,6 +41,8 @@
         {% block javascripts %}
             <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
             <script src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('node_modules/bootbox/dist/bootbox.min.js') }}"></script>
+            <script src="{{ asset('node_modules/bootbox/dist/bootbox.locales.min.js') }}"></script>
             <script src="{{ asset('node_modules/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
             <script src="{{ asset('Assets/JS/template_back.js') }}"></script>
         {% endblock %}
@@ -71,14 +73,14 @@
                                 <span class="d-none d-md-inline">Asociados</span>
                             </a>
                             <div class="sidebar-divider"></div>
+                            <a href="{{ asset('ListUser') }}" class="list-group-item d-inline-block collapsed">
+                                <i class="fa-solid fa-user-gear mr-2"></i>
+                                <span class="d-none d-md-inline">Bibliotecarios</span>
+                            </a>
+                            <div class="sidebar-divider"></div>
                             <a href="{{ asset('ListBook') }}" class="list-group-item d-inline-block collapsed">
                                 <i class="fa-solid fa-book-bookmark mr-2"></i>
                                 <span class="d-none d-md-inline">Libros</span>
-                            </a>
-                            <div class="sidebar-divider"></div>
-                            <a href="{{ asset('ListUser') }}" class="list-group-item d-inline-block collapsed">
-                                <i class="fa-solid fa-user-gear mr-2"></i>
-                                <span class="d-none d-md-inline">Usuarios</span>
                             </a>
                             <div class="sidebar-divider"></div>
                         {% endblock %}

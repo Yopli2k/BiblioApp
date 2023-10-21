@@ -35,7 +35,12 @@ abstract class AppModel
      */
     protected static DataBase $dataBase;
 
-    protected static Message $message;
+    /**
+     * Provides access to the message system.
+     *
+     * @var Message
+     */
+    protected Message $message;
 
     /**
      * Reset the values of all model properties.
@@ -89,10 +94,7 @@ abstract class AppModel
             self::$dataBase = new DataBase();
         }
 
-        if (false === isset(self::$message)) {
-            self::$message = new Message();
-        }
-
+        $this->message = new Message();
         $this->clear();
         if (false === empty($data)) {
             $this->loadFromData($data);
@@ -132,15 +134,11 @@ abstract class AppModel
      */
     public function exists(): bool
     {
-        if (false === empty($this->primaryColumnValue())) {
-            return true;
-        }
-
         $sql = 'SELECT 1 FROM ' . static::tableName()
             . ' WHERE ' . static::primaryColumn()
             . ' = ' . self::$dataBase->var2str($this->primaryColumnValue());
 
-        return count(self::$dataBase->select($sql)) > 0;
+        return !empty($this->primaryColumnValue()) && self::$dataBase->select($sql);
     }
 
     /**

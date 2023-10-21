@@ -81,7 +81,7 @@
             <div class="col-md-5 text-right">
                 <i class="{{ pageData.icon }} fa-3x pl-3 float-right" aria-hidden="true"></i>
                 <h1 class="h5 mb-0">{{ pageData.title }}</h1>
-                {% if fsc.hasData %}
+                {% if controller.hasData %}
                     <p class="text-info mb-3">{{ firstView.model.primaryDescription() | raw }}</p>
                 {% else %}
                     <p class="text-info mb-3">Nuevo</p>
