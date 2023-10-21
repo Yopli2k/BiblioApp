@@ -28,5 +28,11 @@
         <column name="autor" order="130">
             <widget type="text" fieldname="author" />
         </column>
+        <column name="editorial" order="140">
+            <widget type="text" fieldname="editorial" />
+        </column>
+        <column name="publicacion" title="año" order="150">
+            <widget type="text" fieldname="publication" />
+        </column>
     </columns>
 </view>

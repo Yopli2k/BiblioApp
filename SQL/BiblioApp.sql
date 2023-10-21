@@ -108,7 +108,7 @@ CREATE TABLE books (
     editorial varchar(100) NOT NULL,
     id int NOT NULL AUTO_INCREMENT,
     isbn varchar(13) NOT NULL,
-    pages int NOT NULL,
+    pages int NOT NULL DEFAULT 0,
     publication int NOT NULL,
     synopsis text NOT NULL,
     title varchar(100) NOT NULL,

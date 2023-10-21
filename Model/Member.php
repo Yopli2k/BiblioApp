@@ -129,6 +129,16 @@ class Member extends AppModel
     }
 
     /**
+     * Returns the list of fields that are required.
+     *
+     * @return string[]
+     */
+    protected function requiredFields(): array
+    {
+        return ['name', 'phone'];
+    }
+
+    /**
      * Update the model data in the database.
      *
      * @return bool

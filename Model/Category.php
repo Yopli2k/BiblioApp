@@ -120,6 +120,16 @@ class Category extends AppModel
     }
 
     /**
+     * Returns the list of fields that are required.
+     *
+     * @return string[]
+     */
+    protected function requiredFields(): array
+    {
+        return ['name'];
+    }
+
+    /**
      * Update the model data in the database.
      *
      * @return bool

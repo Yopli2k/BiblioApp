@@ -29,6 +29,9 @@ class Book extends AppModel
     /** @var string */
     public string $author;
 
+    /** @var string */
+    public string $editorial;
+
     /**
      * Primary Key.
      *
@@ -38,6 +41,12 @@ class Book extends AppModel
 
     /** @var string */
     public string $isbn;
+
+    /** @var int */
+    public int $pages;
+
+    /** @var int */
+    public int $publication;
 
     /** @var string */
     public string $synopsis;
@@ -51,8 +60,11 @@ class Book extends AppModel
     public function clear(): void
     {
         $this->author = '';
+        $this->editorial = '';
         $this->id = null;
         $this->isbn = '';
+        $this->pages = 0;
+        $this->publication = date('Y');
         $this->synopsis = '';
         $this->title = '';
     }
@@ -105,9 +117,15 @@ class Book extends AppModel
         $this->synopsis = Tools::noHtml(mb_strtolower($this->synopsis ?? '', 'UTF8'));
 
         if (false ===  is_numeric($this->isbn)) {
-            self::$message->error('El ISBN debe ser un número.');
+            $this->message->error('El ISBN debe ser un número.');
             return false;
         }
+
+        if ($this->publication > date('Y')) {
+            $this->message->error('El año de publicación no puede ser mayor que el año actual.');
+            return false;
+        }
+
         return parent::test();
     }
 
@@ -127,6 +145,16 @@ class Book extends AppModel
             . self::$dataBase->var2str($this->title)
             . ')';
         return self::$dataBase->exec($sql);
+    }
+
+    /**
+     * Returns the list of fields that are required.
+     *
+     * @return string[]
+     */
+    protected function requiredFields(): array
+    {
+        return ['author', 'isbn', 'title', 'synopsis', 'publication', 'pages'];
     }
 
     /**

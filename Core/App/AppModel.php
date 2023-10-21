@@ -76,6 +76,13 @@ abstract class AppModel
     abstract protected function insert(): bool;
 
     /**
+     * Returns the list of fields that cannot be empty.
+     *
+     * @return string[]
+     */
+    abstract protected function requiredFields(): array;
+
+    /**
      * Update the model data in the database.
      *
      * @return bool
@@ -252,6 +259,11 @@ abstract class AppModel
         if (empty($this->{$keyField})) {
             $this->{$keyField} = null;
         }
+
+        if (false === $this->checkRequiredFields()) {
+            $this->message->warning('Debe introducir todos los campos obligatorios.');
+            return false;
+        }
         return true;
     }
 
@@ -272,6 +284,20 @@ abstract class AppModel
             'new' => 'Edit' . $model,
             default => empty($value) ? $list . $model : 'Edit' . $model . '?code=' . rawurlencode($value),
         };
+    }
+
+    /**
+     * @param array $fields
+     * @return bool
+     */
+    private function checkRequiredFields(array $fields): bool
+    {
+        foreach ($fields as $field) {
+            if (empty($this->{$field})) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

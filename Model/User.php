@@ -198,6 +198,16 @@ class User extends AppModel
     }
 
     /**
+     * Returns the list of fields that are required.
+     *
+     * @return string[]
+     */
+    protected function requiredFields(): array
+    {
+        return ['email', 'name', 'username', 'password'];
+    }
+
+    /**
      * Check if user have been change the password.
      * If so, it checks that the two passwords are the same and updates the password.
      *

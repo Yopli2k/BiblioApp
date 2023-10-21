@@ -121,6 +121,16 @@ class BookCategory extends AppModel
     }
 
     /**
+     * Returns the list of fields that are required.
+     *
+     * @return string[]
+     */
+    protected function requiredFields(): array
+    {
+        return ['book_id', 'category_id'];
+    }
+
+    /**
      * Update the model data in the database.
      *
      * @return bool
