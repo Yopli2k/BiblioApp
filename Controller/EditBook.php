@@ -41,6 +41,7 @@ class EditBook extends EditController
     {
         $this->addEditView('EditBook', 'Book', 'Libro', 'fa-solid fa-book-bookmark');
         $this->addEditListView('EditBookCategory', 'BookCategory', 'Categorías', 'fa-solid fa-object-group');
+        $this->createViewsRatings();
     }
 
     /**
@@ -66,5 +67,20 @@ class EditBook extends EditController
                 $view->loadData(false, $where);
                 break;
         }
+    }
+
+    private function createViewsRatings(string $viewName = 'ListRating')
+    {
+        $this->addListView($viewName, 'Rating', 'Opiniones', 'fa-regular fa-comments');
+        $this->views[$viewName]->addSearchFields(['valoration']);
+        $this->views[$viewName]->addOrderBy(['rating_date', 'rating_time', 'id'], 'Fecha', 2);
+        $this->views[$viewName]->addOrderBy(['rating', 'id'], 'Valoración');
+
+        $this->views[$viewName]->disableColumn('libro');
+
+        // TODO: fix filter error
+        // $this->views[$viewName]->addFilterAutocomplete('member_id', 'Asociado', 'member_id', 'members', 'id', 'name');
+
+        // TODO: add approved button and process.
     }
 }

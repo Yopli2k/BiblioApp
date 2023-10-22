@@ -29,16 +29,16 @@ class Category extends AppModel
     /**
      * Primary Key.
      *
-     * @var ?int
+     * @var int|null
      */
     public ?int $id;
 
     /**
-     * Human description.
+     *
      *
      * @var string
      */
-    public string $name;
+    public string $valoration;
 
     /**
      * Reset the values of all model properties.
@@ -88,7 +88,7 @@ class Category extends AppModel
      */
     public function test(): bool
     {
-        $this->name = Tools::noHtml(mb_strtolower($this->name ?? '', 'UTF8'));
+        $this->name = Tools::noHtml($this->name);
         return parent::test();
     }
 

@@ -287,12 +287,11 @@ abstract class AppModel
     }
 
     /**
-     * @param array $fields
      * @return bool
      */
-    private function checkRequiredFields(array $fields): bool
+    private function checkRequiredFields(): bool
     {
-        foreach ($fields as $field) {
+        foreach ($this->requiredFields() as $field) {
             if (empty($this->{$field})) {
                 return false;
             }

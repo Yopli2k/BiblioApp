@@ -102,9 +102,10 @@ class Member extends AppModel
      */
     public function test(): bool
     {
-        $this->name = Tools::noHtml(mb_strtolower($this->name ?? '', 'UTF8'));
-        $this->phone = Tools::noHtml(mb_strtolower($this->phone ?? '', 'UTF8'));
+        $this->name = Tools::noHtml(mb_strtolower($this->name ?? ''));
+        $this->phone = Tools::noHtml(mb_strtolower($this->phone ?? ''));
         if (false === preg_match("/^\d{10}$/", $this->phone)) {
+            $this->message->warning('El número de teléfono no es válido.');
             return false;
         }
 

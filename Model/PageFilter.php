@@ -122,6 +122,15 @@ class PageFilter extends AppModel
         return self::$dataBase->exec($sql);
     }
 
+    protected function requiredFields(): array
+    {
+        return [
+            'description',
+            'name',
+            'username',
+        ];
+    }
+
     protected function update(): bool
     {
         $sql = 'UPDATE ' . static::tableName() . ' SET '

@@ -19,58 +19,74 @@ use BiblioApp\Core\App\AppModel;
 use BiblioApp\Core\Tools\Tools;
 
 /**
- * Class to manage the book data.
+ * Class to manage the category data.
  *
  * @author José Antonio Cuello Principal <yopli2000@gmail.com>
  */
-class Book extends AppModel
+class Rating extends AppModel
 {
 
-    /** @var string */
-    public string $author;
-
-    /** @var string */
-    public string $editorial;
+    /**
+     * Link to the book model.
+     *
+     * @var int|null
+     */
+    public ?int $book_id;
 
     /**
      * Primary Key.
      *
-     * @var ?int
+     * @var int|null
      */
     public ?int $id;
 
-    /** @var string */
-    public string $isbn;
+    /**
+     * Link to member model.
+     *
+     * @var int|null
+     */
+    public ?int $member_id;
 
     /**
-     * Title of the book.
+     * Valoration level. From 1 to 5.
+     *
+     * @var int
+     */
+    public int $rating;
+
+    /**
+     * Date of the rating.
      *
      * @var string
      */
-    public string $name;
+    public string $rating_date;
 
-    /** @var int */
-    public int $pages;
+    /**
+     * Time of the rating.
+     *
+     * @var string
+     */
+    public string $rating_time;
 
-    /** @var int */
-    public int $publication;
-
-    /** @var string */
-    public string $synopsis;
+    /**
+     * Valoration from the book made by member.
+     *
+     * @var string
+     */
+    public string $valoration;
 
     /**
      * Reset the values of all model properties.
      */
     public function clear(): void
     {
-        $this->author = '';
-        $this->editorial = '';
+        $this->book_id = null;
         $this->id = null;
-        $this->isbn = '';
-        $this->name = '';
-        $this->pages = 0;
-        $this->publication = date('Y');
-        $this->synopsis = '';
+        $this->member_id = null;
+        $this->rating = 1;
+        $this->rating_date = date('Y-m-d');
+        $this->rating_time = date('H:i:s');
+        $this->valoration = '';
     }
 
     /**
@@ -80,14 +96,13 @@ class Book extends AppModel
      */
     public function loadFromData(array $data = []): void
     {
-        $this->author = $data['author'] ?? '';
-        $this->editorial = $data['editorial'] ?? '';
+        $this->book_id = (int)$data['book_id'] ?? null;
         $this->id = (int)$data['id'] ?? null;
-        $this->isbn = $data['isbn'] ?? '';
-        $this->name = $data['name'] ?? '';
-        $this->pages = (int)$data['pages'] ?? 0;
-        $this->publication = (int)$data['publication'] ?? date('Y');
-        $this->synopsis = $data['synopsis'] ?? '';
+        $this->member_id = (int)$data['member_id'] ?? null;
+        $this->rating = (int)$data['rating'] ?? 5;
+        $this->rating_date = $data['rating_date'] ?? date('Y-m-d');
+        $this->rating_time = $data['rating_time'] ?? date('H:i:s');
+        $this->valoration = $data['valoration'] ?? '';
     }
 
     /**
@@ -107,7 +122,7 @@ class Book extends AppModel
      */
     public static function tableName(): string
     {
-        return 'books';
+        return 'ratings';
     }
 
     /**
@@ -118,22 +133,20 @@ class Book extends AppModel
      */
     public function test(): bool
     {
-        $this->author = Tools::noHtml(mb_strtolower($this->author ?? ''));
-        $this->isbn = Tools::noHtml(mb_strtolower($this->isbn ?? ''));
-        $this->name = Tools::noHtml(mb_strtolower($this->name ?? ''));
-        $this->synopsis = Tools::noHtml(mb_strtolower($this->synopsis ?? ''));
-
-        if (false ===  is_numeric($this->isbn)) {
-            $this->message->error('El ISBN debe ser un número.');
-            return false;
-        }
-
-        if ($this->publication > date('Y')) {
-            $this->message->error('El año de publicación no puede ser mayor que el año actual.');
-            return false;
-        }
-
+        $this->valoration = Tools::noHtml($this->valoration);
         return parent::test();
+    }
+
+    /**
+     * Returns the url where to see / modify the data.
+     *
+     * @param string $type
+     * @param string $list
+     * @return string
+     */
+    public function url(string $type = 'auto', string $list = 'List'): string
+    {
+        return parent::url($type, 'ListBook?activetab=' . $list);
     }
 
     /**
@@ -144,15 +157,14 @@ class Book extends AppModel
     protected function insert(): bool
     {
         $sql = 'INSERT INTO ' . static::tableName()
-            . ' (author, editorial, isbn, name, publication, pages, synopsis)'
+            . ' (book_id, member_id, rating, rating_date, rating_time, valoration)'
             . ' VALUES ('
-            . self::$dataBase->var2str($this->author) . ','
-            . self::$dataBase->var2str($this->editorial) . ','
-            . self::$dataBase->var2str($this->isbn) . ','
-            . self::$dataBase->var2str($this->name) . ','
-            . $this->publication . ','
-            . $this->pages . ','
-            . self::$dataBase->var2str($this->synopsis)
+            . $this->book_id . ','
+            . $this->member_id . ','
+            . $this->rating . ','
+            . self::$dataBase->var2str($this->rating_date) . ','
+            . self::$dataBase->var2str($this->rating_time) . ','
+            . self::$dataBase->var2str($this->valoration)
             . ')';
         return self::$dataBase->exec($sql);
     }
@@ -164,7 +176,7 @@ class Book extends AppModel
      */
     protected function requiredFields(): array
     {
-        return ['author', 'editorial', 'isbn', 'name', 'publication', 'pages', 'synopsis'];
+        return ['book_id', 'member_id', 'rating', 'valoration'];
     }
 
     /**
@@ -175,13 +187,8 @@ class Book extends AppModel
     protected function update(): bool
     {
         $sql = 'UPDATE ' . static::tableName() . ' SET '
-                . 'author = ' . self::$dataBase->var2str($this->author) . ','
-                . 'editorial = ' . self::$dataBase->var2str($this->editorial) . ','
-                . 'isbn = ' . self::$dataBase->var2str($this->isbn) . ','
-                . 'name = ' . self::$dataBase->var2str($this->name). ','
-                . 'pages = ' . $this->pages . ','
-                . 'publication = ' . $this->publication . ','
-                . 'synopsis = ' . self::$dataBase->var2str($this->synopsis)
+            . 'rating = ' . $this->rating . ','
+            . 'valoration = ' . self::$dataBase->var2str($this->valoration)
             . ' WHERE id = ' . self::$dataBase->var2str($this->id);
         return self::$dataBase->exec($sql);
     }
