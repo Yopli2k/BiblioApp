@@ -78,7 +78,8 @@ final class DataBase
         }
 
         if (self::$engine->inTransaction(self::$link) && !$this->rollback()) {
-            Message::error($this->lastErrorMessage());
+            $message = new Message();
+            $message->error($this->lastErrorMessage());
             return false;
         }
 
@@ -167,7 +168,8 @@ final class DataBase
         $this->beginTransaction();
         $result = self::$engine->exec(self::$link, $sql);
         if (false === $result) {
-            Message::error($this->lastErrorMessage());
+            $message = new Message();
+            $message->error($this->lastErrorMessage());
         }
 
         if ($inTransaction) {

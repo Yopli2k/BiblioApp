@@ -16,6 +16,7 @@
 namespace BiblioApp\Model;
 
 use BiblioApp\Core\App\AppModel;
+use BiblioApp\Core\Tools\PasswordTrait;
 use BiblioApp\Core\Tools\Tools;
 
 /**
@@ -26,6 +27,8 @@ use BiblioApp\Core\Tools\Tools;
  */
 class User extends AppModel
 {
+
+    use PasswordTrait;
 
     /** @var string */
     public string $email;
@@ -45,13 +48,6 @@ class User extends AppModel
      * @var string
      */
     public string $username;
-
-    /**
-     * Password hashed with password_hash()
-     *
-     * @var string
-     */
-    public string $password;
 
     /**
      * Reset the values of all model properties.
@@ -137,45 +133,17 @@ class User extends AppModel
     {
         $this->username = trim($this->username);
         if (1 !== preg_match("/^[A-Z0-9_@\+\.\-]{3,50}$/i", $this->username)) {
+            $this->message->warning('El identificador de usuario no es válido.');
             return false;
         }
 
         $this->email = Tools::noHtml(mb_strtolower($this->email ?? '', 'UTF8'));
         if (false === empty($this->email) && false === filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            $this->message->warning('El email no es válido.');
             return false;
         }
 
         return $this->testPassword() && parent::test();
-    }
-
-    /**
-     * Asigns the new password to the user.
-     *
-     * @param string $value
-     */
-    public function setPassword($value)
-    {
-        $this->password = password_hash($value, PASSWORD_DEFAULT);
-    }
-
-    /**
-     * Verifies password. It also rehashes the password if needed.
-     *
-     * @param string $value
-     * @return bool
-     */
-    public function verifyPassword($value)
-    {
-        $paso = password_hash($value, PASSWORD_DEFAULT);
-        if (password_verify($value, $this->password)) {
-            if (password_needs_rehash($this->password, PASSWORD_DEFAULT)) {
-                $this->setPassword($value);
-            }
-
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -205,31 +173,6 @@ class User extends AppModel
     protected function requiredFields(): array
     {
         return ['email', 'name', 'username', 'password'];
-    }
-
-    /**
-     * Check if user have been change the password.
-     * If so, it checks that the two passwords are the same and updates the password.
-     *
-     * @return bool
-     */
-    protected function testPassword(): bool
-    {
-        if (false === empty($this->newPassword) && false === empty($this->newPassword2)) {
-            if ($this->newPassword !== $this->newPassword2) {
-                $this->message->warning('La nueva contraseña no coincide con su comprobación.');
-                return false;
-            }
-
-            $this->setPassword($this->newPassword);
-        }
-
-        if (empty($this->password)) {
-            $this->message->warning('La contraseña no puede estar vacía.');
-            return false;
-        }
-
-        return true;
     }
 
     /**

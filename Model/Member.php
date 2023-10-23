@@ -16,6 +16,7 @@
 namespace BiblioApp\Model;
 
 use BiblioApp\Core\App\AppModel;
+use BiblioApp\Core\Tools\PasswordTrait;
 use BiblioApp\Core\Tools\Tools;
 
 /**
@@ -26,13 +27,47 @@ use BiblioApp\Core\Tools\Tools;
 class Member extends AppModel
 {
 
-    /** @var bool */
+    use PasswordTrait;
+
+    /**
+     * The street address of the member.
+     *
+     * @var string
+     */
+    public string $address;
+
+    /**
+     * The date of creation of the member.
+     *
+     * @var string
+     */
+    public string $creationdate;
+
+    /**
+     * The document legal identification. DNI, NIE, Passport, etc.
+     *
+     * @var string
+     */
+    public string $document;
+
+    /**
+     * The email address of the member.
+     *
+     * @var string
+     */
+    public string $email;
+
+    /**
+     * Indicates if the member is enabled.
+     *
+     * @var bool
+     */
     public bool $enabled;
 
     /**
      * Primary Key.
      *
-     * @var ?int
+     * @var int|null
      */
     public ?int $id;
 
@@ -44,6 +79,20 @@ class Member extends AppModel
     public string $name;
 
     /**
+     * Internal notes about the member.
+     *
+     * @var string
+     */
+    public string $notes;
+
+    /**
+     * The password of the member.
+     *
+     * @var string
+     */
+    public string $password;
+
+    /**
      * Phone number for contact.
      *
      * @var string
@@ -51,14 +100,28 @@ class Member extends AppModel
     public string $phone;
 
     /**
+     * Indicates if the email of the member has been verified.
+     *
+     * @var bool
+     */
+    public bool $verified;
+
+    /**
      * Reset the values of all model properties.
      */
     public function clear(): void
     {
+        $this->address = '';
+        $this->creationdate = date('d-m-Y');
+        $this->document = '';
+        $this->email = '';
         $this->enabled = true;
         $this->id = null;
         $this->name = '';
+        $this->notes = '';
+        $this->password = '';
         $this->phone = '';
+        $this->verified = false;
     }
 
     /**
@@ -68,10 +131,17 @@ class Member extends AppModel
      */
     public function loadFromData(array $data = []): void
     {
+        $this->address = $data['address'] ?? '';
+        $this->creationdate = $data['creationdate'] ?? date('d-m-Y');
+        $this->document = $data['document'] ?? '';
+        $this->email = $data['email'] ?? '';
         $this->enabled = (bool)$data['enabled'] ?? false;
         $this->id = (int)$data['id'] ?? null;
         $this->name = $data['name'] ?? '';
+        $this->notes = $data['notes'] ?? '';
+        $this->password = $data['password'] ?? '';
         $this->phone = $data['phone'] ?? '';
+        $this->verified = (bool)$data['verified'] ?? false;
     }
 
     /**
@@ -102,8 +172,18 @@ class Member extends AppModel
      */
     public function test(): bool
     {
-        $this->name = Tools::noHtml(mb_strtolower($this->name ?? ''));
-        $this->phone = Tools::noHtml(mb_strtolower($this->phone ?? ''));
+        $this->address = Tools::noHtml($this->address ?? '');
+        $this->document = Tools::noHtml($this->document ?? '');
+        $this->name = Tools::noHtml($this->name ?? '');
+        $this->notes = Tools::noHtml($this->notes ?? '');
+
+        $this->email = Tools::noHtml(mb_strtolower($this->email ?? '', 'UTF8'));
+        if (false === empty($this->email) && false === filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            $this->message->warning('El email no es válido.');
+            return false;
+        }
+
+        $this->phone = Tools::noHtml($this->phone ?? '');
         if (false === preg_match("/^\d{10}$/", $this->phone)) {
             $this->message->warning('El número de teléfono no es válido.');
             return false;
@@ -120,11 +200,17 @@ class Member extends AppModel
     protected function insert(): bool
     {
         $sql = 'INSERT INTO ' . static::tableName()
-            . ' (enabled, name, phone)'
+            . ' (address, creationdate, document, email, enabled, name, notes, phone, verified)'
             . ' VALUES ('
+            . self::$dataBase->var2str($this->address) . ','
+            . self::$dataBase->var2str($this->creationdate) . ','
+            . self::$dataBase->var2str($this->document) . ','
+            . self::$dataBase->var2str($this->email) . ','
             . self::$dataBase->var2str($this->enabled) . ','
             . self::$dataBase->var2str($this->name) . ','
-            . self::$dataBase->var2str($this->phone)
+            . self::$dataBase->var2str($this->notes) . ','
+            . self::$dataBase->var2str($this->phone) . ','
+            . self::$dataBase->var2str($this->verified)
             . ')';
         return self::$dataBase->exec($sql);
     }
@@ -136,7 +222,7 @@ class Member extends AppModel
      */
     protected function requiredFields(): array
     {
-        return ['name', 'phone'];
+        return ['address', 'document', 'email', 'name', 'phone'];
     }
 
     /**
@@ -147,9 +233,15 @@ class Member extends AppModel
     protected function update(): bool
     {
         $sql = 'UPDATE ' . static::tableName() . ' SET '
+                . 'address = ' . self::$dataBase->var2str($this->address) . ','
+                . 'document = ' . self::$dataBase->var2str($this->document) . ','
+                . 'email = ' . self::$dataBase->var2str($this->email) . ','
                 . 'enabled = ' . self::$dataBase->var2str($this->enabled) . ','
                 . 'name = ' . self::$dataBase->var2str($this->name) . ','
-                . 'phone = ' . self::$dataBase->var2str($this->phone)
+                . 'notes = ' . self::$dataBase->var2str($this->notes) . ','
+                . 'password = ' . self::$dataBase->var2str($this->password) . ','
+                . 'phone = ' . self::$dataBase->var2str($this->phone) . ','
+                . 'verified = ' . self::$dataBase->var2str($this->verified)
             . ' WHERE id = ' . self::$dataBase->var2str($this->id);
         return self::$dataBase->exec($sql);
     }
