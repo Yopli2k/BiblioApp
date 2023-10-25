@@ -287,6 +287,17 @@ abstract class AppModel
     }
 
     /**
+     * Returns the name of the class of the model.
+     *
+     * @return string
+     */
+    protected function modelClassName(): string
+    {
+        $result = explode('\\', get_class($this));
+        return end($result);
+    }
+
+    /**
      * @return bool
      */
     private function checkRequiredFields(): bool
@@ -315,17 +326,6 @@ abstract class AppModel
         }
 
         return $result;
-    }
-
-    /**
-     * Returns the name of the class of the model.
-     *
-     * @return string
-     */
-    protected function modelClassName(): string
-    {
-        $result = explode('\\', get_class($this));
-        return end($result);
     }
 
     /**

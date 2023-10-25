@@ -59,14 +59,4 @@ class ListMember extends ListController
         $this->addOrderBy($viewName, ['name'], 'Nombre');
         $this->addOrderBy($viewName, ['phone'], 'Teléfono');
     }
-
-    /**
-     * @param string $viewName
-     */
-    private function createViewsCategories(string $viewName = 'ListCategory'): void
-    {
-        $this->addView($viewName, 'Category', 'Categorías', 'fa-solid fa-object-group');
-        $this->addSearchFields($viewName, ['name']);
-        $this->addOrderBy($viewName, ['name'], 'Nombre');
-    }
 }

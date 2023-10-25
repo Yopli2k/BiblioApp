@@ -34,11 +34,11 @@ class Category extends AppModel
     public ?int $id;
 
     /**
-     *
+     * Category name. Human description of the category.
      *
      * @var string
      */
-    public string $valoration;
+    public string $name;
 
     /**
      * Reset the values of all model properties.
