@@ -154,7 +154,11 @@ class CodeModel
     public function getDescription(string $tableName, string $fieldCode, ?string $code, string $fieldDescription): ?string
     {
         $model = $this->get($tableName, $fieldCode, $code, $fieldDescription);
-        return empty($model->description) ? $code : $model->description;
+        if (false === empty($model->description)) {
+            return $model->description;
+        }
+
+        return empty($code) ? '' : $code;
     }
 
     /**

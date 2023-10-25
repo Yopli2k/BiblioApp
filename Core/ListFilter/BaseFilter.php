@@ -86,12 +86,12 @@ abstract class BaseFilter
      */
     public function __construct(string $key, string $field = '', string $label = '')
     {
+        $this->autosubmit = false;
         $this->key = $key;
         $this->field = empty($field) ? $this->key : $field;
         $this->label = empty($label) ? $this->field : $label;
         $this->ordernum = ++self::$total;
-        $this->autosubmit = false;
-        $this->assets();
+        $this->value = null;
     }
 
     /**
@@ -130,14 +130,6 @@ abstract class BaseFilter
     public function setValueFromRequest(Request $request): void
     {
         $this->setValue($request->request->get($this->name()));
-    }
-
-    /**
-     * Adds assets to the asset manager.
-     */
-    protected function assets()
-    {
-        // nothing to do. Override this method to add assets into child views.
     }
 
     /**

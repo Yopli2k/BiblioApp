@@ -36,4 +36,9 @@
             <widget type="date" fieldname="return_date" />
         </column>
     </columns>
+    <rows>
+        <row type="status">
+            <option color="warning" title="Sin devolver" fieldname="return_date">null:</option>
+        </row>
+    </rows>
 </view>

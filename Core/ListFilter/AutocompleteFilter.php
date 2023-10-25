@@ -131,6 +131,8 @@ class AutocompleteFilter extends BaseFilter
     protected function getDescription(): string
     {
         $codeModel = new CodeModel();
-        return $codeModel->getDescription($this->table, $this->fieldcode, $this->value, $this->fieldtitle);
+        return $codeModel->getDescription(
+            $this->table, $this->fieldcode, $this->value, $this->fieldtitle
+        );
     }
 }

@@ -20,6 +20,11 @@ use BiblioApp\Core\ExtendedController\ListController;
 class ListMember extends ListController
 {
 
+    /**
+     * Return the basic data for this page.
+     *
+     * @return array
+     */
     public function getPageData(): array
     {
         $data = parent::getPageData();
@@ -31,6 +36,17 @@ class ListMember extends ListController
     protected function createViews(): void
     {
         $this->createViewsMembers();
+        $this->createViewsLoans();
+    }
+
+    private function createViewsLoans(string $viewName = 'ListLoan'): void
+    {
+        $this->addView($viewName, 'Loan', 'Préstamos', 'fa-solid fa-book-open-reader');
+        $this->addOrderBy($viewName, ['loan_date'], 'Préstamo');
+        $this->addOrderBy($viewName, ['return_date'], 'Devolución');
+        $this->addFilterAutocomplete($viewName, 'book', 'Libro', 'book_id', 'books', 'id', 'name');
+        $this->addFilterAutocomplete($viewName, 'member', 'Asociado', 'member_id', 'members', 'id', 'name');
+        $this->addFilterPeriod($viewName, 'loan_date', 'Préstamo', 'loan_date');
     }
 
     /**
