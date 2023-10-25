@@ -41,6 +41,7 @@ class EditBook extends EditController
     {
         $this->addEditView('EditBook', 'Book', 'Libro', 'fa-solid fa-book-bookmark');
         $this->addEditListView('EditBookCategory', 'BookCategory', 'Categorías', 'fa-solid fa-object-group');
+        $this->createViewsLoans();
         $this->createViewsRatings();
     }
 
@@ -61,13 +62,20 @@ class EditBook extends EditController
                 break;
 
             case 'ListRating':
+            case 'EditLoan':
             case 'EditBookCategory':
                 $mvn = $this->getMainViewName();
                 $idBook = $this->views[$mvn]->model->id;
                 $where = [ new DataBaseWhere('book_id', $idBook) ];
-                $view->loadData(false, $where);
+                $view->loadData(false, $where, ['id' => 'DESC']);
                 break;
         }
+    }
+
+    private function createViewsLoans(string $viewName = 'EditLoan'): void
+    {
+        $this->addEditListView($viewName, 'Loan', 'Préstamos', 'fa-solid fa-book-open-reader');
+        $this->views[$viewName]->disableColumn('libro');
     }
 
     private function createViewsRatings(string $viewName = 'ListRating'): void

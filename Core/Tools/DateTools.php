@@ -29,6 +29,27 @@ class DateTools
         return empty($date) ? date(self::DATE_STYLE) : date(self::DATE_STYLE, strtotime($date));
     }
 
+    /**
+     * Indicates if one date is greater than another.
+     * If indicated, equals to greater than is considered.
+     * If the maximum date is not reported, the current day is assumed.
+     *
+     * @param string $value
+     * @param bool $orEqual
+     * @param string $maxDate
+     * @return bool
+     */
+    public static function dateGreaterThan(string $value, bool $orEqual = false, ?string $maxDate = null): bool
+    {
+        if (empty($maxDate)) {
+            $maxDate = date(self::DATE_STYLE);
+        }
+
+        return $orEqual
+            ? (strtotime($value) >= strtotime($maxDate))
+            : (strtotime($value) > strtotime($maxDate));
+    }
+
     public static function dateTime(?string $date = null): string
     {
         return empty($date) ? date(self::DATETIME_STYLE) : date(self::DATETIME_STYLE, strtotime($date));

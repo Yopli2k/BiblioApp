@@ -29,20 +29,11 @@
                 <values source="members" fieldcode="id" fieldtitle="name"></values>
             </widget>
         </column>
-        <column name="fecha" numcolumns="2" order="130">
-            <widget type="date" fieldname="rating_date" />
+        <column name="fecha" display="center" order="130">
+            <widget type="date" fieldname="loan_date" />
         </column>
-        <column name="hora" numcolumns="2" order="140">
-            <widget type="time" fieldname="rating_time" />
-        </column>
-        <column name="valoracion" title="Valoración" display="center" order="150">
-            <widget type="select" fieldname="rating">
-                <values title="*****">5</values>
-                <values title="****">4</values>
-                <values title="***">3</values>
-                <values title="**">2</values>
-                <values title="*">1</values>
-            </widget>
+        <column name="devolucion" title="devolución" display="center" order="140">
+            <widget type="date" fieldname="return_date" />
         </column>
     </columns>
 </view>

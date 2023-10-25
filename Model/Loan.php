@@ -16,14 +16,14 @@
 namespace BiblioApp\Model;
 
 use BiblioApp\Core\App\AppModel;
-use BiblioApp\Core\Tools\Tools;
+use BiblioApp\Core\Tools\DateTools;
 
 /**
- * Class to manage the rating of the book data.
+ * Class to manage the loan of the book data.
  *
  * @author José Antonio Cuello Principal <yopli2000@gmail.com>
  */
-class Rating extends AppModel
+class Loan extends AppModel
 {
 
     /**
@@ -41,6 +41,13 @@ class Rating extends AppModel
     public ?int $id;
 
     /**
+     * Date of the loan.
+     *
+     * @var string
+     */
+    public string $loan_date;
+
+    /**
      * Link to member model.
      *
      * @var int|null
@@ -48,32 +55,11 @@ class Rating extends AppModel
     public ?int $member_id;
 
     /**
-     * Valoration level. From 1 to 5.
+     * Date of the return of the loan book.
      *
-     * @var int
+     * @var string|null
      */
-    public int $rating;
-
-    /**
-     * Date of the rating.
-     *
-     * @var string
-     */
-    public string $rating_date;
-
-    /**
-     * Time of the rating.
-     *
-     * @var string
-     */
-    public string $rating_time;
-
-    /**
-     * Valoration from the book made by member.
-     *
-     * @var string
-     */
-    public string $valoration;
+    public ?string $return_date;
 
     /**
      * Reset the values of all model properties.
@@ -83,10 +69,8 @@ class Rating extends AppModel
         $this->book_id = null;
         $this->id = null;
         $this->member_id = null;
-        $this->rating = 1;
-        $this->rating_date = date('Y-m-d');
-        $this->rating_time = date('H:i:s');
-        $this->valoration = '';
+        $this->loan_date = date('Y-m-d');
+        $this->return_date = null;
     }
 
     /**
@@ -99,10 +83,8 @@ class Rating extends AppModel
         $this->book_id = (int)$data['book_id'] ?? null;
         $this->id = (int)$data['id'] ?? null;
         $this->member_id = (int)$data['member_id'] ?? null;
-        $this->rating = (int)$data['rating'] ?? 5;
-        $this->rating_date = $data['rating_date'] ?? date('Y-m-d');
-        $this->rating_time = $data['rating_time'] ?? date('H:i:s');
-        $this->valoration = $data['valoration'] ?? '';
+        $this->loan_date = $data['loan_date'] ?? date('Y-m-d');
+        $this->return_date = $data['return_date'] ?? null;
     }
 
     /**
@@ -122,7 +104,7 @@ class Rating extends AppModel
      */
     public static function tableName(): string
     {
-        return 'ratings';
+        return 'loans';
     }
 
     /**
@@ -133,7 +115,10 @@ class Rating extends AppModel
      */
     public function test(): bool
     {
-        $this->valoration = Tools::noHtml($this->valoration);
+        if (DateTools::dateGreaterThan($this->loan_date, false, $this->return_date)) {
+            $this->message->warning('La fecha de retorno debe ser mayor o igual que la fecha de préstamo.');
+            return false;
+        }
         return parent::test();
     }
 
@@ -146,7 +131,7 @@ class Rating extends AppModel
      */
     public function url(string $type = 'auto', string $list = 'List'): string
     {
-        return parent::url($type, 'ListBook?activetab=' . $list);
+        return parent::url($type, 'ListMember?activetab=' . $list);
     }
 
     /**
@@ -157,14 +142,12 @@ class Rating extends AppModel
     protected function insert(): bool
     {
         $sql = 'INSERT INTO ' . static::tableName()
-            . ' (book_id, member_id, rating, rating_date, rating_time, valoration)'
+            . ' (book_id, member_id, loan_date, return_date)'
             . ' VALUES ('
             . $this->book_id . ','
             . $this->member_id . ','
-            . $this->rating . ','
-            . self::$dataBase->var2str($this->rating_date) . ','
-            . self::$dataBase->var2str($this->rating_time) . ','
-            . self::$dataBase->var2str($this->valoration)
+            . self::$dataBase->var2str($this->loan_date) . ','
+            . self::$dataBase->var2str($this->return_date)
             . ')';
         return self::$dataBase->exec($sql);
     }
@@ -176,7 +159,7 @@ class Rating extends AppModel
      */
     protected function requiredFields(): array
     {
-        return ['book_id', 'member_id', 'rating', 'valoration'];
+        return ['book_id', 'member_id', 'loan_date'];
     }
 
     /**
@@ -187,8 +170,10 @@ class Rating extends AppModel
     protected function update(): bool
     {
         $sql = 'UPDATE ' . static::tableName() . ' SET '
-            . 'rating = ' . $this->rating . ','
-            . 'valoration = ' . self::$dataBase->var2str($this->valoration)
+            . 'book_id = ' . $this->book_id . ','
+            . 'member_id = ' . $this->member_id . ','
+            . 'loan_date = ' . self::$dataBase->var2str($this->loan_date) . ','
+            . 'return_date = ' . self::$dataBase->var2str($this->return_date)
             . ' WHERE id = ' . self::$dataBase->var2str($this->id);
         return self::$dataBase->exec($sql);
     }

@@ -41,6 +41,7 @@ class EditMember extends EditController
     {
         $this->addEditView('EditMember', 'Member', 'Asociado', 'fa fa-address-book');
         $this->createViewsNotes();
+        $this->createViewsLoans();
         $this->createViewsRatings();
     }
 
@@ -61,13 +62,20 @@ class EditMember extends EditController
                 $this->title .= ' ' . $view->model->primaryDescription();
                 break;
 
+            case 'EditLoan':
             case 'ListRating':
                 $mvn = $this->getMainViewName();
                 $idMember = $this->views[$mvn]->model->id;
                 $where = [ new DataBaseWhere('member_id', $idMember) ];
-                $view->loadData(false, $where);
+                $view->loadData(false, $where, ['id' => 'DESC']);
                 break;
         }
+    }
+
+    private function createViewsLoans(string $viewName = 'EditLoan'): void
+    {
+        $this->addEditListView($viewName, 'Loan', 'Préstamos', 'fa-solid fa-book-open-reader');
+        $this->views[$viewName]->disableColumn('asociado');
     }
 
     private function createViewsNotes(string $viewName = 'EditMemberNote'): void
@@ -83,5 +91,6 @@ class EditMember extends EditController
         $this->views[$viewName]->addOrderBy(['rating_date', 'rating_time', 'id'], 'Fecha', 2);
         $this->views[$viewName]->addOrderBy(['rating', 'id'], 'Valoración');
         $this->views[$viewName]->disableColumn('asociado');
+        $this->setSettings($viewName, 'clickable', true);
     }
 }

@@ -41,7 +41,7 @@ class ListBook extends ListController
     private function createViewsBooks(string $viewName = 'ListBook'): void
     {
         $this->addView($viewName, 'Book', 'Libros', 'fa-solid fa-book-bookmark');
-        $this->addSearchFields($viewName, ['title', 'synopsis', 'author', 'isbn']);
+        $this->addSearchFields($viewName, ['name', 'synopsis', 'author', 'isbn']);
         $this->addOrderBy($viewName, ['name'], 'Título');
         $this->addOrderBy($viewName, ['isbn'], 'ISBN');
     }
