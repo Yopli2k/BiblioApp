@@ -95,7 +95,6 @@ abstract class BaseController extends PageController
     public function addCustomView(string $viewName, mixed $view): void
     {
         if ($viewName !== $view->getViewName()) {
-            // Tools::log()->error('$viewName must be equals to $view->name');
             return;
         }
 
@@ -219,6 +218,7 @@ abstract class BaseController extends PageController
     // FIXME: review this method
     /**
      * Action to delete data.
+     * Can delete one or more rows.
      *
      * @return bool
      */
@@ -252,17 +252,16 @@ abstract class BaseController extends PageController
             $model->clear();
             $this->dataBase->commit();
             if ($numDeletes > 0) {
-                // Tools::log()->notice('record-deleted-correctly');
+                $this->message->info('Se han eliminado ' . $numDeletes . ' registros.');
                 return true;
             }
         } elseif ($model->loadFromCode($codes) && $model->delete()) {
-            // deleting a single row
-            // Tools::log()->notice('record-deleted-correctly');
+            $this->message->info('Se ha eliminado el registro.');
             $model->clear();
             return true;
         }
 
-        // Tools::log()->warning('record-deleted-error');
+        $this->message->warning('No se ha podido eliminar el registro.');
         $model->clear();
         return false;
     }

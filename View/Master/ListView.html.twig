@@ -17,15 +17,14 @@
 
 {% set currentView = controller.getCurrentView() %}
 {% set formName = 'form' ~ currentView.getViewName() %}
-<!--suppress ALL -->
-{#
+
 <script>
     var listViewDeleteCancel = "Cancelar";
     var listViewDeleteConfirm = "Confirmar";
     var listViewDeleteMessage = "Esto no se puede deshacer. ¿Está seguro que desea continuar?";
-    var listViewDeleteTitle = "¿Confirma que desea realmente eliminar el registro?";
+    var listViewDeleteTitle = "Confirmar que desea realmente eliminar los registro seleccionados";
 </script>
-#}
+
 <form id="{{ formName }}" method="post">
     <input type="hidden" name="action"/>
     <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>

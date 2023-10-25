@@ -32,6 +32,7 @@ class ListBook extends ListController
     {
         $this->createViewsBooks();
         $this->createViewsCategories();
+        $this->createViewsRatings();
     }
 
     /**
@@ -53,5 +54,13 @@ class ListBook extends ListController
         $this->addView($viewName, 'Category', 'Categorías', 'fa-solid fa-object-group');
         $this->addSearchFields($viewName, ['name']);
         $this->addOrderBy($viewName, ['name'], 'Nombre');
+    }
+
+    private function createViewsRatings(string $viewName = 'ListRating'): void
+    {
+        $this->addView($viewName, 'Rating', 'Opiniones', 'fa-regular fa-comments');
+        $this->addSearchFields($viewName, ['valoration']);
+        $this->addOrderBy($viewName, ['rating_date', 'rating_time', 'id'], 'Fecha', 2);
+        $this->addOrderBy($viewName, ['rating', 'id'], 'Valoración');
     }
 }

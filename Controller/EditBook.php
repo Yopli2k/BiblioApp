@@ -60,6 +60,7 @@ class EditBook extends EditController
                 $this->title .= ' ' . $view->model->primaryDescription();
                 break;
 
+            case 'ListRating':
             case 'EditBookCategory':
                 $mvn = $this->getMainViewName();
                 $idBook = $this->views[$mvn]->model->id;
@@ -69,7 +70,7 @@ class EditBook extends EditController
         }
     }
 
-    private function createViewsRatings(string $viewName = 'ListRating')
+    private function createViewsRatings(string $viewName = 'ListRating'): void
     {
         $this->addListView($viewName, 'Rating', 'Opiniones', 'fa-regular fa-comments');
         $this->views[$viewName]->addSearchFields(['valoration']);

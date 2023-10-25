@@ -49,28 +49,6 @@ function listViewDelete(viewName) {
     return false;
 }
 
-function listViewOpenTab(viewName) {
-    // buscamos todos los elementos con la clase toggle-ext-link
-    $("#form" + viewName + " .toggle-ext-link").each(function () {
-        // si tiene la clase d-none, la quitamos
-        if ($(this).hasClass("d-none")) {
-            $(this).removeClass("d-none");
-        } else {
-            // si no la tiene, la añadimos
-            $(this).addClass("d-none");
-        }
-    });
-}
-
-function listViewPrintAction(viewName, option) {
-    $("#form" + viewName).attr("target", "_blank");
-    $("#form" + viewName + " :input[name=\"action\"]").val('export');
-    $("#form" + viewName).append('<input type="hidden" name="option" value="' + option + '"/>');
-    $("#form" + viewName).submit();
-    $("#form" + viewName + " :input[name=\"action\"]").val('');
-    $("#form" + viewName).attr("target", "");
-}
-
 function listViewSetAction(viewName, value) {
     $("#form" + viewName + " :input[name=\"action\"]").val(value);
     $("#form" + viewName).submit();
@@ -124,6 +102,6 @@ $(document).ready(function () {
     });
     // disable enter key press
     $(".noEnterKey").keypress(function (e) {
-        return !(e.which == 13 || e.keyCode == 13);
+        return !(e.which === 13 || e.keyCode === 13);
     });
 });

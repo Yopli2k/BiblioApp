@@ -144,7 +144,7 @@ class ListView extends BaseView
         string $code = '',
         array $where = [],
         array $order = [],
-        int $offset = 0,
+        int $offset = -1,
         int $limit = APP_ITEM_LIMIT
     ): void
     {

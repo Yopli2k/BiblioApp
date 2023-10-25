@@ -47,10 +47,4 @@
             </column>
         </group>
     </columns>
-    <rows>
-        <row type="status">
-            <option color="danger" title="desactivado" fieldname="enabled">0</option>
-            <option color="warning" title="sin verificar" fieldname="verified">0</option>
-        </row>
-    </rows>
 </view>

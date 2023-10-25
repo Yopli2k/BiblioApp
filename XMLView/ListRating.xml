@@ -24,22 +24,25 @@
                 <values source="books" fieldcode="id" fieldtitle="name"></values>
             </widget>
         </column>
-        <column name="asociado" order="110">
+        <column name="asociado" order="120">
             <widget type="autocomplete" fieldname="member_id">
                 <values source="members" fieldcode="id" fieldtitle="name"></values>
             </widget>
         </column>
-        <column name="ranking" order="120">
-            <widget type="text" fieldname="ranking" />
+        <column name="fecha" numcolumns="2" order="130">
+            <widget type="date" fieldname="rating_date" />
         </column>
-        <column name="fecha" order="130">
-            <widget type="date" fieldname="ranking_date" />
+        <column name="hora" numcolumns="2" order="140">
+            <widget type="time" fieldname="rating_time" />
         </column>
-        <column name="hora" order="130">
-            <widget type="time" fieldname="ranking_time" />
-        </column>
-        <column name="comentario" order="150">
-            <widget type="text" fieldname="valoration" />
+        <column name="ranking" display="center" order="150">
+            <widget type="select" fieldname="ranking">
+                <values title="*****">5</values>
+                <values title="****">4</values>
+                <values title="***">3</values>
+                <values title="**">2</values>
+                <values title="*">1</values>
+            </widget>
         </column>
     </columns>
 </view>

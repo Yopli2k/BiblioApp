@@ -192,11 +192,12 @@ abstract class EditController extends BaseController
                 return false;
 
             case 'delete':
-            case 'delete-document':
                 if ($this->deleteAction() && $this->active === $this->getMainViewName()) {
                     // al eliminar el registro principal, redirigimos al listado para mostrar ahí el mensaje de éxito
                     $listUrl = $this->views[$this->active]->model->url('list');
-                    $redirect = !str_contains($listUrl, '?') ? $listUrl . '?action=delete-ok' : $listUrl . '&action=delete-ok';
+                    $redirect = str_contains($listUrl, '?')
+                        ? $listUrl . '&action=delete-ok'
+                        : $listUrl . '?action=delete-ok';
                     $this->redirect($redirect);
                 }
                 break;

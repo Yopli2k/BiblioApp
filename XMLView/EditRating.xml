@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<view>
+    <columns>
+        <group name="main" numcolumns="12">
+            <column name="libro" order="110">
+                <widget type="autocomplete" fieldname="book_id">
+                    <values source="books" fieldcode="id" fieldtitle="name"></values>
+                </widget>
+            </column>
+            <column name="asociado" order="120">
+                <widget type="autocomplete" fieldname="member_id">
+                    <values source="members" fieldcode="id" fieldtitle="name"></values>
+                </widget>
+            </column>
+            <column name="fecha" numcolumns="2" order="130">
+                <widget type="date" fieldname="rating_date" />
+            </column>
+            <column name="hora" numcolumns="2" order="140">
+                <widget type="time" fieldname="rating_time" />
+            </column>
+            <column name="ranking" numcolumns="1" order="150">
+                <widget type="select" fieldname="ranking" required="true">
+                    <values title="*****">5</values>
+                    <values title="****">4</values>
+                    <values title="***">3</values>
+                    <values title="**">2</values>
+                    <values title="*">1</values>
+                </widget>
+            </column>
+        </group>
+        <group name="notes" numcolumns="12">
+            <column name="comentario" numcolumns="12" order="150">
+                <widget type="textarea" fieldname="valoration" rows="3" />
+            </column>
+        </group>
+    </columns>
+</view>

@@ -15,6 +15,7 @@
  */
 namespace BiblioApp\Controller;
 
+use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\ExtendedController\BaseView;
 use BiblioApp\Core\ExtendedController\EditController;
 
@@ -39,6 +40,8 @@ class EditMember extends EditController
     protected function createViews(): void
     {
         $this->addEditView('EditMember', 'Member', 'Asociado', 'fa fa-address-book');
+        $this->createViewsNotes();
+        $this->createViewsRatings();
     }
 
     /**
@@ -49,11 +52,36 @@ class EditMember extends EditController
      */
     protected function loadData(string $viewName, mixed $view): void
     {
-        if ($viewName == 'EditMember') {
-            $primaryKey = $this->request->request->get('id', '');
-            $code = $this->request->query->get('code', $primaryKey);
-            $view->loadData($code);
-            $this->title .= ' ' . $view->model->primaryDescription();
+        switch ($viewName) {
+            case 'EditMemberNote':
+            case 'EditMember':
+                $primaryKey = $this->request->request->get('id', '');
+                $code = $this->request->query->get('code', $primaryKey);
+                $view->loadData($code);
+                $this->title .= ' ' . $view->model->primaryDescription();
+                break;
+
+            case 'ListRating':
+                $mvn = $this->getMainViewName();
+                $idMember = $this->views[$mvn]->model->id;
+                $where = [ new DataBaseWhere('member_id', $idMember) ];
+                $view->loadData(false, $where);
+                break;
         }
+    }
+
+    private function createViewsNotes(string $viewName = 'EditMemberNote'): void
+    {
+        $this->addEditView('EditMemberNote', 'Member', 'Notas', 'fa-regular fa-sticky-note');
+        $this->setSettings($viewName, 'btnDelete', false);
+    }
+
+    private function createViewsRatings(string $viewName = 'ListRating'): void
+    {
+        $this->addListView($viewName, 'Rating', 'Opiniones', 'fa-regular fa-comments');
+        $this->views[$viewName]->addSearchFields(['valoration']);
+        $this->views[$viewName]->addOrderBy(['rating_date', 'rating_time', 'id'], 'Fecha', 2);
+        $this->views[$viewName]->addOrderBy(['rating', 'id'], 'Valoración');
+        $this->views[$viewName]->disableColumn('asociado');
     }
 }
