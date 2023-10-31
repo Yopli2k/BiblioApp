@@ -97,10 +97,6 @@ class BookCategory extends AppModel
      */
     public function test(): bool
     {
-        if (empty($this->book_id) ||empty($this->category_id)) {
-            return false;
-        }
-
         return parent::test();
     }
 

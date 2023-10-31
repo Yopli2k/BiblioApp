@@ -18,6 +18,7 @@ namespace BiblioApp\Controller;
 use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\ExtendedController\BaseView;
 use BiblioApp\Core\ExtendedController\EditController;
+use BiblioApp\Model\BookImage;
 
 /**
  * Controller to edit a book record data.
@@ -43,6 +44,28 @@ class EditBook extends EditController
         $this->addEditListView('EditBookCategory', 'BookCategory', 'Categorías', 'fa-solid fa-object-group');
         $this->createViewsLoans();
         $this->createViewsRatings();
+        $this->createViewsImages();
+    }
+
+    /**
+     * Run the actions that alter data before reading it.
+     *
+     * @param ?string $action
+     * @return bool
+     */
+    protected function execPreviousAction(?string $action): bool
+    {
+        switch ($action) {
+            case 'add-image':
+                $this->addImageAction();
+                return true;
+
+            case 'delete-image':
+                $this->deleteImageAction();
+                return true;
+        }
+
+        return parent::execPreviousAction($action);
     }
 
     /**
@@ -64,12 +87,66 @@ class EditBook extends EditController
             case 'ListRating':
             case 'EditLoan':
             case 'EditBookCategory':
+            case 'EditBookImage':
                 $mvn = $this->getMainViewName();
                 $idBook = $this->views[$mvn]->model->id;
                 $where = [ new DataBaseWhere('book_id', $idBook) ];
                 $view->loadData(false, $where, ['id' => 'DESC']);
                 break;
         }
+    }
+
+    /**
+     * Add a list of images.
+     *
+     * @return bool
+     */
+    private function addImageAction(): bool
+    {
+        if (false === $this->validateFormToken()) {
+            return false;
+        }
+
+        $idbook = $this->request->request->get('book_id', 0);
+        if (empty($idbook)) {
+            $this->message->error('No se ha indicado el libro');
+            return false;
+        }
+
+        $count = 0;
+        $uploadFiles = $this->request->files->get('newfiles', []);
+        foreach ($uploadFiles as $uploadFile) {
+            if (false === $this->validateFile($uploadFile)) {
+                continue;
+            }
+
+            try {
+                $bookImage = new BookImage();
+                $bookImage->book_id = $idbook;
+                $bookImage->filename = $uploadFile->getClientOriginalName();
+                $bookImage->filepath = BookImage::IMAGES_PATH;
+                $bookImage->filetype = $uploadFile->getMimeType();
+                $bookImage->filesize = $uploadFile->getSize();
+
+                $uploadFile->move($bookImage->filepath, $bookImage->filename);
+                if (false === $bookImage->save()) {
+                    $this->message->error('Error al guardar imagen ' . $bookImage->filename);
+                    continue;
+                }
+                ++$count;
+            } catch (Exception $exc) {
+                $this->message->error($exc->getMessage());
+                return true;
+            }
+        }
+
+        $this->message->info('Se han añadido ' . $count . ' imágenes');
+        return true;
+    }
+
+    private function createViewsImages(string $viewName = 'EditBookImage'): void
+    {
+        $this->addHtmlView($viewName, 'BookImage', 'BookImage', 'images', 'fas fa-images');
     }
 
     private function createViewsLoans(string $viewName = 'EditLoan'): void
@@ -91,5 +168,49 @@ class EditBook extends EditController
         // $this->views[$viewName]->addFilterAutocomplete('member_id', 'Asociado', 'member_id', 'members', 'id', 'name');
 
         // TODO: add approved button and process.
+    }
+
+    /**
+     * Delete an image.
+     *
+     * @return bool
+     */
+    private function deleteImageAction(): bool
+    {
+        if (false === $this->validateFormToken()) {
+            return false;
+        }
+
+        $id = $this->request->request->get('image_id', 0);
+        if (empty($id)) {
+            return false;
+        }
+
+        $bookImage = new BookImage();
+        if (false === $bookImage->loadFromCode($id)) {
+            return false;
+        }
+
+        if (false === $bookImage->delete()) {
+            $this->message->warning('Error al eliminar la imagen');
+            return false;
+        }
+
+        $this->message->info('Imagen eliminada correctamente');
+        return true;
+    }
+
+    private function validateFile($uploadFile): bool
+    {
+        if (false === $uploadFile->isValid()) {
+            $this->message->error($uploadFile->getErrorMessage());
+            return false;
+        }
+
+        if (false === strpos($uploadFile->getMimeType(), 'image/')) {
+            $this->message->error('El formato del archivo ' . $uploadFile->getClientOriginalName() . ' no está soportado');
+            return false;
+        }
+        return true;
     }
 }

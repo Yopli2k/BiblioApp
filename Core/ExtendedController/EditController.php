@@ -133,6 +133,21 @@ abstract class EditController extends BaseController
     }
 
     /**
+     * Adds an HTML type view to the controller.
+     *
+     * @param string $viewName
+     * @param string $fileName
+     * @param string $modelName
+     * @param string $viewTitle
+     * @param string $viewIcon
+     */
+    protected function addHtmlView(string $viewName, string $fileName, string $modelName, string $viewTitle, string $viewIcon = 'fab fa-html5')
+    {
+        $view = new HtmlView($viewName, $viewTitle, self::MODEL_NAMESPACE . $modelName, $fileName, $viewIcon);
+        $this->addCustomView($viewName, $view);
+    }
+
+    /**
      * Runs the data edit action.
      *
      * @return bool
