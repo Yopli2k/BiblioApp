@@ -83,7 +83,7 @@ class Rating extends AppModel
         $this->book_id = null;
         $this->id = null;
         $this->member_id = null;
-        $this->rating = 1;
+        $this->rating = 5;
         $this->rating_date = date('Y-m-d');
         $this->rating_time = date('H:i:s');
         $this->valoration = '';

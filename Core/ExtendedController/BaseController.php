@@ -199,7 +199,6 @@ abstract class BaseController extends PageController
             $where[] = new DataBaseWhere($field, $value, '=', $operation);
         }
 
-        // FIXME: TOOLS dont exist
         $results = [];
         foreach ($this->codeModel->search($data['source'], $data['fieldcode'], $data['fieldtitle'], $data['term'], $where) as $value) {
             $results[] = ['key' => Tools::fixHtml($value->code), 'value' => Tools::fixHtml($value->description)];

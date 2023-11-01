@@ -16,6 +16,7 @@
 namespace BiblioApp\Model;
 
 use BiblioApp\Core\App\AppModel;
+use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\Tools\DateTools;
 
 /**
@@ -74,6 +75,27 @@ class Loan extends AppModel
     }
 
     /**
+     * Indicates if the book is loaned.
+     * If the idbook parameter is empty, it checks if the current book is loaned.
+     *
+     * @param int $idbook
+     * @return bool
+     */
+    public function isLoan(int $idbook = 0): bool
+    {
+        if (empty($idbook)) {
+            return empty($this->return_date);
+        }
+
+        $where = [
+            new DataBaseWhere('book_id', $idbook),
+            new DataBaseWhere('return_date', null, 'IS')
+        ];
+        $loan = new Loan();
+        return $loan->loadFromCode('', $where);
+    }
+
+    /**
      * Assign the values of the $data array to the model properties.
      *
      * @param array $data
@@ -119,6 +141,15 @@ class Loan extends AppModel
             $this->message->warning('La fecha de retorno debe ser mayor o igual que la fecha de préstamo.');
             return false;
         }
+
+        if (empty($this->primaryColumnValue()) &&
+            empty($this->return_date) &&
+            $this->isLoan($this->book_id)
+        ) {
+            $this->message->warning('El libro ya está prestado. No es posible volverlo a prestar');
+            return false;
+        }
+
         return parent::test();
     }
 

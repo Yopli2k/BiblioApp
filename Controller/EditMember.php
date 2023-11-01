@@ -54,7 +54,6 @@ class EditMember extends EditController
     protected function loadData(string $viewName, mixed $view): void
     {
         switch ($viewName) {
-            case 'EditMemberNote':
             case 'EditMember':
                 $primaryKey = $this->request->request->get('id', '');
                 $code = $this->request->query->get('code', $primaryKey);
@@ -62,8 +61,13 @@ class EditMember extends EditController
                 $this->title .= ' ' . $view->model->primaryDescription();
                 break;
 
+            case 'EditMemberNote':
+                $view->model = $this->views['EditMember']->model;
+                $view->count = 0;
+                break;
+
             case 'EditLoan':
-            case 'ListRating':
+            case 'EditRating':
                 $mvn = $this->getMainViewName();
                 $idMember = $this->views[$mvn]->model->id;
                 $where = [ new DataBaseWhere('member_id', $idMember) ];
@@ -84,13 +88,9 @@ class EditMember extends EditController
         $this->setSettings($viewName, 'btnDelete', false);
     }
 
-    private function createViewsRatings(string $viewName = 'ListRating'): void
+    private function createViewsRatings(string $viewName = 'EditRating'): void
     {
-        $this->addListView($viewName, 'Rating', 'Opiniones', 'fa-regular fa-comments');
-        $this->views[$viewName]->addSearchFields(['valoration']);
-        $this->views[$viewName]->addOrderBy(['rating_date', 'rating_time', 'id'], 'Fecha', 2);
-        $this->views[$viewName]->addOrderBy(['rating', 'id'], 'Valoración');
+        $this->addEditListView($viewName, 'Rating', 'Opiniones', 'fa-regular fa-comments');
         $this->views[$viewName]->disableColumn('asociado');
-        $this->setSettings($viewName, 'clickable', true);
     }
 }

@@ -220,7 +220,13 @@ abstract class AppModel
         if ($this->exists()) {
             return $this->update();
         }
-        return $this->insert();
+
+        if ($this->insert()) {
+            $this->{static::primaryColumn()} = self::$dataBase->lastval();
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -91,7 +91,7 @@ class CodeModel
         self::initDataBase();
         $sql = 'SELECT DISTINCT ' . $fieldCode . ' AS code, ' . $fieldDescription . ' AS description '
             . 'FROM ' . $tableName . DataBaseWhere::getSQLWhere($where) . ' ORDER BY 2 ASC';
-        foreach (self::$dataBase->selectLimit($sql, self::ALL_LIMIT) as $row) {
+        foreach (self::$dataBase->selectLimit($sql, 15) as $row) {
             $result[] = new static($row);
         }
         return $result;

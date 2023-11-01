@@ -84,7 +84,7 @@ class EditBook extends EditController
                 $this->title .= ' ' . $view->model->primaryDescription();
                 break;
 
-            case 'ListRating':
+            case 'EditRating':
             case 'EditLoan':
             case 'EditBookCategory':
             case 'EditBookImage':
@@ -155,19 +155,10 @@ class EditBook extends EditController
         $this->views[$viewName]->disableColumn('libro');
     }
 
-    private function createViewsRatings(string $viewName = 'ListRating'): void
+    private function createViewsRatings(string $viewName = 'EditRating'): void
     {
-        $this->addListView($viewName, 'Rating', 'Opiniones', 'fa-regular fa-comments');
-        $this->views[$viewName]->addSearchFields(['valoration']);
-        $this->views[$viewName]->addOrderBy(['rating_date', 'rating_time', 'id'], 'Fecha', 2);
-        $this->views[$viewName]->addOrderBy(['rating', 'id'], 'Valoración');
-
+        $this->addEditListView($viewName, 'Rating', 'Opiniones', 'fa-regular fa-comments');
         $this->views[$viewName]->disableColumn('libro');
-
-        // TODO: fix filter error
-        // $this->views[$viewName]->addFilterAutocomplete('member_id', 'Asociado', 'member_id', 'members', 'id', 'name');
-
-        // TODO: add approved button and process.
     }
 
     /**

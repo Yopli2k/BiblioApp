@@ -27,13 +27,7 @@
                     <values source="members" fieldcode="id" fieldtitle="name"></values>
                 </widget>
             </column>
-            <column name="fecha" numcolumns="2" order="130">
-                <widget type="date" fieldname="rating_date" />
-            </column>
-            <column name="hora" numcolumns="2" order="140">
-                <widget type="time" fieldname="rating_time" />
-            </column>
-            <column name="valoracion" title="Valoración" numcolumns="1" order="150">
+            <column name="valoracion" title="Valoración" numcolumns="1" order="130">
                 <widget type="select" fieldname="rating" required="true">
                     <values title="*****">5</values>
                     <values title="****">4</values>
@@ -42,10 +36,16 @@
                     <values title="*">1</values>
                 </widget>
             </column>
+            <column name="fecha" numcolumns="2" order="140">
+                <widget type="date" fieldname="rating_date" />
+            </column>
+            <column name="hora" numcolumns="2" order="150">
+                <widget type="time" fieldname="rating_time" />
+            </column>
         </group>
         <group name="notes" numcolumns="12">
             <column name="comentario" numcolumns="12" order="150">
-                <widget type="textarea" fieldname="valoration" rows="3" />
+                <widget type="textarea" fieldname="valoration" maxlenght="200" rows="3" />
             </column>
         </group>
     </columns>
