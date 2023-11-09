@@ -15,10 +15,6 @@
  */
 
 use BiblioApp\Core\App\Router;
-use Whoops\Handler\JsonResponseHandler;
-use Whoops\Handler\PlainTextHandler;
-use Whoops\Handler\PrettyPageHandler;
-use Whoops\Run;
 
 const APP_FOLDER = __DIR__;
 
@@ -32,15 +28,6 @@ ignore_user_abort(true);
 
 // set timezone
 date_default_timezone_set(APP_TIMEZONE);
-
-// Register error handler
-if (APP_DEBUG) {
-    $whoops = new Run();
-    $whoops->prependHandler(new PlainTextHandler());
-    $whoops->prependHandler(new JsonResponseHandler());
-    $whoops->prependHandler(new PrettyPageHandler());
-    $whoops->register();
-}
 
 // Run application. Can be a download file or a web page.
 // First try to get the file to download, if not, run the web page.

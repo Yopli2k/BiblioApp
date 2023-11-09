@@ -42,9 +42,6 @@ final class Router
     public function getFile(): bool
     {
         $uri = $this->getUri();
-        if ($this->getSpecialFiles($uri)) {
-            return true;
-        }
 
         // Not a file? Not a safe file?
         $filePath = APP_FOLDER . urldecode($uri);
@@ -53,7 +50,7 @@ final class Router
         }
 
         // Allowed folder?
-        $allowedFolders = ['node_modules', 'vendor', 'Core', 'Assets', 'MyFiles'];
+        $allowedFolders = ['Assets', 'Core', 'MyFiles', 'node_modules', 'vendor'];
         foreach ($allowedFolders as $folder) {
             if ('/' . $folder === substr($uri, 0, 1 + strlen($folder))) {
                 $this->download($filePath);
@@ -75,7 +72,7 @@ final class Router
         $safe = [
             'accdb', 'avi', 'cdr', 'css', 'csv', 'doc', 'docx', 'eot', 'gif', 'gz', 'html', 'ico', 'jpeg', 'jpg', 'js',
             'json', 'map', 'mdb', 'mkv', 'mp3', 'mp4', 'ndg', 'ods', 'odt', 'ogg', 'pdf', 'png', 'pptx', 'sql', 'svg',
-            'ttf', 'txt', 'webm', 'woff', 'woff2', 'xls', 'xlsx', 'xml', 'xsig', 'zip'
+            'ttf', 'txt', 'webm', 'woff', 'woff2', 'xls', 'xlsx', 'xml', 'xsig', 'zip', 'scss'
         ];
         return empty($parts)
             || count($parts) === 1
@@ -128,25 +125,6 @@ final class Router
             'js'    => 'application/javascript',
             default => mime_content_type($filePath),
         };
-    }
-
-    /**
-     * Return the special files from Assets folder.
-     *
-     * @param string $uri
-     * @return bool
-     */
-    private function getSpecialFiles(string $uri): bool
-    {
-        // favicon.ico
-        if ('/favicon.ico' == $uri) {
-            $filePath = APP_FOLDER . '/Assets/Images/favicon.ico';
-            header('Content-Type: ' . $this->getMime($filePath));
-            readfile($filePath);
-            return true;
-        }
-
-        return false;
     }
 
     /**

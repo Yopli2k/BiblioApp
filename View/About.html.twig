@@ -1,0 +1,149 @@
+{% extends "Master/FrontTemplate.html.twig" %}
+
+{% block meta %}
+    {{ parent() }}
+    <meta name="author" content="BiblioApp" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Sobre la biblioteca de alquiler de libros"/>
+    <meta name="keywords" content="historia, proyecto, biblioteca, alquiler, libros" />
+    <meta property="og:title" content="Sobre nuestro proyecto"/>
+    <meta property="og:description" content="Sobre nuestra historia"/>
+    <meta property="og:image" content="/Assets/Images/biblio-card.png"/>
+
+    <title>Nuestro proyecto. Comparte conocimiento</title>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="/vendor/swiper/swiper-bundle.min.css">
+    <style>
+        .banner { background-image: url(/Assets/Images/background/bg3.jpg); }
+    </style>
+{% endblock %}
+
+{% block preloader %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <!--banner-->
+    <div class="dz-bnr-inr overlay-secondary-dark dz-bnr-inr-sm banner">
+        <div class="container">
+            <div class="dz-bnr-inr-entry">
+                <h1>Sobre Nosotros</h1>
+                <nav aria-label="breadcrumb" class="breadcrumb-row">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html"> Inicio</a></li>
+                        <li class="breadcrumb-item">Sobre Nosotros</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!--Our Mission Section-->
+    <section class="content-inner overlay-white-middle">
+        <div class="container">
+            <div class="row about-style1 align-items-center">
+                <div class="col-lg-6 m-b30">
+                    <div class="row sp10 about-thumb">
+                        <div class="col-sm-6 aos-item" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                            <div class="split-box">
+                                <div>
+                                    <img class="m-b30" src="/Assets/Images/about/about1.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="split-box ">
+                                <div>
+                                    <img class="m-b20 aos-item" src="/Assets/Images/about/about2.jpg" alt="" data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
+                                </div>
+                            </div>
+                            <div class="exp-bx aos-item"  data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
+                                <div class="exp-head">
+                                    <div class="counter-num">
+                                        <h2>15<small>+</small></h2>
+                                    </div>
+                                    <h6 class="title">Years of Experience</h6>
+                                </div>
+                                <div class="exp-info">
+                                    <ul class="list-check primary">
+                                        <li>Comics & Graphics</li>
+                                        <li>Biography</li>
+                                        <li>Literary Collections</li>
+                                        <li>Children Fiction</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 m-b30 aos-item" data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
+                    <div class="about-content px-lg-4">
+                        <div class="section-head style-1">
+                            <h2 class="title">Bookland Is Best Choice For Learners</h2>
+                            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration which don’t look even slightly believable. It Is A Long Established Fact That A Reader Will Be Distracted</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--icon-box3 section-->
+    <section class="content-inner bg-light">
+        <div class="container">
+            <div class="section-head text-center">
+                <h2 class="title">Our Mission</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="icon-bx-wraper style-3 m-b30">
+                        <div class="icon-lg m-b20">
+                            <i class="flaticon-open-book-1 icon-cell"></i>
+                        </div>
+                        <div class="icon-content">
+                            <h4 class="title">Best Bookstore</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="icon-bx-wraper style-3 m-b30">
+                        <div class="icon-lg m-b20">
+                            <i class="flaticon-exclusive icon-cell"></i>
+                        </div>
+                        <div class="icon-content">
+                            <h4 class="title">Trusted Seller</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="icon-bx-wraper style-3 m-b30">
+                        <div class="icon-lg m-b20">
+                            <i class="flaticon-store icon-cell"></i>
+                        </div>
+                        <div class="icon-content">
+                            <h4 class="title">Expand Store</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

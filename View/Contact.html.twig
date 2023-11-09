@@ -1,0 +1,95 @@
+{% extends "Master/FrontTemplate.html.twig" %}
+
+{% block meta %}
+    {{ parent() }}
+    <meta name="author" content="BiblioApp" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Contactar con nosotros"/>
+    <meta name="keywords" content="contactar, biblioteca, alquiler, libros" />
+    <meta property="og:title" content="Contactar con nosotros"/>
+    <meta property="og:description" content="Contactar con nosotros"/>
+    <meta property="og:image" content="/Assets/Images/biblio-card.png"/>
+
+    <title>Contactar con nosotros</title>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .banner { background-image: url(/Assets/Images/background/bg3.jpg); }
+        .formbg { background-image: url(/Assets/Images/background/bg2.jpg); }
+    </style>
+{% endblock %}
+
+{% block preloader %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <!--banner-->
+    <div class="dz-bnr-inr overlay-secondary-dark dz-bnr-inr-sm banner">
+        <div class="container">
+            <div class="dz-bnr-inr-entry">
+                <h1>Contactar con Nosotros</h1>
+                <nav aria-label="breadcrumb" class="breadcrumb-row">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html"> Inicio</a></li>
+                        <li class="breadcrumb-item">Contactar</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- form contact -->
+    <section class="content-inner bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 m-b40">
+                    <div class="contact-area1 m-r20 m-md-r0">
+                        <div class="section-head style-1">
+                            <h6 class="sub-title text-primary">Contactar</h6>
+                            <h3 class="title m-b20">Completar el formulario</h3>
+                        </div>
+                        <form class="dz-form dzForm" method="POST" action="Contact">
+                            <input type="hidden" class="form-control" name="dzToDo" value="Contact">
+                            <div class="dzFormMsg"></div>
+                            <div class="input-group">
+                                <input required type="text" class="form-control" name="dzName" placeholder="Full Name">
+                            </div>
+                            <div class="input-group">
+                                <input required type="text" class="form-control" name="dzEmail" placeholder="Email Adress">
+                            </div>
+                            <div class="input-group">
+                                <input required type="text" class="form-control" name="dzPhoneNumber" placeholder="Phone No.">
+                            </div>
+                            <div class="input-group">
+                                <textarea required name="dzMessage" rows="5" class="form-control">Message</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
+                                <input class="form-control d-none" style="display:none;" data-recaptcha="true" required data-error="Please complete the Captcha">
+                            </div>
+                            <div>
+                                <button name="submit" type="submit" value="submit" class="btn w-100 btn-primary btnhover">SUBMIT</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
