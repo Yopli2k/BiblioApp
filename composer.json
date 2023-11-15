@@ -11,11 +11,11 @@
   ],
   "config": {
     "platform": {
-      "php": "8.1.21"
+      "php": "8.0"
     }
   },
   "require": {
-    "php": ">=8.1",
+    "php": ">=8.0",
     "symfony/http-foundation": "4.4.*",
     "symfony/translation": "4.4.*",
     "twig/twig": "3.*",

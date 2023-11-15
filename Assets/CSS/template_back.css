@@ -1,11 +1,17 @@
+@charset "UTF-8";
+/*
+ * Backend CSS Definition
+ */
+@import url("/Assets/CSS/basic.css");
+
 /**
  * GENERAL
  */
 html, body {
   width: 100%;
   height: 100%;
-  background-color: #fff;
-  color: #000;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
 }
 
 .img-circle {
@@ -35,7 +41,7 @@ html, body {
 }
 
 .logo .logo-text {
-  color: #fff;
+  color: white;
   font-weight: 700;
 }
 
@@ -43,13 +49,13 @@ html, body {
  * LEFT PANEL SIDEBAR
  */
 #sidebar {
-  background-color: #333;
+  background-color: var(--secondary);
   overflow: hidden;
   z-index: 3;
 }
 
 #sidebar .list-group {
-  background-color: #333;
+  background-color: var(--secondary);
   min-height: 100vh;
 }
 
@@ -59,16 +65,14 @@ html, body {
 
 #sidebar .list-group-item {
   border-radius: 0;
-  background-color: #333;
-  color: #ccc;
-  border-left: 0;
-  border-right: 0;
-  border-color: #2c2c2c;
+  background-color: var(--secondary);
+  color: var(--bs-gray-500);
+  border: 0;
   white-space: nowrap;
 }
 
 #sidebar .list-group-item:hover {
-  color: navajowhite;
+  color: var(--primary);
   text-decoration: none;
 }
 
@@ -77,11 +81,11 @@ html, body {
   height: 0;
   margin: 0.5rem 0;
   overflow: hidden;
-  border-top: 1px solid #4f5962;
+  border-top: 1px solid var(--bs-gray-600);
 }
 
 #sidebar .dark-mode .sidebar-divider {
-  border-color: #6c757d;
+  border-color: var(--bs-gray-700);
 }
 
 /**
