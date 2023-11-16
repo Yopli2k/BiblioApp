@@ -16,6 +16,7 @@
 namespace BiblioApp\Model;
 
 use BiblioApp\Core\App\AppModel;
+use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\Tools\Tools;
 
 /**
@@ -55,6 +56,18 @@ class Book extends AppModel
     /** @var int */
     public int $publication;
 
+    /**
+     * The average rating of the book.
+     *   - it is calculated in the getRating method.
+     *   - if the book has no rating, it is set to 3.
+     *
+     * @var int
+     */
+    public int $rating = 0;
+
+    /** @var bool */
+    public bool $recommended;
+
     /** @var string */
     public string $synopsis;
 
@@ -70,7 +83,37 @@ class Book extends AppModel
         $this->name = '';
         $this->pages = 0;
         $this->publication = date('Y');
+        $this->recommended = false;
         $this->synopsis = '';
+    }
+
+    /**
+     * Get the image of the book.
+     *
+     * @return BookImage
+     */
+    public function getImage(): BookImage
+    {
+        $bookImage = new BookImage();
+        $where = [ new DataBaseWhere('book_id', $this->id) ];
+        $bookImage->loadFromCode('', $where, []);
+        return $bookImage;
+    }
+
+    /**
+     * Get the average rating of the book.
+     * For performance reasons, it is only calculated once, when not has value.
+     *
+     * @return int
+     */
+    public function getRating(): int
+    {
+        if (empty($this->rating)) {
+            $sql = 'SELECT ROUND(COALESCE(AVG(rating), 3), 0) AS rating FROM ratings WHERE book_id = ' . $this->id;
+            $data = self::$dataBase->select($sql);
+            $this->rating = (int)$data[0]['rating'] ?? 3;
+        }
+        return $this->rating;
     }
 
     /**
@@ -87,6 +130,7 @@ class Book extends AppModel
         $this->name = $data['name'] ?? '';
         $this->pages = (int)$data['pages'] ?? 0;
         $this->publication = (int)$data['publication'] ?? date('Y');
+        $this->recommended = (bool)$data['recommended'] ?? false;
         $this->synopsis = $data['synopsis'] ?? '';
     }
 
@@ -144,7 +188,7 @@ class Book extends AppModel
     protected function insert(): bool
     {
         $sql = 'INSERT INTO ' . static::tableName()
-            . ' (author, editorial, isbn, name, publication, pages, synopsis)'
+            . ' (author, editorial, isbn, name, publication, pages, recommended, synopsis)'
             . ' VALUES ('
             . self::$dataBase->var2str($this->author) . ','
             . self::$dataBase->var2str($this->editorial) . ','
@@ -152,6 +196,7 @@ class Book extends AppModel
             . self::$dataBase->var2str($this->name) . ','
             . $this->publication . ','
             . $this->pages . ','
+            . self::$dataBase->var2str($this->recommended) . ','
             . self::$dataBase->var2str($this->synopsis)
             . ')';
         return self::$dataBase->exec($sql);
@@ -181,6 +226,7 @@ class Book extends AppModel
                 . 'name = ' . self::$dataBase->var2str($this->name). ','
                 . 'pages = ' . $this->pages . ','
                 . 'publication = ' . $this->publication . ','
+                . 'recommended = ' . self::$dataBase->var2str($this->recommended) . ','
                 . 'synopsis = ' . self::$dataBase->var2str($this->synopsis)
             . ' WHERE id = ' . self::$dataBase->var2str($this->id);
         return self::$dataBase->exec($sql);

@@ -38,6 +38,12 @@
             <column name="paginas" title="páginas" order="160">
                 <widget type="number" fieldname="pages" step="1" decimal="0" required="true" />
             </column>
+            <column name="recomendado" order="200">
+                <widget type="select" fieldname="recommended">
+                    <values title="No">0</values>
+                    <values title="Sí">1</values>
+                </widget>
+            </column>
         </group>
         <group name="synopsis" numcolumns="6">
             <column name="sinopsis" numcolumns="12" order="200">

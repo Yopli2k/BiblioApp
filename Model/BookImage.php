@@ -119,6 +119,21 @@ class BookImage extends AppModel
     }
 
     /**
+     * Return the full path of the image.
+     * (path and filename)
+     *
+     * @return string
+     */
+    public function getFullPath(): string
+    {
+        if (empty($this->filepath) || empty($this->filename)) {
+            return '';
+        }
+
+        return $this->filepath . DIRECTORY_SEPARATOR . $this->filename;
+    }
+
+    /**
      * Assign the values of the $data array to the model properties.
      *
      * @param array $data

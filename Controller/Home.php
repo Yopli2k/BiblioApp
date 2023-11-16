@@ -16,14 +16,58 @@
 namespace BiblioApp\Controller;
 
 use BiblioApp\Core\App\PageController;
+use BiblioApp\Core\DataBase\DataBaseWhere;
+use BiblioApp\Model\Book;
+use BiblioApp\Model\Category;
 
 class Home extends PageController
 {
 
+    public function getCategories(): array
+    {
+        $categories = new Category();
+        return $categories->select([]);
+    }
+
+    /**
+     * Return the basic data for this page.
+     *
+     * @return array
+     */
     public function getPageData(): array
     {
         $data = parent::getPageData();
         $data['title'] = 'Home Page';
         return $data;
+    }
+
+    /**
+     * Returns a list of books marked as recommended
+     *
+     * @return Book[]
+     */
+    public function getRecommendBooks(): array
+    {
+        $books = new Book();
+        $where = [ new DataBaseWhere('recommended', true) ];
+        return $books->select($where, [], 0, 4);
+    }
+
+    /**
+     * Get the average rating of the book.
+     * For performance reasons, it is only calculated once, when not has value.
+     *
+     * @return int
+     */
+    public function getRating(Book $book): int
+    {
+        return $book->getRating();
+    }
+
+    public function getUrlBookImage(Book $book): string
+    {
+        $bookImage = $book->getImage();
+        $url = $bookImage->getFullPath();
+        return (file_exists($url)) ? $url : '';
     }
 }

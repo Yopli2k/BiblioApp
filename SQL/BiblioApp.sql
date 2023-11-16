@@ -144,6 +144,7 @@ CREATE TABLE books (
     name varchar(100) NOT NULL,
     pages int NOT NULL DEFAULT 0,
     publication int NOT NULL,
+    recommended bool NOT NULL DEFAULT false,
     synopsis text NOT NULL,
     CONSTRAINT books_pk PRIMARY KEY (id)
 );
