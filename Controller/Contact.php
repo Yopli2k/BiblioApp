@@ -24,6 +24,7 @@ class Contact extends PageController
     {
         $data = parent::getPageData();
         $data['title'] = 'Contactar con Nosotros';
+        $data['breadcrumb'] = 'Contactar';
         return $data;
     }
 }

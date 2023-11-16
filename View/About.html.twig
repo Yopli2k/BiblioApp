@@ -31,20 +31,11 @@
 
 {% block body %}
     {{ parent() }}
+    {% from 'Macro/Utils.html.twig' import pageBanner %}
+
     <!--banner-->
-    <div class="dz-bnr-inr overlay-secondary-dark dz-bnr-inr-sm banner">
-        <div class="container">
-            <div class="dz-bnr-inr-entry">
-                <h1>Sobre Nosotros</h1>
-                <nav aria-label="breadcrumb" class="breadcrumb-row">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html"> Inicio</a></li>
-                        <li class="breadcrumb-item">Sobre Nosotros</li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+    {{ pageBanner(controller) }}
+
     <!--Our Mission Section-->
     <section class="content-inner overlay-white-middle">
         <div class="container">

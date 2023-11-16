@@ -17,7 +17,8 @@
     {{ parent() }}
     <style>
         .banner { background-image: url(/Assets/Images/background/bg3.jpg); }
-        .formbg { background-image: url(/Assets/Images/background/bg2.jpg); }
+        #message { height: 150px; }
+        #recaptcha { display:none; }
     </style>
 {% endblock %}
 
@@ -31,20 +32,10 @@
 
 {% block body %}
     {{ parent() }}
+    {% from 'Macro/Utils.html.twig' import pageBanner, formInput %}
+
     <!--banner-->
-    <div class="dz-bnr-inr overlay-secondary-dark dz-bnr-inr-sm banner">
-        <div class="container">
-            <div class="dz-bnr-inr-entry">
-                <h1>Contactar con Nosotros</h1>
-                <nav aria-label="breadcrumb" class="breadcrumb-row">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html"> Inicio</a></li>
-                        <li class="breadcrumb-item">Contactar</li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+    {{ pageBanner(controller) }}
 
     <!-- form contact -->
     <section class="content-inner bg-light">
@@ -56,27 +47,42 @@
                             <h6 class="sub-title text-primary">Contactar</h6>
                             <h3 class="title m-b20">Completar el formulario</h3>
                         </div>
-                        <form class="dz-form dzForm" method="POST" action="Contact">
-                            <input type="hidden" class="form-control" name="dzToDo" value="Contact">
-                            <div class="dzFormMsg"></div>
-                            <div class="input-group">
-                                <input required type="text" class="form-control" name="dzName" placeholder="Full Name">
+
+                        <form class="form-floating" method="POST" action="Contact">
+                            <input type="hidden" class="form-control" name="action" value="contact">
+                            {{ formInput(controller, 'text', 'name', 'Nombre completo') }}
+                            {{ formInput(controller, 'email', 'email', 'Correo electrónico') }}
+                            {{ formInput(controller, 'tel', 'phone', 'Teléfono') }}
+
+                            <div class="form-floating mb-3">
+                                <textarea id="message" class="form-control" placeholder="Mensaje" name="message" required></textarea>
+                                <label for="message">Mensaje</label>
                             </div>
-                            <div class="input-group">
-                                <input required type="text" class="form-control" name="dzEmail" placeholder="Email Adress">
+
+                            <div class="form-check mb-3">
+                                <input id="rgpd" type="checkbox" class="form-check-input" name="rgpd" value="" required>
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    He leído y acepto la <a href="" target="_blank">Política de Privacidad</a>.
+                                </label>
                             </div>
-                            <div class="input-group">
-                                <input required type="text" class="form-control" name="dzPhoneNumber" placeholder="Phone No.">
+
+                            <div class="input-row">
+                                <p class="border border-3 mt-3 p-2">
+                                    La persona responsable del archivo, utilizará esta información para responder a las
+                                    solicitudes de contacto. Los datos enviados se guardarán en nuestros servidores
+                                    dentro de la UE. Puede acceder, rectificar o eliminarlos si lo desea, enviando un
+                                    mensaje utilizando este mismo formulario, indicando en él la información de contacto
+                                    original, así como la acción deseada.
+                                </p>
                             </div>
-                            <div class="input-group">
-                                <textarea required name="dzMessage" rows="5" class="form-control">Message</textarea>
-                            </div>
+
                             <div class="mb-3">
                                 <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
-                                <input class="form-control d-none" style="display:none;" data-recaptcha="true" required data-error="Please complete the Captcha">
+                                <input class="form-control d-none" id="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha">
                             </div>
+
                             <div>
-                                <button name="submit" type="submit" value="submit" class="btn w-100 btn-primary btnhover">SUBMIT</button>
+                                <button name="submit" type="submit" value="submit" class="btn w-100 btn-primary btnhover">A C E P T A R</button>
                             </div>
                         </form>
                     </div>

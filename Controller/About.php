@@ -24,6 +24,7 @@ class About extends PageController
     {
         $data = parent::getPageData();
         $data['title'] = 'Sobre Nosotros';
+        $data['breadcrumb'] = 'Sobre Nosotros';
         return $data;
     }
 }
