@@ -25,12 +25,14 @@
 
 {% block css %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}" />
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('Assets/JS/ListView.js') }}"></script>
+    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('Assets/JS/ListFilterAutocomplete.js') }}"></script>
+    <script src="{{ asset('Assets/JS/ListView.js') }}"></script>
     {# Custom JS #}
     <script>
         $(document).ready(function () {

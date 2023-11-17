@@ -29,9 +29,8 @@
             {# TODO: add apple icons for ipad and iphone #}
         {% endblock %}
         {% block css %}
-            <link rel="stylesheet" type="text/css" href="/Assets/CSS/style.css">
-            <link rel="stylesheet" type="text/css" href="/Assets/Icons/fontawesome/css/all.min.css">
-            <link rel="stylesheet" type="text/css" href="/vendor/bootstrap-select/dist/css/bootstrap-select.min.css">
+            <link rel="stylesheet" href="{{ asset('Assets/CSS/style.css') }}"/>
+            <link rel="stylesheet" href="{{ asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" />
         {% endblock %}
     </head>
     {% block fullBody %}
@@ -63,13 +62,13 @@
                                 <div class="header-search-nav">
                                     <div class="header-item-search">
                                         <div class="input-group search-input">
-                                            <select class="default-select">
+                                            <select id="navCategory" name="navCategory" class="default-select">
                                                 <option>Categorías</option>
                                                 <option>Photography </option>
                                                 <option>Arts</option>
                                                 <option>Adventure</option>
                                             </select>
-                                            <input type="text" class="form-control" aria-label="Búsqueda de libros por categoría" placeholder="Introduce el título del libro">
+                                            <input id="navQuery" name="navQuery" type="text" class="form-control" aria-label="Búsqueda de libros" placeholder="Introduce el título del libro o autor">
                                             <button class="btn" type="button"><i class="flaticon-loupe"></i></button>
                                         </div>
                                     </div>
@@ -98,7 +97,7 @@
                                     <div class="header-nav navbar-collapse collapse justify-content-start" id="navbarNavDropdown">
                                         <div class="search-input mt-3">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" aria-label="Búsqueda de libros por categoría" placeholder="Introduce el título del libro">
+                                                <input id="navQueryMain" name="navQueryMain" type="text" class="form-control" aria-label="Búsqueda de libros" placeholder="Introduce el título del libro o autor">
                                                 <button class="btn" type="button"><i class="flaticon-loupe"></i></button>
                                             </div>
                                         </div>
@@ -156,7 +155,7 @@
                                     <div class="widget widget_services">
                                         <h5 class="footer-title">Legales</h5>
                                         <ul>
-                                            <li><a href="index.html">Condiciones de Uso</a></li>
+                                            <li><a href="LegalNotice">Aviso Legal</a></li>
                                             <li><a href="services.html">Política de Privacidad</a></li>
                                             <li><a href="books-detail.html">Política de Cookies</a></li>
                                         </ul>
@@ -182,16 +181,14 @@
 
                 <!-- JS scripts -->
                 {% block javascripts %}
-                    <script src="/Assets/JS/jquery.min.js"></script>
-                    <script src="/Assets/JS/dz.carousel.js"></script>
-                    <script src="/Assets/JS/dz.ajax.js"></script>
-                    <script src="/Assets/JS/custom.js"></script>
-                    <script src="/vendor/wow/wow.min.js"></script>
-                    <script src="/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-                    <script src="/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-                    <script src="/vendor/counter/waypoints-min.js"></script>
-                    <script src="/vendor/counter/counterup.min.js"></script>
-                    <script src="/vendor/swiper/swiper-bundle.min.js"></script>
+                    <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+                    <script src="{{ asset('Assets/JS/Custom.js') }}"></script>
+                    <script src="{{ asset('vendor/wow/wow.min.js') }}"></script>
+                    <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+                    <script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
+                    <script src="{{ asset('vendor/counter/waypoints-min.js') }}"></script>
+                    <script src="{{ asset('vendor/counter/counterup.min.js') }}"></script>
+                    <script src="{{ asset('vendor/swiper/swiper-bundle.min.js') }}"></script>
                 {% endblock %}
             </div>
         </body>

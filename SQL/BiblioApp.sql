@@ -276,6 +276,25 @@ CREATE TABLE ratings (
 );
 
 /**
+ * Create webcontacts table.
+ * This table stores the contacts made by the web form.
+ */
+CREATE TABLE webcontacts (
+    creationdate date NOT NULL,
+    creationtime time NOT NULL,
+    email varchar(100) NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
+    member_id int,
+    name varchar(100) NOT NULL,
+    notes text,
+    phone varchar(10) NOT NULL,
+    resolved bool NOT NULL DEFAULT false,
+    CONSTRAINT webcontacts_pk PRIMARY KEY (id),
+    CONSTRAINT webcontacts_member_fk FOREIGN KEY (member_id) REFERENCES members (id) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+
+/**
  * Create filters table.
  * This table stores filters made by users into views.
  */

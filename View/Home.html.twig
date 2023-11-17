@@ -35,11 +35,14 @@
 
 {% block body %}
     {{ parent() }}
+    {% from 'Macro/Utils.html.twig' import pageHeader %}
+
     <!--Recommend Section -->
     <section class="content-inner bg-grey">
         <div class="container">
-            {{ _self.renderHeader(
+            {{ pageHeader(
                     controller,
+                    'center',
                     'Nuestras Recomendaciones',
                     'Te presentamos nuestra selección de libros recomendados. Cada obra ha sido elegida para ofrecerte una experiencia que te ayudará en tu crecimiento personal. Nuestra selección de libros te invita a descubrir el poder transformador de la palabra y a profundizar en el mensaje de Jesús.'
                 )
@@ -105,8 +108,9 @@
     <!-- Book List (Grid) -->
     <section class="content-inner border-bottom bg-grey">
         <div class="container">
-            {{ _self.renderHeader(
+            {{ pageHeader(
                     controller,
+                    'center',
                     'Libros',
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.'
                 )
@@ -691,13 +695,6 @@
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
-
-{% macro renderHeader(controller, title, content) %}
-    <div class="section-head text-center">
-        <h2 class="title">{{ title }}</h2>
-        <p>{{ content }}</p>
-    </div>
-{% endmacro %}
 
 {% macro renderBook(controller, book) %}
     <div class="col-book style-1">

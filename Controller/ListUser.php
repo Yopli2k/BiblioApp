@@ -15,6 +15,7 @@
  */
 namespace BiblioApp\Controller;
 
+use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\ExtendedController\ListController;
 
 class ListUser extends ListController
@@ -31,6 +32,7 @@ class ListUser extends ListController
     protected function createViews(): void
     {
         $this->createViewsUsers();
+        $this->createViewsWebContacts();
     }
 
     /**
@@ -45,5 +47,22 @@ class ListUser extends ListController
         $this->addOrderBy($viewName, ['email'], 'Correo');
         $this->setSettings($viewName, 'btnDelete', false);
         $this->setSettings($viewName, 'checkBoxes', false);
+    }
+
+    private function createViewsWebContacts(string $viewName = 'ListWebContact'): void
+    {
+        $this->addView($viewName, 'WebContact', 'Contactos Web', 'fas fa-envelope');
+        $this->addSearchFields($viewName, ['name', 'email', 'phone']);
+        $this->addOrderBy($viewName, ['creationdate', 'creationtime'], 'Fecha');
+        $this->addOrderBy($viewName, ['name'], 'Nombre');
+        $this->addOrderBy($viewName, ['email'], 'Correo');
+
+        $this->addFilterPeriod($viewName, 'creationdate', 'Fecha', 'creationdate');
+        $this->addFilterAutocomplete($viewName, 'member', 'Asociado', 'member_id', 'members', 'id', 'name');
+        $this->addFilterSelectWhere($viewName, 'status', [
+            ['label' => 'Pendiente', 'where' => [ new DataBaseWhere('resolved', false) ] ],
+            ['label' => 'Resuelto', 'where' => [ new DataBaseWhere('resolved', true) ] ],
+            ['label' => 'Todos', 'where' => []]
+        ], 'Estado');
     }
 }

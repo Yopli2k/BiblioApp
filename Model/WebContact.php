@@ -16,54 +16,39 @@
 namespace BiblioApp\Model;
 
 use BiblioApp\Core\App\AppModel;
-use BiblioApp\Core\Tools\PasswordTrait;
+use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\Tools\PhoneTools;
 use BiblioApp\Core\Tools\Tools;
+use BiblioApp\Model\Member;
 
 /**
- * Class to manage the member data.
+ * Class to manage the contacts made through the web.
  *
  * @author José Antonio Cuello Principal <yopli2000@gmail.com>
  */
-class Member extends AppModel
+class WebContact extends AppModel
 {
 
-    use PasswordTrait;
-
     /**
-     * The street address of the member.
-     *
-     * @var string
-     */
-    public string $address;
-
-    /**
-     * The date of creation of the member.
+     * Date of the contact.
      *
      * @var string
      */
     public string $creationdate;
 
     /**
-     * The document legal identification. DNI, NIE, Passport, etc.
+     * Time of the contact.
      *
      * @var string
      */
-    public string $document;
+    public string $creationtime;
 
     /**
-     * The email address of the member.
+     * The email address of the contact.
      *
      * @var string
      */
     public string $email;
-
-    /**
-     * Indicates if the member is enabled.
-     *
-     * @var bool
-     */
-    public bool $enabled;
 
     /**
      * Primary Key.
@@ -73,25 +58,25 @@ class Member extends AppModel
     public ?int $id;
 
     /**
-     * Full name of the member.
+     * Link to member model.
+     *
+     * @var int|null
+     */
+    public ?int $member_id;
+
+    /**
+     * The name of the person who made the contact.
      *
      * @var string
      */
     public string $name;
 
     /**
-     * Internal notes about the member.
+     * Contact message from the web.
      *
      * @var string
      */
     public string $notes;
-
-    /**
-     * The password of the member.
-     *
-     * @var string
-     */
-    public string $password;
 
     /**
      * Phone number for contact.
@@ -101,28 +86,26 @@ class Member extends AppModel
     public string $phone;
 
     /**
-     * Indicates if the email of the member has been verified.
+     * Indicates if the contact is resolved.
      *
      * @var bool
      */
-    public bool $verified;
+    public bool $resolved;
 
     /**
      * Reset the values of all model properties.
      */
     public function clear(): void
     {
-        $this->address = '';
-        $this->creationdate = date('d-m-Y');
-        $this->document = '';
-        $this->email = '';
-        $this->enabled = true;
         $this->id = null;
+        $this->member_id = null;
+        $this->creationdate = date('Y-m-d');
+        $this->creationtime = date('H:i:s');
+        $this->email = '';
         $this->name = '';
         $this->notes = '';
-        $this->password = '';
         $this->phone = '';
-        $this->verified = false;
+        $this->resolved = false;
     }
 
     /**
@@ -132,17 +115,15 @@ class Member extends AppModel
      */
     public function loadFromData(array $data = []): void
     {
-        $this->address = $data['address'] ?? '';
-        $this->creationdate = $data['creationdate'] ?? date('d-m-Y');
-        $this->document = $data['document'] ?? '';
-        $this->email = $data['email'] ?? '';
-        $this->enabled = (bool)$data['enabled'] ?? false;
         $this->id = (int)$data['id'] ?? null;
+        $this->member_id = (int)$data['member_id'] ?? null;
+        $this->creationdate = $data['creationdate'] ?? date('Y-m-d');
+        $this->creationtime = $data['creationtime'] ?? date('H:i:s');
+        $this->email = $data['email'] ?? '';
         $this->name = $data['name'] ?? '';
         $this->notes = $data['notes'] ?? '';
-        $this->password = $data['password'] ?? '';
         $this->phone = $data['phone'] ?? '';
-        $this->verified = (bool)$data['verified'] ?? false;
+        $this->resolved = (bool)$data['resolved'] ?? false;
     }
 
     /**
@@ -162,7 +143,7 @@ class Member extends AppModel
      */
     public static function tableName(): string
     {
-        return 'members';
+        return 'webcontacts';
     }
 
     /**
@@ -173,10 +154,8 @@ class Member extends AppModel
      */
     public function test(): bool
     {
-        $this->address = Tools::noHtml($this->address ?? '');
-        $this->document = Tools::noHtml($this->document ?? '');
-        $this->name = Tools::noHtml($this->name ?? '');
-        $this->notes = Tools::noHtml($this->notes ?? '');
+        $this->name = Tools::noHtml($this->name);
+        $this->notes = Tools::noHtml($this->notes);
 
         $this->email = Tools::noHtml(mb_strtolower($this->email ?? '', 'UTF8'));
         if (false === empty($this->email) && false === filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
@@ -190,12 +169,23 @@ class Member extends AppModel
             return false;
         }
 
-        if (false === preg_match("/^\d{10}$/", $this->phone)) {
-            $this->message->warning('El número de teléfono no es válido.');
-            return false;
+        if (empty($this->member_id)) {
+            $this->setMemberId();
         }
 
         return parent::test();
+    }
+
+    /**
+     * Returns the url where to see / modify the data.
+     *
+     * @param string $type
+     * @param string $list
+     * @return string
+     */
+    public function url(string $type = 'auto', string $list = 'List'): string
+    {
+        return parent::url($type, 'ListUser?activetab=' . $list);
     }
 
     /**
@@ -206,17 +196,16 @@ class Member extends AppModel
     protected function insert(): bool
     {
         $sql = 'INSERT INTO ' . static::tableName()
-            . ' (address, creationdate, document, email, enabled, name, notes, phone, verified)'
+            . ' (member_id, creationdate, creationtime, email, name, notes, phone, resolved)'
             . ' VALUES ('
-            . self::$dataBase->var2str($this->address) . ','
+            . $this->member_id . ','
             . self::$dataBase->var2str($this->creationdate) . ','
-            . self::$dataBase->var2str($this->document) . ','
+            . self::$dataBase->var2str($this->creationtime) . ','
             . self::$dataBase->var2str($this->email) . ','
-            . self::$dataBase->var2str($this->enabled) . ','
             . self::$dataBase->var2str($this->name) . ','
             . self::$dataBase->var2str($this->notes) . ','
             . self::$dataBase->var2str($this->phone) . ','
-            . self::$dataBase->var2str($this->verified)
+            . $this->resolved
             . ')';
         return self::$dataBase->exec($sql);
     }
@@ -228,7 +217,7 @@ class Member extends AppModel
      */
     protected function requiredFields(): array
     {
-        return ['address', 'document', 'email', 'name', 'phone'];
+        return ['creationdate', 'creationtime', 'email', 'name', 'notes', 'phone'];
     }
 
     /**
@@ -239,16 +228,29 @@ class Member extends AppModel
     protected function update(): bool
     {
         $sql = 'UPDATE ' . static::tableName() . ' SET '
-                . 'address = ' . self::$dataBase->var2str($this->address) . ','
-                . 'document = ' . self::$dataBase->var2str($this->document) . ','
-                . 'email = ' . self::$dataBase->var2str($this->email) . ','
-                . 'enabled = ' . self::$dataBase->var2str($this->enabled) . ','
-                . 'name = ' . self::$dataBase->var2str($this->name) . ','
-                . 'notes = ' . self::$dataBase->var2str($this->notes) . ','
-                . 'password = ' . self::$dataBase->var2str($this->password) . ','
-                . 'phone = ' . self::$dataBase->var2str($this->phone) . ','
-                . 'verified = ' . self::$dataBase->var2str($this->verified)
+            . 'member_id = ' . $this->member_id . ','
+            . 'email = ' . self::$dataBase->var2str($this->email) . ','
+            . 'name = ' . self::$dataBase->var2str($this->name) . ','
+            . 'notes = ' . self::$dataBase->var2str($this->notes) . ','
+            . 'phone = ' . self::$dataBase->var2str($this->phone) . ','
+            . 'resolved = ' . $this->resolved
             . ' WHERE id = ' . self::$dataBase->var2str($this->id);
         return self::$dataBase->exec($sql);
+    }
+
+    /**
+     * Set the member id from the email.
+     */
+    private function setMemberId(): void
+    {
+        if (empty($this->email)) {
+            return;
+        }
+
+        $where = [ new DataBaseWhere('email', $this->email) ];
+        $member = new Member();
+        if ($member->loadFromCode('', $where)) {
+            $this->member_id = $member->id;
+        }
     }
 }

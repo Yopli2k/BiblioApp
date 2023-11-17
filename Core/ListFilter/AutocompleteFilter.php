@@ -116,16 +116,6 @@ class AutocompleteFilter extends BaseFilter
     }
 
     /**
-     * Adds need asset to the asset manager.
-     */
-    protected function assets()
-    {
-        // AssetManager::add('css', APP_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.css', 2);
-        // AssetManager::add('js', APP_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.js', 2);
-        // AssetManager::add('js', APP_ROUTE . '/Dinamic/Assets/JS/ListFilterAutocomplete.js');
-    }
-
-    /**
      * @return string
      */
     protected function getDescription(): string

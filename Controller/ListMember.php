@@ -44,9 +44,9 @@ class ListMember extends ListController
         $this->addView($viewName, 'Loan', 'Préstamos', 'fa-solid fa-book-open-reader');
         $this->addOrderBy($viewName, ['loan_date'], 'Préstamo');
         $this->addOrderBy($viewName, ['return_date'], 'Devolución');
+        $this->addFilterPeriod($viewName, 'loan_date', 'Préstamo', 'loan_date');
         $this->addFilterAutocomplete($viewName, 'book', 'Libro', 'book_id', 'books', 'id', 'name');
         $this->addFilterAutocomplete($viewName, 'member', 'Asociado', 'member_id', 'members', 'id', 'name');
-        $this->addFilterPeriod($viewName, 'loan_date', 'Préstamo', 'loan_date');
     }
 
     /**

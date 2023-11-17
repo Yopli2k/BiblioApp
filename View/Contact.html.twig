@@ -8,7 +8,7 @@
     <meta name="keywords" content="contactar, biblioteca, alquiler, libros" />
     <meta property="og:title" content="Contactar con nosotros"/>
     <meta property="og:description" content="Contactar con nosotros"/>
-    <meta property="og:image" content="/Assets/Images/biblio-card.png"/>
+    <meta property="og:image" content="{{ asset('Assets/Images/biblio-card.png') }}"/>
 
     <title>Contactar con nosotros</title>
 {% endblock %}
@@ -16,7 +16,7 @@
 {% block css %}
     {{ parent() }}
     <style>
-        .banner { background-image: url(/Assets/Images/background/bg3.jpg); }
+        .banner { background-image: url(/Assets/Images/background/contactar.jpg); }
         #message { height: 150px; }
         #recaptcha { display:none; }
     </style>
@@ -38,7 +38,7 @@
     {{ pageBanner(controller) }}
 
     <!-- form contact -->
-    <section class="content-inner bg-light">
+    <section class="content-inner border-bottom bg-grey">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 m-b40">
@@ -48,8 +48,8 @@
                             <h3 class="title m-b20">Completar el formulario</h3>
                         </div>
 
-                        <form class="form-floating" method="POST" action="Contact">
-                            <input type="hidden" class="form-control" name="action" value="contact">
+                        <form id="formContact" class="form-floating" method="POST" action="Contact">
+                            <input id="action" name="action" type="hidden" class="form-control" value="contact">
                             {{ formInput(controller, 'text', 'name', 'Nombre completo') }}
                             {{ formInput(controller, 'email', 'email', 'Correo electrónico') }}
                             {{ formInput(controller, 'tel', 'phone', 'Teléfono') }}
@@ -61,24 +61,26 @@
 
                             <div class="form-check mb-3">
                                 <input id="rgpd" type="checkbox" class="form-check-input" name="rgpd" value="" required>
-                                <label class="form-check-label" for="flexCheckDefault">
+                                <label class="form-check-label" for="rgpd">
                                     He leído y acepto la <a href="" target="_blank">Política de Privacidad</a>.
                                 </label>
                             </div>
 
-                            <div class="input-row">
-                                <p class="border border-3 mt-3 p-2">
-                                    La persona responsable del archivo, utilizará esta información para responder a las
-                                    solicitudes de contacto. Los datos enviados se guardarán en nuestros servidores
-                                    dentro de la UE. Puede acceder, rectificar o eliminarlos si lo desea, enviando un
-                                    mensaje utilizando este mismo formulario, indicando en él la información de contacto
-                                    original, así como la acción deseada.
-                                </p>
-                            </div>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <p class="border border-3 mb-3 p-2">
+                                        La persona responsable del archivo, utilizará esta información para responder a las
+                                        solicitudes de contacto. Los datos se guardarán en nuestros servidores
+                                        dentro de la UE. Puede acceder, rectificar o eliminarlos, enviando un
+                                        mensaje utilizando este mismo formulario, indicando en él la información de contacto
+                                        original, así como la acción deseada.
+                                    </p>
+                                </div>
 
-                            <div class="mb-3">
-                                <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
-                                <input class="form-control d-none" id="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha">
+                                <div class="col-lg-4 mb-3">
+                                    <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
+                                    <!-- <input class="form-control d-none" id="recaptcha" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->
+                                </div>
                             </div>
 
                             <div>
@@ -98,4 +100,6 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="{{ asset('Assets/Js/Contact.js') }}"
 {% endblock %}

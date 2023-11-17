@@ -16,9 +16,23 @@
 namespace BiblioApp\Controller;
 
 use BiblioApp\Core\App\PageController;
+use BiblioApp\Model\WebContact;
+use Symfony\Component\HttpFoundation\Response;
 
 class Contact extends PageController
 {
+
+    /**
+     * Runs the controller's logic.
+     *
+     * @param Response $response
+     */
+    public function exec(Response &$response): void
+    {
+        parent::exec($response);
+        $action = $this->request->request->get('action', $this->request->query->get('action', ''));
+        $this->execPreviousAction($action);
+    }
 
     public function getPageData(): array
     {
@@ -26,5 +40,44 @@ class Contact extends PageController
         $data['title'] = 'Contactar con Nosotros';
         $data['breadcrumb'] = 'Contactar';
         return $data;
+    }
+
+    /**
+     * Run the actions that alter data before reading it.
+     *
+     * @param ?string $action
+     * @return bool
+     */
+    protected function execPreviousAction(?string $action): bool
+    {
+        if ($action == 'contact') {
+            $results = $this->contactAction();
+            $this->response->setContent(json_encode($results));
+            return false;
+        }
+
+        return true;
+    }
+
+    private function contactAction(): array
+    {
+        $data = $this->request->request->get();
+        $contact = new WebContact();
+        $contact->email = $data['email'] ?? '';
+        $contact->name = $data['name'] ?? '';
+        $contact->notes = $data['notes'] ?? '';
+        $contact->phone = $data['phone'] ?? '';
+
+        if ($contact->save()) {
+            return [
+                'result' => true,
+                'message' => 'Mensaje enviado correctamente'
+            ];
+        }
+
+        return [
+            'result' => false,
+            'message' => 'No se ha podido registrar el mensaje'
+        ];
     }
 }

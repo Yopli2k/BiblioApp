@@ -1,6 +1,5 @@
 /**
-/**
-Core script to handle the entire theme and core functions
+  Core script to handle the entire theme and core functions
 **/
 var Bookland = function(){
 	/* Search Bar ============ */

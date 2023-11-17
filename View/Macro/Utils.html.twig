@@ -15,15 +15,29 @@
  */
 #}
 
+{#
+    Add a input field to a form.
+    If the type is 'tel' then the pattern attribute is added.
+
+    @param controller The controller object.
+    @param type The type of the input field.
+    @param name The name of the input field.
+    @param label The label of the input field.
+#}
 {% macro formInput(controller, type, name, label) %}
     <div class="form-floating mb-3">
         <input id="{{ name }}" type="{{ type }}" class="form-control"
-               {% if type == 'tel' %} pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" {% endif %}
-               name="{{ name }}" placeholder="{{ label }}" required>
+               {% if type == 'tel' %} pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}" {% endif %}
+               name="{{ name }}" placeholder="{{ label }}" required autocomplete="false">
         <label for="{{ name }}">{{ label }}</label>
     </div>
 {% endmacro %}
 
+{#
+    Add a banner with breadcrumb to a page.
+
+    @param controller The controller object.
+#}
 {% macro pageBanner(controller) %}
     {% set pageData = controller.getPageData() %}
     <div class="dz-bnr-inr overlay-secondary-dark dz-bnr-inr-sm banner">
@@ -38,5 +52,21 @@
                 </nav>
             </div>
         </div>
+    </div>
+{% endmacro %}
+
+{#
+    Add a header with title and optional text to a page.
+
+    @param controller The controller object.
+    @param title The title of the header.
+    @param content The optional text of the header.
+#}
+{% macro pageHeader(controller, align, title, content) %}
+    <div class="section-head text-{{ align }}">
+        <h2 class="title">{{ title }}</h2>
+        {% if content is not empty %}
+            <p>{{ content }}</p>
+        {% endif %}
     </div>
 {% endmacro %}
