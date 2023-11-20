@@ -75,17 +75,7 @@ class AppController extends AppBase
             return false;
         }
 
-        if ($this->request->query->get('logout')) {
-            AppCookies::clear($this->response);
-            $this->response->headers->set('Refresh', '0; ' . 'Login');
-            return false;
-        }
-
-        $userName = $this->request->request->get('biblioUserName', '');
-        $this->user = empty($userName)
-            ? $this->cookieAuth()
-            : $this->userAuth($userName);
-
+        $this->user = $this->cookieAuth();
         $pageName = $this->getPageName();
         $this->loadController($pageName);
         return true;
@@ -165,6 +155,11 @@ class AppController extends AppBase
      */
     private function cookieAuth(): ?User
     {
+        if ($this->request->query->get('logout')) {
+            AppCookies::clear($this->response);
+            return null;
+        }
+
         $userName = AppCookies::getUser($this->request);
         if (empty($userName)) {
             return null;

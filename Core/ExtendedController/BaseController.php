@@ -113,6 +113,12 @@ abstract class BaseController extends PageController
     public function exec(Response &$response): void
     {
         parent::exec($response);
+        if (false === isset($this->user)) {
+            $this->redirect('LoginUser');
+            $this->setTemplate(false);
+            return;
+        }
+
         $this->createViews();
     }
 

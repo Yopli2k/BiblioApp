@@ -35,7 +35,8 @@ $router = new Router();
 if (false === $router->getFile()) {
     $app = $router->getApp();
     $app->connect();        // Connect to the database, cache, etc.
-    $app->run();            // Executes App logic
-    $app->render();         // Render web page
+    if ($app->run()) {      // Executes App logic
+        $app->render();     // Render web page
+    }
     $app->close();          // Disconnect from everything
 }

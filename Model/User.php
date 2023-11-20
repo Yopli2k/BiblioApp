@@ -172,7 +172,7 @@ class User extends AppModel
      */
     protected function requiredFields(): array
     {
-        return ['email', 'name', 'username', 'password'];
+        return ['name', 'username', 'password'];
     }
 
     /**

@@ -114,6 +114,14 @@ abstract class AppBase
             return false;
         }
 
+        /* TODO: implementar IPBanned
+        if ($this->isIPBanned()) {
+            ToolBox::i18nLog()->critical('ip-banned');
+            $this->die(Response::HTTP_TOO_MANY_REQUESTS);
+            return false;
+        }
+        */
+
         return true;
     }
 

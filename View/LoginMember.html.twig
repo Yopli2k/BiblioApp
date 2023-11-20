@@ -1,0 +1,97 @@
+{% extends "Master/FrontTemplate.html.twig" %}
+
+{% block meta %}
+    {{ parent() }}
+    <meta name="author" content="BiblioApp" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Login para miembros de la comunidad"/>
+    <meta name="keywords" content="miembros, biblioteca, alquiler, libros" />
+    <meta property="og:title" content="Login para miembros"/>
+    <meta property="og:description" content="Permite realizar el proceso de identificación a los miembros de la comunidad"/>
+    <meta property="og:image" content="{{ asset('Assets/Images/biblio-card.png') }}"/>
+
+    <title>Login para miembros</title>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .banner { background-image: url(/Assets/Images/background/contactar.jpg); }
+        #recaptcha { display:none; }
+    </style>
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    {% from 'Macro/Utils.html.twig' import pageBanner, formInput %}
+
+    <!--banner-->
+    {{ pageBanner(controller) }}
+
+    <!--login panels-->
+    <section class="content-inner border-bottom">
+        <div class="container">
+            <div class="row">
+                <!-- New member -->
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="login-area">
+                        <div class="tab-content">
+                            <h4>NUEVO MIEMBRO</h4>
+                            <p>Al crear una cuenta en nuestro sitio podrá realizar alquiler de libros los cuales podrá leer tranquilamente durante un mes.</p>
+                            <a class="btn btn-primary btnhover m-r5 button-lg radius-no" href="RegisterMember">CREAR UNA CUENTA</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Login member -->
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="login-area">
+                        <div class="tab-content nav">
+                            <form id="formLogin" action="{{ asset('LoginMember') }}" class="form-floating tab-pane active col-12" method="POST">
+                                <h4 class="text-secondary">IDENTIFICARSE</h4>
+                                <p class="font-weight-600">Si tiene una cuenta con nosotros, inicie sesión.</p>
+                                <input name="action" type="hidden" value="login">
+                                {{ formInput(controller, 'email', 'email', 'Correo electrónico') }}
+                                {{ formInput(controller, 'password', 'password', 'Contraseña') }}
+                                <div class="mb-3">
+                                    <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
+                                    <!-- <input class="form-control d-none" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary btnhover me-2">conectar</button>
+                                    <a data-bs-toggle="tab" href="#formPassword" class="m-l5"><i class="fas fa-unlock-alt"></i> Olvidé la contraseña</a>
+                                </div>
+                            </form>
+                            <form id="formPassword" class="form-floating tab-pane fade col-12" method="POST">
+                                <h4 class="text-secondary">RECUPERAR CONTRASEÑA</h4>
+                                <p class="font-weight-600">Le enviaremos un correo electrónico para restablecer su contraseña.</p>
+                                <input name="action" type="hidden" value="change-password">
+                                {{ formInput(controller, 'email', 'email2', 'Correo electrónico') }}
+                                <div class="mb-3">
+                                    <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
+                                    <!-- <input class="form-control d-none" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->
+                                </div>
+                                <div>
+                                    <a class="btn btn-outline-secondary btnhover m-r10" data-bs-toggle="tab" href="#formLogin">Volver</a>
+                                    <button type="submit" class="btn btn-primary btnhover">Enviar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+{% endblock %}

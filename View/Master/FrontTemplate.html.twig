@@ -54,7 +54,11 @@
                                 <!-- navigation: right -->
                                 <div class="extra-nav">
                                     <div class="extra-cell">
-                                        <a class="btn btn-primary w-100 btnhover btn-sm" href="shop-login.html">Identificar</a>
+                                        {% if controller.user is empty or controller.user.primaryColumnValue() is empty %}
+                                        <a class="btn btn-primary w-100 btnhover btn-sm" href="LoginMember">Conectar</a>
+                                        {% else %}
+                                        <a class="btn btn-primary w-100 btnhover btn-sm" href="/index.php?action=logout">Salir</a>
+                                        {% endif %}
                                     </div>
                                 </div>
 
@@ -104,10 +108,11 @@
                                         <ul class="nav navbar-nav">
                                             <li><a href="index.php"><span>Inicio</span></a></li>
                                             <li><a href="About"><span>Sobre Nosotros</span></a></li>
+                                            {% if controller.user is not null and controller.user.primaryColumnValue() is not empty %}
                                             <li><a href="index.php"><span>Mi perfil</span></a></li>
+                                            {% endif %}
                                             <li><a href="Contact"><span>Contactar</span></a></li>
                                         </ul>
-                                        <!-- Poner aqui los botones de login y registro -->
                                     </div>
                                 </div>
                             </div>
@@ -121,6 +126,7 @@
                     {% block body %}
                     {% endblock %}
                 </div>
+                <!-- Scroll Top Button -->
                 <button class="scroltop" type="button"><i class="fas fa-arrow-up"></i> Top</button>
 
                 <!-- Footer -->
@@ -136,8 +142,9 @@
                                         <div class="footer-logo logo-white">
                                             <a href="index.html"><img src="Assets/Images/logo-horizontal.png" alt=""></a>
                                         </div>
-                                        <p class="text">
-                                            BiblioApp is a Book Store Ecommerce Website Template by DexignZone lorem ipsum dolor sit
+                                        <p>
+                                            Donde compartir conocimiento mediante la lectura.<br>
+                                            Diseño basado en Bookland de DexignZone.
                                         </p>
                                     </div>
                                 </div>
@@ -145,9 +152,9 @@
                                     <div class="widget widget_services">
                                         <h5 class="footer-title">Te Interesa</h5>
                                         <ul>
-                                            <li><a href="About">Sobre Nosotros</a></li>
+                                            <li><a href="About"><span>Sobre Nosotros</span></a></li>
                                             <li><a href="Contact">Contactar</a></li>
-                                            <li><a href="faq.html">FAQ</a></li>
+                                            <li><a href="FrequentAQ">FAQs</a></li>
                                         </ul>
                                     </div>
                                 </div>

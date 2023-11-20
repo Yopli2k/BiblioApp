@@ -17,13 +17,14 @@ namespace BiblioApp\Controller;
 
 use BiblioApp\Core\App\PageController;
 
-class Login extends PageController
+class LoginMember extends PageController
 {
 
     public function getPageData(): array
     {
         $data = parent::getPageData();
-        $data['title'] = 'Login Page';
+        $data['title'] = 'Login';
+        $data['breadcrumb'] = 'Identificarse';
         return $data;
     }
 }
