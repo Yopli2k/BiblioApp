@@ -14,8 +14,8 @@
     7. Pages
     
 */
-@import url("/Assets/Icons/fontawesome/css/all.min.css");
-@import url("/Assets/Icons/flaticon/font/flaticon.css");
+@import url("/Assets/CSS/fontawesome/all.min.css");
+@import url("/Assets/CSS/flaticon/flaticon.css");
 @import url("/Assets/CSS/basic.css");
 
 *,
@@ -3990,7 +3990,7 @@ textarea.form-control-lg {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center; }
-  
+
   .btn-group-vertical > .btn,
   .btn-group-vertical > .wp-block-button__link,
   .woocommerce .widget_shopping_cart .buttons .btn-group-vertical > a,

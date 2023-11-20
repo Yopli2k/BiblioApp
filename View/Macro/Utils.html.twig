@@ -15,6 +15,22 @@
  */
 #}
 
+{% macro faqCard(controller, parent, child, title, body) %}
+    <div class="card">
+        <div class="card-header" id="{{ parent }}">
+            <h3 class="title" data-bs-toggle="collapse" data-bs-target="#{{ child }}" aria-expanded="false" aria-controls="{{ child }}">
+                <span>{{ title }}</span>
+                <span class="icon"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+            </h3>
+        </div>
+        <div id="{{ child }}" class="collapse accordion-collapse" aria-labelledby="headingOne" data-bs-parent="#{{ parent }}">
+            <div class="card-body">
+                <p>{{ body }}</p>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
 {#
     Add a input field to a form.
     If the type is 'tel' then the pattern attribute is added.

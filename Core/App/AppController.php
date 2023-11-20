@@ -204,8 +204,7 @@ class AppController extends AppBase
         $param = $this->getUriParam(0);
         return match ($param) {
             '',
-            'index.php' => isset($this->user) ? 'Main' : 'Home',
-            'Login'     => isset($this->user) ? 'Main' : 'Login',
+            'index.php' => 'Home',
             default     => $param,
         };
     }

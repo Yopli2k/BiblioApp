@@ -1,0 +1,136 @@
+{% extends "Master/FrontTemplate.html.twig" %}
+
+{% block meta %}
+    {{ parent() }}
+    <meta name="author" content="BiblioApp" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Preguntas frecuentes"/>
+    <meta name="keywords" content="faq, preguntas, frecuentes, biblioteca, alquiler, libros" />
+    <meta property="og:title" content="Preguntas frecuentes"/>
+    <meta property="og:description" content="Respuestas a las preguntas frecuentes"/>
+    <meta property="og:image" content="/Assets/Images/biblio-card.png"/>
+
+    <title>Preguntas frecuentes</title>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .banner { background-image: url(/Assets/Images/background/about.jpg); }
+    </style>
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    {% from 'Macro/Utils.html.twig' import faqCard, pageBanner %}
+
+    <!--banner-->
+    {{ pageBanner(controller) }}
+
+    <!-- FAQ Content Start -->
+    <section class="content-inner main-faq-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 align-self-center mb-4">
+                    <div class="faq-content-box">
+                        <div class="section-head">
+                            <h2 class="title">¿Qué es BiblioApp?</h2>
+                        </div>
+                        <div class="faq-accordion">
+                            {{ faqCard(controller, 'parent1', 'child1',
+                                    '¿Cómo funciona el servicio de alquiler de libros?',
+                                    'Para alquilar un libro, primero debes registrarte en la plataforma. Una vez registrado, '
+                                      ~ 'puedes buscar el libro que deseas y, si está disponible, pulsar en botón "Reservar".'
+                                      ~ 'Simplemente pasa por nuestro local, realiza el pago y recoge el libro.'
+                                      ~ 'Una vez leído, retornalo en el mismo local.'
+                            ) }}
+
+                            {{ faqCard(controller, 'parent2', 'child2',
+                                    '¿Qué coste tiene el servicio de alquiler de libros?',
+                                    'La filosofía de BiblioApp es compartir la lectura a un precio muy económico para que '
+                                      ~ 'todos puedan acceder a los libros. Por esto, el coste de alquilar un libro es de 1€ '
+                                      ~ 'del que podrás disfrutar durante máximo de un mes. Al realizar la primera reserva, '
+                                      ~ 'deberás abonar 20€ en concepto de depósito de garantía. Este depósito se devolverá '
+                                      ~ 'cuando el miembro decida darse de baja.'
+                            ) }}
+
+                            {{ faqCard(controller, 'parent3', 'child3',
+                                    '¿Cómo funcionan las devoluciones y los retrasos?',
+                                    'Cada vez que alquiles un libro, podrás recogerlo por nuestro local. Dispones de un máximo de 7 días naturales. '
+                                      ~ 'Una vez lo tengas podrás disfrutar del libro durante un mes. Pasado ese tiempo si no lo has devuelto '
+                                      ~ 'se te cobrará 1€ por cada día de retraso y se bloqueará tu cuenta hasta haber resuelto la devolución.'
+                            ) }}
+
+                            {{ faqCard(controller, 'parent4', 'child4',
+                                '¿Cuántos libros puedo alquilar cada vez?',
+                                'Puedes alquilar un máximo de 3 libros por miembro, siempre y cuando hayas realizado el depósito '
+                                  ~ 'de garantía de 20€ por cada libro. Este depósito se devolverá cuando el miembro decida darse de baja.'
+                            ) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-2 order-1 mb-4">
+                    <div class="faq-img-box wow left-animation rounded-md border shadow" data-wow-delay="0.2s">
+                        <img src="{{ asset('Assets/Images/faq1.jpg') }}" alt="FAQ Libro con interrogación">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <section class="content-inner main-faq-content border-bottom bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="faq-img-box rounded-md border shadow">
+                        <img src="{{ asset('Assets/Images/faq2.jpg') }}" alt="Colección de libros">
+                    </div>
+                </div>
+                <div class="col-lg-6 align-self-center mb-4">
+                    <div class="faq-content-box">
+                        <div class="section-head">
+                            <h2 class="title">Gestión de Libros</h2>
+                        </div>
+                        <div class="faq-accordion">
+                            {{ faqCard(controller, 'parent5', 'child5',
+                                '¿Cómo se garantiza la seguridad y el estado del libro?',
+                                'Cuando te registras y reservas un libro, al recogerlo se debe dejar en depósito 20€ para '
+                                  ~ 'completar la activación del estado de miembro. Este depósito se devolverá cuando el '
+                                  ~ 'miembro decida darse de baja. En caso de que el libro se devuelva en mal estado, '
+                                  ~ 'se descontará del depósito el coste de reparación o reposición del libro debiendo '
+                                  ~ 'restaurar la diferencia del deposito.'
+                            ) }}
+
+                            {{ faqCard(controller, 'parent6', 'child6',
+                                '¿Puedo cancelar un préstamo después de haberlo solicitado?',
+                                'Sí, siempre que no hayas recogido el libro. En caso de que ya lo hayas recogido, '
+                                  ~ 'deberás devolverlo en el plazo establecido.'
+                            ) }}
+
+                            {{ faqCard(controller, 'parent7', 'child7',
+                                'Tengo libros que ya no leo ¿Puedo donarlos?',
+                                'Claro, todo libro que quieras donar será bienvenido. Puedes traerlo a nuestro local. '
+                                  ~ 'Debe ser de temática cristiana, estar en buen estado y no ser una edición antigua. '
+                                  ~ 'Por cada libro que dones, te daremos un cupón de 1€ para que puedas alquilar un libro.'
+                            ) }}
+
+                            {{ faqCard(controller, 'parent8', 'child8',
+                                'Soy menor de edad ¿Puedo alquilar libros?',
+                                'Sí, siempre que vengas acompañado de un adulto que se haga responsable de la devolución '
+                                  ~ 'del libro y del pago de los retrasos en caso de que los hubiera.'
+                            ) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
