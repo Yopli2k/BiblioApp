@@ -72,6 +72,9 @@ class Member extends AppModel
      */
     public ?int $id;
 
+    /** @var string */
+    public string $logkey;
+
     /**
      * Full name of the member.
      *
@@ -118,6 +121,7 @@ class Member extends AppModel
         $this->email = '';
         $this->enabled = true;
         $this->id = null;
+        $this->logkey = '';
         $this->name = '';
         $this->notes = '';
         $this->password = '';
@@ -138,11 +142,23 @@ class Member extends AppModel
         $this->email = $data['email'] ?? '';
         $this->enabled = (bool)$data['enabled'] ?? false;
         $this->id = (int)$data['id'] ?? null;
+        $this->logkey = $data['logkey'] ?? '';
         $this->name = $data['name'] ?? '';
         $this->notes = $data['notes'] ?? '';
         $this->password = $data['password'] ?? '';
         $this->phone = $data['phone'] ?? '';
         $this->verified = (bool)$data['verified'] ?? false;
+    }
+
+    /**
+     * Set new logkey to user.
+     *
+     * @return void
+     */
+    public function newLogkey()
+    {
+        $this->logkey = Tools::randomString(99);
+        $this->save();
     }
 
     /**
@@ -243,6 +259,7 @@ class Member extends AppModel
                 . 'document = ' . self::$dataBase->var2str($this->document) . ','
                 . 'email = ' . self::$dataBase->var2str($this->email) . ','
                 . 'enabled = ' . self::$dataBase->var2str($this->enabled) . ','
+                . 'logkey = ' . self::$dataBase->var2str($this->logkey) . ','
                 . 'name = ' . self::$dataBase->var2str($this->name) . ','
                 . 'notes = ' . self::$dataBase->var2str($this->notes) . ','
                 . 'password = ' . self::$dataBase->var2str($this->password) . ','

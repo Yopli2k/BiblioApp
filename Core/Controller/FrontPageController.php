@@ -15,9 +15,9 @@
  */
 namespace BiblioApp\Core\Controller;
 
-use BiblioApp\Controller\Base\User;
 use BiblioApp\Core\App\AppCookies;
 use BiblioApp\Model\Member;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Page controller base for all frontend pages.
@@ -29,9 +29,9 @@ abstract class FrontPageController extends PageController
     /**
      * The member logged in into frontend.
      *
-     * @var Member $member
+     * @var ?Member $member
      */
-    public Member $member;
+    public ?Member $member;
 
     /**
      * Initialize all objects and properties.
@@ -42,6 +42,60 @@ abstract class FrontPageController extends PageController
     public function __construct(string $className, string $uri = '')
     {
         parent::__construct($className, $uri);
-        $this->member = new Member();
+        $this->member = null;
+    }
+
+    /**
+     * Runs the controller's logic.
+     * if return false, the controller break the execution.
+     *
+     * @param Response $response
+     * @return bool
+     */
+    public function exec(Response &$response): bool
+    {
+        if (false === parent::exec($response)) {
+            return false;
+        }
+
+        // Check for logout action before loading member
+        $action = $this->request->request->get('action', $this->request->query->get('action', ''));
+        if ($action === 'logout') {
+            AppCookies::clearCookie($this->response, 'biblioMemberID');
+            AppCookies::clearCookie($this->response, 'biblioMemberLogKey');
+        }
+
+        // Load member from cookies
+        $this->member = $this->cookieAuth();
+        if (isset($this->member)) {
+            $this->multiRequestProtection->addSeed($this->member->primaryColumnValue());
+        }
+        return true;
+    }
+
+    /**
+     * Authenticate the member using the cookie.
+     */
+    private function cookieAuth(): ?Member
+    {
+        $memberId = AppCookies::getCookie($this->request, 'biblioMemberID');
+        $logKey = AppCookies::getCookie($this->request, 'biblioMemberLogKey');
+        if (empty($memberId) || empty($logKey)) {
+            return null;
+        }
+
+        $member = new Member();
+        if ($member->loadFromCode($memberId)
+            && $member->enabled
+            && $member->logkey === $logKey
+        ) {
+            AppCookies::setCookie($this->response, 'biblioMemberID', $member->primaryColumnValue());
+            AppCookies::setCookie($this->response, 'biblioMemberLogKey', $member->logkey);
+            return $member;
+        }
+
+        AppCookies::clearCookie($this->response, 'biblioMemberID');
+        AppCookies::clearCookie($this->response, 'biblioMemberLogKey');
+        return null;
     }
 }

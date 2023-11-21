@@ -15,10 +15,36 @@
  */
 namespace BiblioApp\Controller;
 
+use BiblioApp\Core\App\AppCookies;
 use BiblioApp\Core\Controller\FrontPageController;
+use BiblioApp\Core\DataBase\DataBaseWhere;
+use BiblioApp\Model\Member;
+use Symfony\Component\HttpFoundation\Response;
 
 class LoginMember extends FrontPageController
 {
+
+    /**
+     * Runs the controller's logic.
+     * if return false, the controller break the execution.
+     *
+     * @param Response $response
+     * @return bool
+     */
+    public function exec(Response &$response): bool
+    {
+        if (false === parent::exec($response)) {
+            return false;
+        }
+
+        // Get action and execute if not empty
+        $action = $this->request->request->get('action', $this->request->query->get('action', ''));
+        if (false === $this->execPreviousAction($action)) {
+            $this->setTemplate(false);
+            return false;
+        }
+        return true;
+    }
 
     public function getPageData(): array
     {
@@ -26,5 +52,56 @@ class LoginMember extends FrontPageController
         $data['title'] = 'Login';
         $data['breadcrumb'] = 'Identificarse';
         return $data;
+    }
+
+    /**
+     * Run the actions that alter data before reading it.
+     *
+     * @param ?string $action
+     * @return bool
+     */
+    protected function execPreviousAction(?string $action): bool
+    {
+        switch ($action) {
+            case 'login':
+                if ($this->loginAction()) {
+                    $this->redirect('/index.php');
+                    return false;
+                }
+                $this->message->error('Usuario o contraseña incorrectos.');
+                break;
+
+            case 'change-password':
+                if($this->changePasswordAction()) {
+                    $this->redirect('LoginUser');
+                    return false;
+                }
+                $this->message->error('Error cambiando la contraseña.');
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * make login for member.
+     *
+     * @return bool
+     */
+    private function loginAction(): bool
+    {
+        $data = $this->request->request->all();
+        $where = [ new DataBaseWhere('email', $data['email']) ];
+        $member = new Member();
+        if ($member->loadFromCode('', $where)
+            && $member->enabled
+            && $member->verifyPassword($data['password'])
+        ) {
+            $member->newLogkey();
+            AppCookies::setCookie($this->response, 'biblioMemberID', $member->id);
+            AppCookies::setCookie($this->response, 'biblioMemberLogKey', $member->logkey);
+            return true;
+        }
+
+        return false;
     }
 }

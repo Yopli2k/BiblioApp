@@ -73,14 +73,16 @@ class LoginUser extends FrontPageController
                     $this->redirect('ListUser');
                     return false;
                 }
-                return true;
+                $this->message->error('Usuario o contraseña incorrectos.');
+                break;
 
             case 'change-password':
                 if($this->changePasswordAction()) {
                     $this->redirect('LoginUser');
                     return false;
                 }
-                return true;
+                $this->message->error('Error cambiando la contraseña.');
+                break;
         }
         return true;
     }
