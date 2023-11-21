@@ -15,23 +15,30 @@
  */
 namespace BiblioApp\Controller;
 
-use BiblioApp\Core\App\PageController;
+use BiblioApp\Core\Controller\FrontPageController;
 use BiblioApp\Model\WebContact;
 use Symfony\Component\HttpFoundation\Response;
 
-class Contact extends PageController
+class Contact extends FrontPageController
 {
 
     /**
      * Runs the controller's logic.
+     * if return false, the controller break the execution.
      *
      * @param Response $response
+     * @return bool
      */
-    public function exec(Response &$response): void
+    public function exec(Response &$response): bool
     {
-        parent::exec($response);
+        if (false === parent::exec($response)) {
+            return false;
+        }
         $action = $this->request->request->get('action', $this->request->query->get('action', ''));
-        $this->execPreviousAction($action);
+        if (false === $this->execPreviousAction($action)) {
+            return false;
+        }
+        return true;
     }
 
     public function getPageData(): array

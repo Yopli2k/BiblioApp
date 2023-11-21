@@ -16,27 +16,33 @@
 namespace BiblioApp\Controller;
 
 use BiblioApp\Core\App\AppCookies;
-use BiblioApp\Core\App\PageController;
+use BiblioApp\Core\Controller\FrontPageController;
 use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 
-class LoginUser extends PageController
+class LoginUser extends FrontPageController
 {
 
     /**
      * Runs the controller's logic.
+     * if return false, the controller break the execution.
      *
      * @param Response $response
+     * @return bool
      */
-    public function exec(Response &$response): void
+    public function exec(Response &$response): bool
     {
-        parent::exec($response);
+        if (false === parent::exec($response)) {
+            return false;
+        }
 
         // Get action and execute if not empty
         $action = $this->request->request->get('action', $this->request->query->get('action', ''));
         if (false === $this->execPreviousAction($action)) {
             $this->setTemplate(false);
+            return false;
         }
+        return true;
     }
 
     public function getPageData(): array
@@ -57,7 +63,8 @@ class LoginUser extends PageController
     {
         switch ($action) {
             case 'logout':
-                AppCookies::clear($this->response);
+                AppCookies::clearCookie($this->response, 'biblioUserName');
+                AppCookies::clearCookie($this->response, 'biblioUserLogKey');
                 $this->redirect('LoginUser');
                 return false;
 
@@ -92,7 +99,8 @@ class LoginUser extends PageController
             && $user->verifyPassword($data['biblioPassword'])
         ) {
             $user->newLogkey();
-            AppCookies::update($this->response, $user);
+            AppCookies::setCookie($this->response, 'biblioUserName', $user->username);
+            AppCookies::setCookie($this->response, 'biblioUserLogKey', $user->logkey);
             return true;
         }
 

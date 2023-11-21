@@ -15,11 +15,10 @@
  */
 namespace BiblioApp\Core\ExtendedController;
 
-use BiblioApp\Core\App\PageController;
+use BiblioApp\Core\Controller\BackPageController;
 use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\Tools\Tools;
 use BiblioApp\Model\CodeModel;
-use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -28,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author Carlos García Gómez <carlos@facturascripts.com>
  * @author José Antonio Cuello Principal <yopli2000@gmail.com>
  */
-abstract class BaseController extends PageController
+abstract class BaseController extends BackPageController
 {
     const MODEL_NAMESPACE = '\\BiblioApp\\Model\\';
 
@@ -77,12 +76,11 @@ abstract class BaseController extends PageController
      * Initializes all the objects and properties.
      *
      * @param string $className
-     * @param ?User $user
      * @param string $uri
      */
-    public function __construct(string $className, ?User $user, string $uri = '')
+    public function __construct(string $className, string $uri = '')
     {
-        parent::__construct($className, $user, $uri);
+        parent::__construct($className, $uri);
         $activeTabGet = $this->request->query->get('activetab', '');
         $this->active = $this->request->request->get('activetab', $activeTabGet);
         $this->codeModel = new CodeModel();
@@ -107,25 +105,24 @@ abstract class BaseController extends PageController
 
     /**
      * Runs the controller's logic.
+     * if return false, the controller break the execution.
      *
      * @param Response $response
+     * @return bool
      */
-    public function exec(Response &$response): void
+    public function exec(Response &$response): bool
     {
-        parent::exec($response);
-        if (false === isset($this->user)) {
-            $this->redirect('LoginUser');
-            $this->setTemplate(false);
-            return;
+        if (false === parent::exec($response)) {
+            return false;
         }
-
         $this->createViews();
+        return true;
     }
 
     /**
      * @return BaseView|ListView
      */
-    public function getCurrentView()
+    public function getCurrentView(): BaseView|ListView
     {
         return $this->views[$this->current];
     }
@@ -229,7 +226,6 @@ abstract class BaseController extends PageController
      */
     protected function deleteAction(): bool
     {
-        // check user permissions
         if (false === $this->views[$this->active]->settings['btnDelete']) {
             return false;
         }

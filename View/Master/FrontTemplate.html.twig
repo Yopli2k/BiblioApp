@@ -54,7 +54,7 @@
                                 <!-- navigation: right -->
                                 <div class="extra-nav">
                                     <div class="extra-cell">
-                                        {% if controller.user is empty or controller.user.primaryColumnValue() is empty %}
+                                        {% if controller.member is empty or controller.member.primaryColumnValue() is empty %}
                                         <a class="btn btn-primary w-100 btnhover btn-sm" href="LoginMember">Conectar</a>
                                         {% else %}
                                         <a class="btn btn-primary w-100 btnhover btn-sm" href="/index.php?action=logout">Salir</a>
@@ -108,7 +108,7 @@
                                         <ul class="nav navbar-nav">
                                             <li><a href="index.php"><span>Inicio</span></a></li>
                                             <li><a href="About"><span>Sobre Nosotros</span></a></li>
-                                            {% if controller.user is not null and controller.user.primaryColumnValue() is not empty %}
+                                            {% if controller.member is not null and controller.member.primaryColumnValue() is not empty %}
                                             <li><a href="index.php"><span>Mi perfil</span></a></li>
                                             {% endif %}
                                             <li><a href="Contact"><span>Contactar</span></a></li>

@@ -15,12 +15,12 @@
  */
 namespace BiblioApp\Controller;
 
-use BiblioApp\Core\App\PageController;
+use BiblioApp\Core\Controller\FrontPageController;
 use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Model\Book;
 use BiblioApp\Model\Category;
 
-class Home extends PageController
+class Home extends FrontPageController
 {
 
     public function getCategories(): array

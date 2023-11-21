@@ -15,7 +15,6 @@
  */
 namespace BiblioApp\Core\App;
 
-use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,50 +30,41 @@ class AppCookies
 {
 
     /**
-     * Clear all cookies.
+     * Clear the cookie value.
      *
      * @param Response $response
+     * @param string $cookie
      * @return void
      */
-    public static function clear(Response $response): void
+    public static function clearCookie(Response $response, string $cookie): void
     {
-        $response->headers->clearCookie('biblioUserName', APP_ROUTE);
-        $response->headers->clearCookie('biblioLogkey', APP_ROUTE);
+        $response->headers->clearCookie($cookie, APP_ROUTE);
     }
 
     /**
-     * Get the logkey from cookies.
+     * Get the cookie value.
      *
      * @param Request $request
+     * @param string $cookie
+     * @param string $default
      * @return string
      */
-    public static function getLogkey(Request $request): string
+    public static function getCookie(Request $request, string $cookie, string $default = ''): string
     {
-        return $request->cookies->get('biblioLogkey', '');
+        return $request->cookies->get($cookie, $default);
     }
 
     /**
-     * Get the username from cookies.
-     *
-     * @param Request $request
-     * @return string
-     */
-    public static function getUser(Request $request): string
-    {
-        return $request->cookies->get('biblioUserName', '');
-    }
-
-    /**
-     * Set the cookies from the user data.
+     * Set value to cookies.
      *
      * @param Response $response
-     * @param User $user
+     * @param string $cookie
+     * @param string $value
      * @return void
      */
-    public static function update(Response $response, User $user): void
+    public static function setCookie(Response $response, string $cookie, string $value): void
     {
         $expire = time() + APP_COOKIES_EXPIRE;
-        $response->headers->setCookie(new Cookie('biblioUserName', $user->username, $expire, APP_ROUTE, null, false, false, false, null));
-        $response->headers->setCookie(new Cookie('biblioLogkey', $user->logkey, $expire, APP_ROUTE, null, false, false, false, null));
+        $response->headers->setCookie(new Cookie($cookie, $value, $expire, APP_ROUTE, null, false, false, false, null));
     }
 }

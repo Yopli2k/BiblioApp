@@ -57,6 +57,7 @@ CREATE TABLE members (
      email varchar(100) NOT NULL,
      enabled bool NOT NULL DEFAULT true,
      id int NOT NULL AUTO_INCREMENT,
+     logkey varchar(100),
      name varchar(100) NOT NULL,
      notes text,
      password varchar(255),

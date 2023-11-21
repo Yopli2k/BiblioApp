@@ -16,7 +16,6 @@
 namespace BiblioApp\Core\ExtendedController;
 
 use BiblioApp\Core\DataBase\DataBaseWhere;
-use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -31,31 +30,34 @@ abstract class ListController extends BaseController
      * Initializes all the objects and properties.
      *
      * @param string $className
-     * @param ?User $user
      * @param string $uri
      */
-    public function __construct(string $className, ?User $user, string $uri = '')
+    public function __construct(string $className, string $uri = '')
     {
-        parent::__construct($className, $user, $uri);
+        parent::__construct($className, $uri);
         $this->setTemplate('Master/ListController');
     }
 
     /**
      * Runs the controller's logic.
+     * if return false, the controller break the execution.
      *
      * @param Response $response
+     * @return bool
      */
-    public function exec(Response &$response): void
+    public function exec(Response &$response): bool
     {
-        parent::exec($response);
+        if (false === parent::exec($response)) {
+            return false;
+        }
 
         // Get action and execute if not empty
         $action = $this->request->request->get('action', $this->request->query->get('action', ''));
         if (false === $this->execPreviousAction($action)) {
-            return;
+            return false;
         }
 
-        // Load filter saved and data for every view
+        // Load data for every view
         foreach ($this->views as $viewName => $view) {
             $case = $this->active == $viewName ? 'load' : 'preload';
             $view->processFormData($this->request, $case);
@@ -64,6 +66,7 @@ abstract class ListController extends BaseController
 
         // Execute actions after loading data
         $this->execAfterAction($action);
+        return true;
     }
 
     /**
@@ -232,21 +235,6 @@ abstract class ListController extends BaseController
     }
 
     /**
-     * Removes the selected page filter.
-     */
-    protected function deleteFilterAction(): void
-    {
-        $idfilter = $this->request->request->get('loadfilter', 0);
-        if ($this->views[$this->active]->deletePageFilter($idfilter)) {
-            $this->message->info('Registro eliminado correctamente.');
-            $this->request->request->remove('loadfilter');
-            return;
-        }
-
-        $this->message->warning('No se pudo eliminar el registro.');
-    }
-
-    /**
      * Runs the controller actions after data read.
      *
      * @param string $action
@@ -276,14 +264,6 @@ abstract class ListController extends BaseController
             case 'delete':
                 $this->deleteAction();
                 break;
-
-            case 'delete-filter':
-                $this->deleteFilterAction();
-                break;
-
-            case 'save-filter':
-                $this->saveFilterAction();
-                break;
         }
 
         return true;
@@ -296,19 +276,5 @@ abstract class ListController extends BaseController
     protected function loadData(string $viewName, mixed $view): void
     {
         $view->loadData('');
-    }
-
-    /**
-     * Saves filter values for active view and user.
-     */
-    protected function saveFilterAction(): void
-    {
-        $idFilter = $this->views[$this->active]->savePageFilter($this->request, $this->user);
-        if (false === empty($idFilter)) {
-            $this->message->info('Registro actualizado correctamente.');
-
-            // load filters in request
-            $this->request->request->set('loadfilter', $idFilter);
-        }
     }
 }

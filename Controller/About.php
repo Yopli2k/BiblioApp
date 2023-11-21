@@ -15,9 +15,9 @@
  */
 namespace BiblioApp\Controller;
 
-use BiblioApp\Core\App\PageController;
+use BiblioApp\Core\Controller\FrontPageController;
 
-class About extends PageController
+class About extends FrontPageController
 {
 
     public function getPageData(): array

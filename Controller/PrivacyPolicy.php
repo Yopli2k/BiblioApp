@@ -15,9 +15,9 @@
  */
 namespace BiblioApp\Controller;
 
-use BiblioApp\Core\App\PageController;
+use BiblioApp\Core\Controller\FrontPageController;
 
-class PrivacyPolicy extends PageController
+class PrivacyPolicy extends FrontPageController
 {
 
     public function getPageData(): array

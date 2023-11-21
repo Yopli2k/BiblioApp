@@ -15,8 +15,6 @@
  */
 namespace BiblioApp\Core\ExtendedController;
 
-use BiblioApp\Core\App\Message;
-use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -40,28 +38,31 @@ abstract class EditController extends BaseController
      * Initializes all the objects and properties.
      *
      * @param string $className
-     * @param ?User $user
      * @param string $uri
      */
-    public function __construct(string $className, ?User $user, string $uri = '')
+    public function __construct(string $className, string $uri = '')
     {
-        parent::__construct($className, $user, $uri);
+        parent::__construct($className, $uri);
         $this->setTemplate('Master/EditController');
     }
 
     /**
      * Runs the controller's logic.
+     * if return false, the controller break the execution.
      *
      * @param Response $response
+     * @return bool
      */
-    public function exec(Response &$response): void
+    public function exec(Response &$response): bool
     {
-        parent::exec($response);
+        if (false === parent::exec($response)) {
+            return false;
+        }
 
         // Get action and execute if not empty
         $action = $this->request->request->get('action', $this->request->query->get('action', ''));
         if (false === $this->execPreviousAction($action)) {
-            return;
+            return false;
         }
 
         // Load the data for each view
@@ -84,6 +85,7 @@ abstract class EditController extends BaseController
             if ($viewName === $mainViewName && $view->model->exists()) {
                 $this->hasData = true;
             }
+            return true;
         }
 
         // Execute actions after loading data

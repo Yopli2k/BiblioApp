@@ -13,10 +13,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace BiblioApp\Core\App;
+namespace BiblioApp\Core\Controller;
 
+use BiblioApp\Core\App\Message;
+use BiblioApp\Core\App\MultiRequestProtection;
 use BiblioApp\Core\DataBase\DataBase;
-use BiblioApp\Model\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,14 +41,6 @@ abstract class PageController
      * @var string título de la página.
      */
     public string $title;
-
-    /**
-     * User logged in.
-     * When the user is not logged in, it is null.
-     *
-     * @var ?User
-     */
-    public ?User $user;
 
     /**
      * It provides direct access to the database.
@@ -96,10 +89,9 @@ abstract class PageController
      * Initialize all objects and properties.
      *
      * @param string $className
-     * @param ?User $user
      * @param string $uri
      */
-    public function __construct(string $className, ?User $user, string $uri = '')
+    public function __construct(string $className, string $uri = '')
     {
         $this->className = $className;
         $this->dataBase = new DataBase();
@@ -109,7 +101,19 @@ abstract class PageController
         $this->template = $this->className . '.html.twig';
         $this->title = $this->getPageData()['title'] ?? $this->className;
         $this->uri = $uri;
-        $this->user = $user;
+    }
+
+    /**
+     * Runs the controller's logic.
+     * if return false, the controller break the execution.
+     *
+     * @param Response $response
+     * @return bool
+     */
+    public function exec(Response &$response): bool
+    {
+        $this->response = &$response;
+        return true;
     }
 
     /**
@@ -143,19 +147,6 @@ abstract class PageController
     public function getTitle(): string
     {
         return $this->getPageData()['title'] ?? $this->className;
-    }
-
-    /**
-     * Runs the controller's logic.
-     *
-     * @param Response $response
-     */
-    public function exec(Response &$response): void
-    {
-        $this->response = &$response;
-        if (isset($this->user)) {
-            $this->multiRequestProtection->addSeed($this->user->username);
-        }
     }
 
     /**
