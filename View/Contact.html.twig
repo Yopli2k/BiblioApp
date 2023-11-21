@@ -38,6 +38,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 m-b40">
+                    <!--message-->
+                    <div class="row">
+                        <div class="col-12">
+                            {{ message(controller, 'info', 'success', false) }}
+                            {{ message(controller, 'warning', 'warning', false) }}
+                            {{ message(controller, 'error', 'danger', false) }}
+                        </div>
+                    </div>
+                    <!-- form data -->
                     <div class="contact-area1 m-r20 m-md-r0">
                         <div class="section-head style-1">
                             <h6 class="sub-title text-primary">Contactar</h6>
@@ -46,13 +55,13 @@
 
                         <form id="formContact" class="form-floating" method="POST" action="Contact">
                             <input name="action" type="hidden" class="form-control" value="contact">
-                            {{ formInput(controller, 'text', 'name', 'Nombre completo') }}
+                            {{ formInput(controller, 'text', 'name', 'Nombre completo', '', true) }}
                             <div class="row g-2">
                                 <div class="col-md-8">
-                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico') }}
+                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico', '', true) }}
                                 </div>
                                 <div class="col-md-4">
-                                    {{ formInput(controller, 'tel', 'phone', 'Teléfono') }}
+                                    {{ formInput(controller, 'tel', 'phone', 'Teléfono', '', true) }}
                                 </div>
                             </div>
 

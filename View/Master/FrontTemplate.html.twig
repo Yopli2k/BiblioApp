@@ -79,7 +79,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- End Top Header -->
 
                         <!-- Menu Header -->
                         <div class="sticky-header main-bar-wraper navbar-expand-lg">
@@ -109,7 +108,7 @@
                                             <li><a href="index.php"><span>Inicio</span></a></li>
                                             <li><a href="About"><span>Sobre Nosotros</span></a></li>
                                             {% if controller.member is not null and controller.member.primaryColumnValue() is not empty %}
-                                            <li><a href="index.php"><span>Mi perfil</span></a></li>
+                                            <li><a href="MemberPanel"><span>Mi perfil</span></a></li>
                                             {% endif %}
                                             <li><a href="Contact"><span>Contactar</span></a></li>
                                         </ul>
@@ -117,7 +116,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Main Header End -->
                     {% endblock %}
                 </header>
 

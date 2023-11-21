@@ -54,8 +54,8 @@
                                 <h4 class="text-secondary">IDENTIFICARSE</h4>
                                 <p class="font-weight-600">Si tiene una cuenta con nosotros, inicie sesión.</p>
                                 <input name="action" type="hidden" value="login">
-                                {{ formInput(controller, 'email', 'email', 'Correo electrónico') }}
-                                {{ formInput(controller, 'password', 'password', 'Contraseña') }}
+                                {{ formInput(controller, 'email', 'email', 'Correo electrónico', '', true) }}
+                                {{ formInput(controller, 'password', 'password', 'Contraseña', '', true) }}
                                 <div class="mb-3">
                                     <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
                                     <!-- <input class="form-control d-none" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->
@@ -69,7 +69,7 @@
                                 <h4 class="text-secondary">RECUPERAR CONTRASEÑA</h4>
                                 <p class="font-weight-600">Le enviaremos un correo electrónico para restablecer su contraseña.</p>
                                 <input name="action" type="hidden" value="change-password">
-                                {{ formInput(controller, 'email', 'email2', 'Correo electrónico') }}
+                                {{ formInput(controller, 'email', 'email2', 'Correo electrónico', '', true) }}
                                 <div class="mb-3">
                                     <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
                                     <!-- <input class="form-control d-none" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->

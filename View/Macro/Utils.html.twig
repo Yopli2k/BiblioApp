@@ -15,6 +15,16 @@
  */
 #}
 
+{#
+    Add a collapse card with a title and body to a page.
+    The card can be expanded and collapsed with a icon into header.
+
+    @param controller The controller object.
+    @param parent The id name of the parent element.
+    @param child The id name of the child element.
+    @param title The title of the card.
+    @param body The body of the card (collapsed).
+#}
 {% macro faqCard(controller, parent, child, title, body) %}
     <div class="card">
         <div class="card-header" id="{{ parent }}">
@@ -40,14 +50,40 @@
     @param name The name of the input field.
     @param label The label of the input field.
 #}
-{% macro formInput(controller, type, name, label) %}
+{% macro formInput(controller, type, name, label, value, required) %}
     <div class="form-floating mb-3">
         <input id="{{ name }}" type="{{ type }}" class="form-control"
                {% if type == 'tel' %} pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}" {% endif %}
-               name="{{ name }}" placeholder="{{ label }}" required autocomplete="false">
+               name="{{ name }}"
+               placeholder="{{ label }}"
+               value="{{ value }}"
+               autocomplete="false"
+               {% if required %} required{% endif %}>
         <label for="{{ name }}">{{ label }}</label>
     </div>
 {% endmacro %}
+
+{#
+    Add the list of messages of one level to a page.
+
+    @param controller The controller object.
+    @param level The level of the messages.
+    @param style The bootstrap style of the messages.
+#}
+{% macro message(controller, level, style, close) %}
+    {% set messages = controller.message.getMessages(level) %}
+    {% if messages | length > 0 %}
+        <div class="alert alert-{{ style }} alert-dismissible fade show" role="alert">
+            <button type="button" class="close btn-close" data-dismiss="alert" data-bs-dismiss="alert" aria-label="Close">
+                {% if close %}<span aria-hidden="true">&times;</span>{% endif %}
+            </button>
+            {% for item in messages %}
+                <div>{{ item | raw }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
 
 {#
     Add a banner with breadcrumb to a page.

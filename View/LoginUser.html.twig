@@ -42,8 +42,8 @@
                             <h4 class="text-secondary">IDENTIFICARSE</h4>
                             <p class="font-weight-600">Si tiene una cuenta con nosotros, inicie sesión.</p>
                             <input name="action" type="hidden" value="login">
-                            {{ formInput(controller, 'text', 'biblioUserName', 'Usuario') }}
-                            {{ formInput(controller, 'password', 'biblioPassword', 'Contraseña') }}
+                            {{ formInput(controller, 'text', 'biblioUserName', 'Usuario', '', true) }}
+                            {{ formInput(controller, 'password', 'biblioPassword', 'Contraseña', '', true) }}
                             <div class="mb-3">
                                 <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
                                 <!-- <input class="form-control d-none" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->
@@ -56,10 +56,10 @@
                         <form id="formPassword" action="{{ asset('LoginUser') }}" class="form-floating tab-pane fade col-12" method="post">
                             <h4 class="text-secondary">RECUPERAR CONTRASEÑA</h4>
                             <input name="action" type="hidden" value="change-password">
-                            {{ formInput(controller, 'password', 'admin_passwd', 'Contraseña Administrador') }}
-                            {{ formInput(controller, 'text', 'username', 'Usuario') }}
-                            {{ formInput(controller, 'password', 'new_passwd', 'Nueva Contraseña') }}
-                            {{ formInput(controller, 'password', 'confirm_passwd', 'Confirmar Contraseña') }}
+                            {{ formInput(controller, 'password', 'admin_passwd', 'Contraseña Administrador', '', true) }}
+                            {{ formInput(controller, 'text', 'username', 'Usuario', '', true) }}
+                            {{ formInput(controller, 'password', 'new_passwd', 'Nueva Contraseña', '', true) }}
+                            {{ formInput(controller, 'password', 'confirm_passwd', 'Confirmar Contraseña', '', true) }}
                             <div class="mb-3">
                                 <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
                                 <!-- <input class="form-control d-none" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->

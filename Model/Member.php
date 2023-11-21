@@ -16,6 +16,7 @@
 namespace BiblioApp\Model;
 
 use BiblioApp\Core\App\AppModel;
+use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\Tools\PasswordTrait;
 use BiblioApp\Core\Tools\PhoneTools;
 use BiblioApp\Core\Tools\Tools;
@@ -109,6 +110,31 @@ class Member extends AppModel
      * @var bool
      */
     public bool $verified;
+
+    /**
+     * Check if the email is already in use or is the same as the current member.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function checkNewEmail(string $email): bool
+    {
+        if (empty($email)) {
+            return false;
+        }
+
+        if ($this->email === $email) {
+            return true;
+        }
+
+        $where = [ new DataBaseWhere('email', $email) ];
+        $member = new Member();
+        if ($member->loadFromCode('', $where)) {
+            return $this->id === $member->id;
+        }
+
+        return true;
+    }
 
     /**
      * Reset the values of all model properties.

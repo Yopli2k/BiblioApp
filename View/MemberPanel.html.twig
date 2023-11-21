@@ -1,0 +1,109 @@
+{% extends "Master/FrontTemplate.html.twig" %}
+
+{% block meta %}
+    {{ parent() }}
+    <meta name="author" content="BiblioApp" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Información del Miembro"/>
+    <meta name="keywords" content="perfil, miembro, biblioteca, alquiler, libros" />
+    <meta property="og:title" content="Información del Miembro"/>
+    <meta property="og:description" content="Panel con la información del miembro"/>
+    <meta property="og:image" content="{{ asset('Assets/Images/biblio-card.png') }}"/>
+
+    <title>Mi información</title>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .banner { background-image: url(/Assets/Images/background/contactar.jpg); }
+    </style>
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    {% from 'Macro/Utils.html.twig' import formInput, message, pageBanner %}
+    {% set member = controller.member %}
+
+    <!--banner-->
+    {{ pageBanner(controller) }}
+
+    <!--content-->
+    <section class="content-inner border-bottom bg-white">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-10 col-lg-9 m-b30">
+                    <!--message-->
+                    <div class="row">
+                        <div class="col-12">
+                            {{ message(controller, 'info', 'success', false) }}
+                            {{ message(controller, 'warning', 'warning', false) }}
+                            {{ message(controller, 'error', 'danger', false) }}
+                        </div>
+                    </div>
+                    <!--form-->
+                    <form id="formPanel" action="{{ asset('MemberPanel') }}" class="form-floating tab-pane active col-12" method="post">
+                        <div class="shop-bx shop-profile">
+                            <div class="shop-bx-title clearfix">
+                                <h3>Información Básica</h3>
+                            </div>
+                            <input id="action" name="action" type="hidden" class="form-control" value="update">
+                            <div class="row g-2">
+                                <div class="col-md-8">
+                                    {{ formInput(controller, 'text', 'name', 'Nombre completo', member.name, true) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ formInput(controller, 'text', 'document', 'Documento Oficial', member.document, true) }}
+                                </div>
+                            </div>
+                            <div class="shop-bx-title mt-3 clearfix">
+                                <h3>Datos de Contacto</h3>
+                            </div>
+                            {{ formInput(controller, 'text', 'address', 'Dirección', member.address, true) }}
+                            <div class="row g-2">
+                                <div class="col-md-8">
+                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico', member.email, true) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ formInput(controller, 'tel', 'phone', 'Teléfono', member.phone, true) }}
+                                </div>
+                            </div>
+
+                            <div class="shop-bx-title mt-3 clearfix">
+                                <h4>Cambiar Contraseña</h4>
+                            </div>
+                            <p>Introduzca los siguientes datos si desea cambiar su contraseña de identificación.</p>
+                            <div class="row g-2">
+                                <div class="col-md">
+                                    {{ formInput(controller, 'password', 'password', 'Contraseña', '', false) }}
+                                </div>
+                                <div class="col-md">
+                                    {{ formInput(controller, 'password', 'new_password', 'Nueva Contraseña', '', false) }}
+                                </div>
+                                <div class="col-md">
+                                    {{ formInput(controller, 'password', 'confirm', 'Confirmar contraseña', '', false) }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div>
+                                <button name="submit" type="submit" value="submit" class="btn w-100 btn-primary btnhover">A C E P T A R</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

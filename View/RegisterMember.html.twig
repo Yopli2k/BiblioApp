@@ -47,29 +47,29 @@
                             <input id="action" name="action" type="hidden" class="form-control" value="new">
                             <div class="row g-2">
                                 <div class="col-md-8">
-                                    {{ formInput(controller, 'text', 'name', 'Nombre completo') }}
+                                    {{ formInput(controller, 'text', 'name', 'Nombre completo', '', true) }}
                                 </div>
                                 <div class="col-md-4">
-                                    {{ formInput(controller, 'text', 'document', 'Documento Oficial') }}
+                                    {{ formInput(controller, 'text', 'document', 'Documento Oficial', '', true) }}
                                 </div>
                             </div>
-                            {{ formInput(controller, 'text', 'address', 'Dirección') }}
+                            {{ formInput(controller, 'text', 'address', 'Dirección', '', true) }}
                             <div class="row g-2">
                                 <div class="col-md-8">
-                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico') }}
+                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico', '', true) }}
                                 </div>
                                 <div class="col-md-4">
-                                    {{ formInput(controller, 'tel', 'phone', 'Teléfono') }}
+                                    {{ formInput(controller, 'tel', 'phone', 'Teléfono', '', true) }}
                                 </div>
                             </div>
 
                             <hr>
                             <div class="row g-2">
                                 <div class="col-md">
-                                    {{ formInput(controller, 'password', 'password', 'Contraseña') }}
+                                    {{ formInput(controller, 'password', 'password', 'Contraseña', '', true) }}
                                 </div>
                                 <div class="col-md">
-                                    {{ formInput(controller, 'password', 'confirm', 'Confirmar contraseña') }}
+                                    {{ formInput(controller, 'password', 'confirm', 'Confirmar contraseña', '', true) }}
                                 </div>
                             </div>
                             <hr>
