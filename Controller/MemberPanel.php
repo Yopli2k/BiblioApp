@@ -50,6 +50,11 @@ class MemberPanel extends FrontPageController
         return true;
     }
 
+    /**
+     * Return the basic data for this page.
+     *
+     * @return array
+     */
     public function getPageData(): array
     {
         $data = parent::getPageData();
@@ -66,26 +71,69 @@ class MemberPanel extends FrontPageController
      */
     protected function execPreviousAction(?string $action): bool
     {
-        if ($action == 'update') {
-            if ($this->updateAction()) {
-                $this->message->info('Información actualizada correctamente.');
-            } else {
-                $this->message->error('No se ha podido actualizar los datos.');
-            }
+        switch ($action) {
+            case 'update':
+                if ($this->updateAction()) {
+                    $this->message->info('Información actualizada correctamente.');
+                } else {
+                    $this->message->error('No se ha podido actualizar los datos.');
+                }
+                break;
+
+            case 'change-password':
+                if ($this->changePasswordAction()) {
+                    $this->message->info('Contraseña actualizada correctamente.');
+                }
+                break;
         }
         return true;
     }
 
+    /**
+     * Change member password.
+     *
+     * @return bool
+     */
+    private function changePasswordAction(): bool
+    {
+        $data = $this->request->request->all();
+        if (empty($data['password'])
+            || empty($data['new_password'])
+            || empty($data['confirm'])
+        ) {
+            $this->message->warning('Debe completar todos los campos.');
+            return false;
+        }
+
+        if (false === $this->member->verifyPassword($data['password'])) {
+            $this->message->warning('La contraseña actual no es correcta.');
+            return false;
+        }
+
+        $this->member->newPassword = $data['new_password'];
+        $this->member->newPassword2 = $data['confirm'];
+        return $this->member->testPassword() && $this->member->save();
+    }
+
+    /**
+     * Update member data.
+     *
+     * @return bool
+     */
     private function updateAction(): bool
     {
         $data = $this->request->request->all();
+
+        if (false === $this->member->checkNewEmail($data['email'])) {
+            $this->message->warning('El correo electrónico ya está en uso.');
+            return false;
+        }
+
         $this->member->address = $data['address'];
         $this->member->document = $data['document'];
+        $this->member->email = $data['email'];
         $this->member->name = $data['name'];
         $this->member->phone = $data['phone'];
-        if ($this->member->checkNewEmail($data['email'])) {
-            $this->member->email = $data['email'];
-        }
         return $this->member->save();
     }
 }

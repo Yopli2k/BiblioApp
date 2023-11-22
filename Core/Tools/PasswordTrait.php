@@ -55,31 +55,12 @@ trait PasswordTrait
     }
 
     /**
-     * Verifies password. It also rehash the password if needed.
-     *
-     * @param string $value
-     * @return bool
-     */
-    public function verifyPassword(string $value): bool
-    {
-        if (password_verify($value, $this->password)) {
-            if (password_needs_rehash($this->password, PASSWORD_DEFAULT)) {
-                $this->setPassword($value);
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Check if user have been change the password.
      *  If so, it checks that the two passwords are the same and updates the password.
      *
      * @return bool
      */
-    protected function testPassword(): bool
+    public function testPassword(): bool
     {
         if (false === empty($this->newPassword) && false === empty($this->newPassword2)) {
             if ($this->newPassword !== $this->newPassword2) {
@@ -96,5 +77,24 @@ trait PasswordTrait
         }
 
         return true;
+    }
+
+    /**
+     * Verifies password. It also rehash the password if needed.
+     *
+     * @param string $value
+     * @return bool
+     */
+    public function verifyPassword(string $value): bool
+    {
+        if (password_verify($value, $this->password)) {
+            if (password_needs_rehash($this->password, PASSWORD_DEFAULT)) {
+                $this->setPassword($value);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
