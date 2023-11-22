@@ -17,7 +17,7 @@
     {{ parent() }}
     <style>
         .banner { background-image: url(/Assets/Images/background/contactar.jpg); }
-        #message { height: 150px; }
+        #notes { height: 150px; }
         #recaptcha { display:none; }
     </style>
 {% endblock %}
@@ -28,7 +28,8 @@
 
 {% block body %}
     {{ parent() }}
-    {% from 'Macro/Utils.html.twig' import pageBanner, formInput %}
+    {% from 'Macro/Utils.html.twig' import pageBanner, formInput, message %}
+    {% set formData = controller.formData %}
 
     <!--banner-->
     {{ pageBanner(controller) }}
@@ -39,7 +40,7 @@
             <div class="row">
                 <div class="col-lg-12 m-b40">
                     <!--message-->
-                    <div class="row">
+                    <div class="row m-r20 m-md-r0">
                         <div class="col-12">
                             {{ message(controller, 'info', 'success', false) }}
                             {{ message(controller, 'warning', 'warning', false) }}
@@ -47,27 +48,27 @@
                         </div>
                     </div>
                     <!-- form data -->
-                    <div class="contact-area1 m-r20 m-md-r0">
+                    <div class="contact-area1 m-r10 m-md-r0">
                         <div class="section-head style-1">
                             <h6 class="sub-title text-primary">Contactar</h6>
                             <h3 class="title m-b20">Completar el formulario</h3>
                         </div>
 
-                        <form id="formContact" class="form-floating" method="POST" action="Contact">
+                        <form id="formContact" action="{{ asset('Contact') }}" class="form-floating" method="post">
                             <input name="action" type="hidden" class="form-control" value="contact">
-                            {{ formInput(controller, 'text', 'name', 'Nombre completo', '', true) }}
+                            {{ formInput(controller, 'text', 'name', 'Nombre completo', formData.name, true) }}
                             <div class="row g-2">
                                 <div class="col-md-8">
-                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico', '', true) }}
+                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico', formData.email, true) }}
                                 </div>
                                 <div class="col-md-4">
-                                    {{ formInput(controller, 'tel', 'phone', 'Teléfono', '', true) }}
+                                    {{ formInput(controller, 'tel', 'phone', 'Teléfono', formData.phone, true) }}
                                 </div>
                             </div>
 
                             <div class="form-floating mb-3">
-                                <textarea id="message" class="form-control" placeholder="Mensaje" name="message" required></textarea>
-                                <label for="message">Mensaje</label>
+                                <textarea id="notes" class="form-control" placeholder="Mensaje" name="notes" required>{{ formData.notes }}</textarea>
+                                <label for="notes">Mensaje</label>
                             </div>
 
                             <div class="form-check mb-3">
@@ -112,5 +113,4 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="https://www.google.com/recaptcha/api.js"></script>
-    <script src="{{ asset('Assets/Js/Contact.js') }}"
 {% endblock %}

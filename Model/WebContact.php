@@ -195,17 +195,18 @@ class WebContact extends AppModel
      */
     protected function insert(): bool
     {
+        $member_id = empty($this->member_id) ? 'NULL' : $this->member_id;
         $sql = 'INSERT INTO ' . static::tableName()
             . ' (member_id, creationdate, creationtime, email, name, notes, phone, resolved)'
             . ' VALUES ('
-            . $this->member_id . ','
+            . $member_id . ','
             . self::$dataBase->var2str($this->creationdate) . ','
             . self::$dataBase->var2str($this->creationtime) . ','
             . self::$dataBase->var2str($this->email) . ','
             . self::$dataBase->var2str($this->name) . ','
             . self::$dataBase->var2str($this->notes) . ','
             . self::$dataBase->var2str($this->phone) . ','
-            . $this->resolved
+            . self::$dataBase->var2str($this->resolved)
             . ')';
         return self::$dataBase->exec($sql);
     }
@@ -227,13 +228,14 @@ class WebContact extends AppModel
      */
     protected function update(): bool
     {
+        $member_id = empty($this->member_id) ? 'NULL' : $this->member_id;
         $sql = 'UPDATE ' . static::tableName() . ' SET '
-            . 'member_id = ' . $this->member_id . ','
+            . 'member_id = ' . $member_id . ','
             . 'email = ' . self::$dataBase->var2str($this->email) . ','
             . 'name = ' . self::$dataBase->var2str($this->name) . ','
             . 'notes = ' . self::$dataBase->var2str($this->notes) . ','
             . 'phone = ' . self::$dataBase->var2str($this->phone) . ','
-            . 'resolved = ' . $this->resolved
+            . 'resolved = ' . self::$dataBase->var2str($this->resolved)
             . ' WHERE id = ' . self::$dataBase->var2str($this->id);
         return self::$dataBase->exec($sql);
     }

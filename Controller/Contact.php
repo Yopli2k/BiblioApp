@@ -23,6 +23,14 @@ class Contact extends FrontPageController
 {
 
     /**
+     * The received data from the form.
+     * if the form is saved, the array is empty.
+     *
+     * @var array
+     */
+    public array $formData = [];
+
+    /**
      * Runs the controller's logic.
      * if return false, the controller break the execution.
      *
@@ -34,8 +42,10 @@ class Contact extends FrontPageController
         if (false === parent::exec($response)) {
             return false;
         }
+
         $action = $this->request->request->get('action', $this->request->query->get('action', ''));
         if (false === $this->execPreviousAction($action)) {
+            $this->setTemplate(false);
             return false;
         }
         return true;
@@ -58,33 +68,33 @@ class Contact extends FrontPageController
     protected function execPreviousAction(?string $action): bool
     {
         if ($action == 'contact') {
-            $results = $this->contactAction();
-            $this->response->setContent(json_encode($results));
-            return false;
+            if ($this->contactAction()) {
+                $this->message->info('Contacto realizado correctamente');
+            } else {
+                $this->message->error('¡Error! Revise los datos introducidos');
+            }
         }
 
         return true;
     }
 
-    private function contactAction(): array
+    private function contactAction(): bool
     {
-        $data = $this->request->request->get();
+        $data = $this->request->request->all();
         $contact = new WebContact();
         $contact->email = $data['email'] ?? '';
         $contact->name = $data['name'] ?? '';
         $contact->notes = $data['notes'] ?? '';
         $contact->phone = $data['phone'] ?? '';
-
-        if ($contact->save()) {
-            return [
-                'result' => true,
-                'message' => 'Mensaje enviado correctamente'
+        if (false === $contact->save()) {
+            $this->formData = [
+                'email' => $data['email'] ?? '',
+                'name' => $data['name'] ?? '',
+                'notes' => $data['notes'] ?? '',
+                'phone' => $data['phone'] ?? '',
             ];
+            return false;
         }
-
-        return [
-            'result' => false,
-            'message' => 'No se ha podido registrar el mensaje'
-        ];
+        return true;
     }
 }
