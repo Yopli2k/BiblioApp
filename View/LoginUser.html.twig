@@ -28,7 +28,8 @@
 {% block body %}
     {{ parent() }}
 
-    {% from 'Macro/Utils.html.twig' import pageBanner, formInput %}
+    {% from 'Macro/Forms.html.twig' import formInput, recaptcha %}
+    {% from 'Macro/Utils.html.twig' import pageBanner %}
 
     <!--banner-->
     {{ pageBanner(controller) }}
@@ -61,8 +62,7 @@
                             {{ formInput(controller, 'password', 'new_passwd', 'Nueva Contraseña', '', true) }}
                             {{ formInput(controller, 'password', 'confirm_passwd', 'Confirmar Contraseña', '', true) }}
                             <div class="mb-3">
-                                <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
-                                <!-- <input class="form-control d-none" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->
+                                {{ recaptcha(controller) }}
                             </div>
                             <div class="text-left">
                                 <a class="btn btn-outline-secondary btnhover m-r10" data-bs-toggle="tab" href="#formLogin">Volver</a>

@@ -58,6 +58,18 @@ class BookCategory extends AppModel
     }
 
     /**
+     * Return the category of this book.
+     *
+     * @return Category
+     */
+    public function getCategory(): Category
+    {
+        $category = new Category();
+        $category->loadFromCode($this->category_id);
+        return $category;
+    }
+
+    /**
      * Assign the values of the $data array to the model properties.
      *
      * @param array $data

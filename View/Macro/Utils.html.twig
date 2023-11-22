@@ -42,28 +42,6 @@
 {% endmacro %}
 
 {#
-    Add a input field to a form.
-    If the type is 'tel' then the pattern attribute is added.
-
-    @param controller The controller object.
-    @param type The type of the input field.
-    @param name The name of the input field.
-    @param label The label of the input field.
-#}
-{% macro formInput(controller, type, name, label, value, required) %}
-    <div class="form-floating mb-3">
-        <input id="{{ name }}" type="{{ type }}" class="form-control"
-               {% if type == 'tel' %} pattern="(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}" {% endif %}
-               name="{{ name }}"
-               placeholder="{{ label }}"
-               value="{{ value }}"
-               autocomplete="false"
-               {% if required %} required{% endif %}>
-        <label for="{{ name }}">{{ label }}</label>
-    </div>
-{% endmacro %}
-
-{#
     Add the list of messages of one level to a page.
 
     @param controller The controller object.

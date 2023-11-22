@@ -697,23 +697,18 @@
 {% endblock %}
 
 {% macro renderBook(controller, book) %}
+    {% from 'Macro/Book.html.twig' import ranking %}
+
     <div class="col-book style-1">
         <div class="dz-shop-card style-1">
             <div class="dz-media">
                 <img src="{{ controller.getUrlBookImage(book) }}" alt="book">
             </div>
             <div class="dz-content">
-                <h5 class="title"><a href="books-grid-view.html">{{ book.name }}</a></h5>
+                <h5 class="title"><a href="BookDetail?code={{ book.id }}">{{ book.name }}</a></h5>
                 {{ book.author }}
-                {% set rating = controller.getRating(book) %}
-                <ul class="dz-rating">
-                    <li><i class="flaticon-star text-yellow"></i></li>
-                    <li><i class="flaticon-star {% if rating > 1 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
-                    <li><i class="flaticon-star {% if rating > 2 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
-                    <li><i class="flaticon-star {% if rating > 3 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
-                    <li><i class="flaticon-star {% if rating > 4 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
-                </ul>
-                <a href="shop-cart.html" class="btn btn-secondary box-btn btnhover2 mt-2">Saber más</a>
+                {{ ranking(controller, book) }}
+                <a href="BookDetail?code={{ book.id }}" class="btn btn-secondary box-btn btnhover2 mt-2">Saber más</a>
             </div>
         </div>
     </div>

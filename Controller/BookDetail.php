@@ -16,28 +16,30 @@
 namespace BiblioApp\Controller;
 
 use BiblioApp\Core\Controller\FrontPageController;
-use BiblioApp\Model\WebContact;
+use BiblioApp\Controller\Base\BookTrait;
+use BiblioApp\Model\Book;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Controller to manage a contact form.
+ * Controller to show a book record data.
  *
  * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
  */
-class Contact extends FrontPageController
+class BookDetail extends FrontPageController
 {
+    use BookTrait;
 
     /**
-     * The received data from the form.
-     * if the form is saved, the array is empty.
+     * The book to show.
      *
-     * @var array
+     * @var Book
      */
-    public array $formData = [];
+    public Book $book;
 
     /**
      * Runs the controller's logic.
      * if return false, the controller break the execution.
+     * if member is not logged in, redirect to home page.
      *
      * @param Response $response
      * @return bool
@@ -48,6 +50,15 @@ class Contact extends FrontPageController
             return false;
         }
 
+        $this->book = new Book();
+        $book_id = $this->request->query->get('code', '');
+        if (empty($book_id) || false === $this->book->loadFromCode($book_id)) {
+            $this->redirect('');
+            $this->setTemplate(false);
+            return false;
+        }
+
+        // Get action and execute if not empty
         $action = $this->request->request->get('action', $this->request->query->get('action', ''));
         if (false === $this->execPreviousAction($action)) {
             $this->setTemplate(false);
@@ -59,8 +70,8 @@ class Contact extends FrontPageController
     public function getPageData(): array
     {
         $data = parent::getPageData();
-        $data['title'] = 'Contactar con Nosotros';
-        $data['breadcrumb'] = 'Contactar';
+        $data['title'] = 'Detalle del libro';
+        $data['breadcrumb'] = 'Libro';
         return $data;
     }
 
@@ -72,34 +83,6 @@ class Contact extends FrontPageController
      */
     protected function execPreviousAction(?string $action): bool
     {
-        if ($action == 'contact') {
-            if ($this->contactAction()) {
-                $this->message->info('Contacto realizado correctamente');
-            } else {
-                $this->message->error('¡Error! Revise los datos introducidos');
-            }
-        }
-
-        return true;
-    }
-
-    private function contactAction(): bool
-    {
-        $data = $this->request->request->all();
-        $contact = new WebContact();
-        $contact->email = $data['email'] ?? '';
-        $contact->name = $data['name'] ?? '';
-        $contact->notes = $data['notes'] ?? '';
-        $contact->phone = $data['phone'] ?? '';
-        if (false === $contact->save()) {
-            $this->formData = [
-                'email' => $data['email'] ?? '',
-                'name' => $data['name'] ?? '',
-                'notes' => $data['notes'] ?? '',
-                'phone' => $data['phone'] ?? '',
-            ];
-            return false;
-        }
         return true;
     }
 }

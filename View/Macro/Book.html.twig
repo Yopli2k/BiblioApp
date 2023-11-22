@@ -1,0 +1,45 @@
+{#
+/**
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#}
+
+{% macro comment(controller, title, message, footer) %}
+    <div class="card border-1 border-primary">
+        <div class="card-body">
+            <h6 class="card-title text-secondary"><small>{{ title }}</small></h6>
+            <p class="card-text">{{ message }}</p>
+        </div>
+        <div class="card-footer text-body-secondary">
+            <span class="small">{{ footer }}</span>
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+    Add a ranking star.
+
+    @param controller The controller object.
+    @param book The book object.
+#}
+{% macro ranking(controller, book) %}
+    {% set rating = controller.getRating(book) %}
+    <ul class="dz-rating">
+        <li><i class="flaticon-star text-yellow"></i></li>
+        <li><i class="flaticon-star {% if rating > 1 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
+        <li><i class="flaticon-star {% if rating > 2 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
+        <li><i class="flaticon-star {% if rating > 3 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
+        <li><i class="flaticon-star {% if rating > 4 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
+    </ul>
+{% endmacro %}

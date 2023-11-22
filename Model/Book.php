@@ -88,6 +88,22 @@ class Book extends AppModel
     }
 
     /**
+     * Return the list of categories of this book.
+     *
+     * @return Category[];
+     */
+    public function getCategories(): array
+    {
+        $result = [];
+        $categories = new BookCategory();
+        $where = [ new DataBaseWhere('book_id', $this->id) ];
+        foreach ($categories->select($where) as $category) {
+            $result[] = $category->getCategory();
+        }
+        return $result;
+    }
+
+    /**
      * Get the image of the book.
      *
      * @return BookImage
@@ -114,6 +130,17 @@ class Book extends AppModel
             $this->rating = (int)$data[0]['rating'] ?? 3;
         }
         return $this->rating;
+    }
+
+    public function getValorations(): array
+    {
+        $result = [];
+        $ratings = new Rating();
+        $where = [ new DataBaseWhere('book_id', $this->id) ];
+        foreach ($ratings->select($where) as $rating) {
+            $result[] = $rating;
+        }
+        return $result;
     }
 
     /**

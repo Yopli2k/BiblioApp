@@ -90,6 +90,18 @@ class Rating extends AppModel
     }
 
     /**
+     * Return the member has made the rating.
+     *
+     * @return Member
+     */
+    public function getMember(): Member
+    {
+        $member = new Member();
+        $member->loadFromCode($this->member_id);
+        return $member;
+    }
+
+    /**
      * Assign the values of the $data array to the model properties.
      *
      * @param array $data

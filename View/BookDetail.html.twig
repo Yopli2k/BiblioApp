@@ -1,0 +1,178 @@
+{% extends "Master/FrontTemplate.html.twig" %}
+
+{% block meta %}
+    {{ parent() }}
+    <meta name="author" content="BiblioApp" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Detalle del libro"/>
+    <meta name="keywords" content="proyecto, biblioteca, alquiler, libros" />
+    <meta property="og:title" content="Detalle del libro"/>
+    <meta property="og:description" content="Detalle del libro"/>
+    <meta property="og:image" content="/Assets/Images/biblio-card.png"/>
+
+    <title>Detalle del libro</title>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        #notes { height: 150px; }
+        #recaptcha { display:none; }
+    </style>
+{% endblock %}
+
+{% block preloader %}
+    <div id="loading-area" class="preloader-wrapper-1">
+        <div class="preloader-inner">
+            <div class="preloader-shade"></div>
+            <div class="preloader-wrap"></div>
+            <div class="preloader-wrap wrap2"></div>
+            <div class="preloader-wrap wrap3"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    {% from 'Macro/Book.html.twig' import comment, ranking %}
+    {% from 'Macro/Forms.html.twig' import formInput, formRGPD %}
+    {% from 'Macro/Utils.html.twig' import message, pageHeader %}
+    {% set book = controller.book %}
+    {% set formData = controller.formData %}
+
+    <!-- Book Detail -->
+    <section class="content-inner bg-grey">
+        <div class="container">
+            <div class="row justify-content-center book-grid-row style-4">
+                <div class="col-lg-10">
+                    <div class="dz-box bg-white shadow">
+                        <div class="dz-media p-3">
+                            <img src="{{ controller.getUrlBookImage(book) }}" alt="{{ book.name }}">
+                        </div>
+                        <div class="dz-content">
+                            <div class="dz-header">
+                                <h3 class="title">{{ book.name }}</h3>
+                                <div class="shop-item-rating">
+                                    <div class="d-lg-flex d-sm-inline-flex d-flex align-items-center">
+                                        {{ ranking(controller, book) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dz-body">
+                                <div class="book-detail">
+                                    <ul class="book-info">
+                                        <li><span>Autor</span>{{ book.author }}</li>
+                                        <li><span>Editorial</span>{{ book.editorial }}</li>
+                                        <li><span>Año</span>{{ book.publication }}</li>
+                                    </ul>
+                                </div>
+                                <div class="book-detail">
+                                    <ul class="book-info">
+                                        <li><span>ISBN</span>{{ book.isbn }}</li>
+                                        <li><span>Páginas</span>{{ book.pages }}</li>
+                                    </ul>
+                                </div>
+                                <p class="text-1">{{ book.synopsis }}</p>
+                                {% for category in controller.getCategories(book) %}
+                                    <span class="badge">{{ category.name }}</span>
+                                {% endfor %}
+                                <div class="book-footer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- comment lists -->
+    <section class="content-inner p-t20 p-b20">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    {{ pageHeader(controller, 'center', 'Qué dicen nuestros lectores', '') }}
+
+                    <div class="post-comments comments-area style-1 clearfix">
+                        {% set valorations = controller.getValorations(book) %}
+                        {% set count = valorations|length %}
+                        <h4 class="comments-title">{{ count }} COMENTARIOS</h4>
+                        {% for item in valorations %}
+                            {{ comment(controller,
+                                item.member.name,
+                                item.rating.valoration,
+                                item.rating.rating_date ~ '  ' ~ item.rating.rating_time
+                            ) }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if controller.member is not empty and controller.member.primaryColumnValue() is not empty %}
+    <!-- comment form -->
+    <section class="content-inner p-t40 border-bottom bg-grey">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 m-b40">
+                    <!-- result messages -->
+                    <div class="row">
+                        <div class="col-12">
+                            {{ message(controller, 'info', 'success', false) }}
+                            {{ message(controller, 'warning', 'warning', false) }}
+                            {{ message(controller, 'error', 'danger', false) }}
+                        </div>
+                    </div>
+
+                    <!-- form -->
+                    <div class="contact-area1">
+                        <form id="formComment" action="{{ asset('BookDetail') }}" class="form-floating tab-pane active col-12" method="post">
+                            <input name="action" type="hidden" class="form-control" value="comment">
+                            <div class="shop-bx shop-profile">
+                                <div class="shop-bx-title clearfix">
+                                    <h3>Comparte tu opinión</h3>
+                                </div>
+                                <p>El correo electrónico debe coincidir con el correo de su perfil.</p>
+
+                                <div class="form-floating mb-3">
+                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico', formData.email, true) }}
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <textarea id="notes" class="form-control" placeholder="Comentario" name="notes" required>{{ formData.notes }}</textarea>
+                                    <label for="notes">Comentario</label>
+                                </div>
+
+                                <div class="form-check mb-3">
+                                    <input id="rgpd" type="checkbox" class="form-check-input" name="rgpd" value="" required>
+                                    <label class="form-check-label" for="rgpd">
+                                        He leído y acepto la <a href="PrivacyPolicy" target="_blank">Política de Privacidad</a>.
+                                    </label>
+                                </div>
+
+                                {{ formRGPD(controller) }}
+                                <hr>
+                                <button name="submit" type="submit" value="submit" class="btn w-100 btn-primary btnhover">A C E P T A R</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+{% endblock %}

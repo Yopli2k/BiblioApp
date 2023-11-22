@@ -26,7 +26,8 @@
 
 {% block body %}
     {{ parent() }}
-    {% from 'Macro/Utils.html.twig' import formInput, message, pageBanner %}
+    {% from 'Macro/Forms.html.twig' import formInput %}
+    {% from 'Macro/Utils.html.twig' import message, pageBanner %}
     {% set member = controller.member %}
 
     <!--banner-->
