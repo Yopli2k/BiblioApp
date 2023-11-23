@@ -17,6 +17,7 @@ namespace BiblioApp\Controller;
 
 use BiblioApp\Core\Controller\FrontPageController;
 use BiblioApp\Core\DataBase\DataBaseWhere;
+use BiblioApp\Core\Tools\Tools;
 use BiblioApp\Model\Book;
 use BiblioApp\Model\BookCategory;
 use BiblioApp\Model\Category;
@@ -30,17 +31,39 @@ class Home extends FrontPageController
     private const ORDERBY_AUTHOR = 'Autor';
 
     /**
+     * the total number of books (filtered or not)
+     *
+     * @var int
+     */
+    public int $bookCount = 0;
+
+    /**
+     * Set the limit x page for the book list
+     *
+     * @var int
+     */
+    public int $limit = 12;
+
+    /**
      * Set the filter category for the book list
      *
      * @var array
      */
     public array $filterCategory = [];
 
+    /**
+     * Set the order by for the book list
+     *
+     * @var string
+     */
     public string $filterOrderBy = self::ORDERBY_NEW;
 
-    private int $offset = 0;
-
-    private int $limit = 16;
+    /**
+     * Set the offset for the book list (pagination)
+     *
+     * @var int
+     */
+    public int $offset = 0;
 
     use BookTrait;
 
@@ -89,6 +112,7 @@ class Home extends FrontPageController
             ? ['author' => 'ASC']
             : ['id' => 'DESC'];
 
+        $this->bookCount = $books->count($where);
         return $books->select($where, $orderBy, $this->offset, $this->limit);
     }
 
@@ -126,6 +150,11 @@ class Home extends FrontPageController
         $data = parent::getPageData();
         $data['title'] = 'Home Page';
         return $data;
+    }
+
+    public function getPagination(): array
+    {
+        return Tools::getPagination($this->bookCount, $this->offset, $this->limit);
     }
 
     /**

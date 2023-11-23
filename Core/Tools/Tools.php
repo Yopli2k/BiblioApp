@@ -60,6 +60,48 @@ class Tools
     }
 
     /**
+     * Return a list of page items for pagination.
+     *
+     * @return array
+     */
+    public static function getPagination(int $count, int $offset, int $limit = APP_ITEM_LIMIT): array
+    {
+        $pages = [];
+        $key1 = $key2 = 0;
+        $current = 1;
+
+        // add all pages
+        while ($key2 < $count) {
+            $pages[$key1] = [
+                'active' => ($key2 == $offset),
+                'num' => $key1 + 1,
+                'offset' => $key1 * $limit,
+            ];
+            if ($key2 == $offset) {
+                $current = $key1;
+            }
+            $key1++;
+            $key2 += $limit;
+        }
+
+        // now descarting pages
+        foreach (array_keys($pages) as $key2) {
+            $middle = intval($key1 / 2);
+
+            /**
+             * We discard everything except the first page, the last one, the middle one,
+             * the current one, the 5 previous and 5 following ones.
+             */
+            if (($key2 > 1 && $key2 < $current - 5 && $key2 != $middle) || ($key2 > $current + 5 && $key2 < $key1 - 1 && $key2 != $middle)) {
+                unset($pages[$key2]);
+            }
+        }
+
+        // if there is only one page, we return an empty array
+        return count($pages) > 1 ? $pages : [];
+    }
+
+    /**
      * Returns a random text string of length $length.
      *
      * @param int $length

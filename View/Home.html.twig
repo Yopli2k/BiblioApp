@@ -32,10 +32,11 @@
     {{ parent() }}
 {% endblock %}
 
-
 {% block body %}
     {{ parent() }}
     {% from 'Macro/Utils.html.twig' import pageHeader %}
+    {% set bookList = controller.getBookList() %}
+    {% set bookCount = controller.bookCount %}
 
     <!--Recommend Section -->
     <section class="content-inner bg-grey">
@@ -65,7 +66,7 @@
                         </div>
                         <div class="icon-content">
                             <h5 class="dz-title m-b10">Hazte Socio</h5>
-                            <p>Disfruta de ventajas de ser socio con sólo registrarte.</p>
+                            <p>Disfruta de ventajas de ser socio con solo registrarte.</p>
                         </div>
                     </div>
                 </div>
@@ -146,26 +147,31 @@
                 </div>
             </div>
             <div class="row book-grid-row">
-                {% for book in controller.getBookList() %}
+                {% for book in bookList %}
                     {{ _self.renderBook(controller, book) }}
                 {% endfor %}
             </div>
-            <div class="row page mt-0">
+            {% if bookCount > controller.limit %}
+                {% set pages = controller.getPagination() %}
+                {% set firstBook = controller.offset + 1 %}
+                {% set lastBook = min(controller.offset + controller.limit, bookCount) %}
+                <div class="row page mt-0">
                     <div class="col-md-6">
-                        <p class="page-text">Mostrando 12 de 50 libros</p>
+                        <h6>Mostrando de {{ firstBook }} al {{ lastBook }} de un total de {{ bookCount }} libros</h6>
                     </div>
                     <div class="col-md-6">
                         <nav aria-label="Blog Pagination">
                             <ul class="pagination style-1 p-t20">
-                                <li class="page-item"><a class="page-link prev" href="javascript:void(0);">Anterior</a></li>
-                                <li class="page-item"><a class="page-link active" href="javascript:void(0);">1</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
-                                <li class="page-item"><a class="page-link next" href="javascript:void(0);">Siguiente</a></li>
+                                {% for page in pages %}
+                                    {% set active = page.active ? 'active' : '' %}
+                                    {% set url = loop.first ? 'index.php' : 'index.php?offset=' ~ page.offset %}
+                                    <li class="page-item"><a class="page-link {{ active }}" href="{{ url }}">{{ page.num }}</a></li>
+                                {% endfor %}
                             </ul>
                         </nav>
                     </div>
                 </div>
+            {% endif %}
         </div>
     </section>
 {% endblock %}
