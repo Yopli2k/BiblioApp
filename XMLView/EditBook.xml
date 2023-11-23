@@ -39,7 +39,7 @@
                 <widget type="number" fieldname="pages" step="1" decimal="0" required="true" />
             </column>
             <column name="recomendado" order="200">
-                <widget type="select" fieldname="recommended">
+                <widget type="select" fieldname="recommended" required="true">
                     <values title="No">0</values>
                     <values title="Sí">1</values>
                 </widget>

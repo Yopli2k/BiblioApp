@@ -1,0 +1,18 @@
+.home-book-image {
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+    max-height: 357px;
+}
+
+.home-book-title {
+    min-height: 56px;
+}
+
+.text-1 {
+    padding-right: 30px;
+}
+
+.home-form-check-inline {
+    width: 22% !important;
+}

@@ -96,7 +96,7 @@
     <div class="section-head text-{{ align }}">
         <h2 class="title">{{ title }}</h2>
         {% if content is not empty %}
-            <p>{{ content }}</p>
+            <p>{{ content|raw }}</p>
         {% endif %}
     </div>
 {% endmacro %}

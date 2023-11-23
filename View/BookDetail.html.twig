@@ -76,7 +76,7 @@
                                         <li><span>Páginas</span>{{ book.pages }}</li>
                                     </ul>
                                 </div>
-                                <p class="text-1">{{ book.synopsis }}</p>
+                                <p class="text-1">{{ book.synopsis|raw }}</p>
                                 {% for category in controller.getCategories(book) %}
                                     <span class="badge">{{ category.name }}</span>
                                 {% endfor %}

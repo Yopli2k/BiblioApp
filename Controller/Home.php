@@ -18,18 +18,102 @@ namespace BiblioApp\Controller;
 use BiblioApp\Core\Controller\FrontPageController;
 use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Model\Book;
+use BiblioApp\Model\BookCategory;
 use BiblioApp\Model\Category;
 use BiblioApp\Controller\Base\BookTrait;
+use Symfony\Component\HttpFoundation\Response;
 
 class Home extends FrontPageController
 {
 
+    private const ORDERBY_NEW = 'Novedad';
+    private const ORDERBY_AUTHOR = 'Autor';
+
+    /**
+     * Set the filter category for the book list
+     *
+     * @var array
+     */
+    public array $filterCategory = [];
+
+    public string $filterOrderBy = self::ORDERBY_NEW;
+
+    private int $offset = 0;
+
+    private int $limit = 16;
+
     use BookTrait;
 
+    /**
+     * Runs the controller's logic.
+     * if return false, the controller break the execution.
+     * if member is not logged in, redirect to home page.
+     *
+     * @param Response $response
+     * @return bool
+     */
+    public function exec(Response &$response): bool
+    {
+        if (false === parent::exec($response)) {
+            return false;
+        }
+
+        // Get the filter category and offset, if exists
+        $this->filterCategory = $this->request->request->get('category', []);
+        $this->filterOrderBy = $this->request->request->get('orderby', self::ORDERBY_NEW);
+        $this->offset = $this->request->request->get('offset', $this->request->query->get('offset', 0));
+
+        // Get action and execute if not empty
+        $action = $this->request->request->get('action', $this->request->query->get('action', ''));
+        if (false === $this->execPreviousAction($action)) {
+            $this->setTemplate(false);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Return a list of all or filter books.
+     *
+     * @return Book[]
+     */
+    public function getBookList(): array
+    {
+        $book_ids = $this->getBookIds();
+        $books = new Book();
+        $where = empty($book_ids)
+            ? []
+            : [ new DataBaseWhere('id', implode(',', $book_ids), 'IN') ];
+
+        $orderBy = $this->filterOrderBy === self::ORDERBY_AUTHOR
+            ? ['author' => 'ASC']
+            : ['id' => 'DESC'];
+
+        return $books->select($where, $orderBy, $this->offset, $this->limit);
+    }
+
+    /**
+     * Return a list of all categories.
+     *
+     * @return array
+     */
     public function getCategories(): array
     {
         $categories = new Category();
         return $categories->select([]);
+    }
+
+    /**
+     * Return a list of all order by.
+     *
+     * @return array
+     */
+    public function getOrderByList(): array
+    {
+        return [
+            self::ORDERBY_NEW => 'Novedad',
+            self::ORDERBY_AUTHOR => 'Autor'
+        ];
     }
 
     /**
@@ -54,5 +138,41 @@ class Home extends FrontPageController
         $books = new Book();
         $where = [ new DataBaseWhere('recommended', true) ];
         return $books->select($where, [], 0, 4);
+    }
+
+    /**
+     * Run the actions that alter data before reading it.
+     *
+     * @param ?string $action
+     * @return bool
+     */
+    protected function execPreviousAction(?string $action): bool
+    {
+        return true;
+    }
+
+    /**
+     * Return a list of book ids filtered by category
+     *
+     * @return array
+     */
+    private function getBookIds(): array
+    {
+        $category_ids = [];
+        foreach ($this->filterCategory as $category_id) {
+            $category_ids[] = $category_id;
+        }
+
+        if (empty($category_ids)) {
+            return [];
+        }
+
+        $bookIds = [];
+        $bookCategories = new BookCategory();
+        $where = [ new DataBaseWhere('category_id', implode(',', $category_ids), 'IN') ];
+        foreach ($bookCategories->select($where) as $bookCategory) {
+            $bookIds[] = $bookCategory->book_id;
+        }
+        return $bookIds;
     }
 }

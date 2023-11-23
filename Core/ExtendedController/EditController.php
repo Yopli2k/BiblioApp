@@ -85,11 +85,11 @@ abstract class EditController extends BaseController
             if ($viewName === $mainViewName && $view->model->exists()) {
                 $this->hasData = true;
             }
-            return true;
         }
 
         // Execute actions after loading data
         $this->execAfterAction($action);
+        return true;
     }
 
     /**

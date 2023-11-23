@@ -17,6 +17,12 @@ namespace BiblioApp\Controller\Base;
 
 use BiblioApp\Model\Book;
 
+/**
+ * Trait BookTrait
+ * This trait contains methods for use in the controllers that need to work with books.
+ *
+ * @author José Antonio Cuello Principal
+ */
 trait BookTrait
 {
     /**

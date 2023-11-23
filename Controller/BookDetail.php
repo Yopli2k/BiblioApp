@@ -67,6 +67,11 @@ class BookDetail extends FrontPageController
         return true;
     }
 
+    /**
+     * Return the basic data for this page.
+     *
+     * @return array
+     */
     public function getPageData(): array
     {
         $data = parent::getPageData();

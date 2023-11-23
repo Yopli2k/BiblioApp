@@ -189,10 +189,10 @@ class Book extends AppModel
      */
     public function test(): bool
     {
-        $this->author = Tools::noHtml(mb_strtolower($this->author ?? ''));
-        $this->isbn = Tools::noHtml(mb_strtolower($this->isbn ?? ''));
-        $this->name = Tools::noHtml(mb_strtolower($this->name ?? ''));
-        $this->synopsis = Tools::noHtml(mb_strtolower($this->synopsis ?? ''));
+        $this->author = Tools::noHtml(($this->author ?? ''));
+        $this->isbn = Tools::noHtml(($this->isbn ?? ''));
+        $this->name = Tools::noHtml(($this->name ?? ''));
+        $this->synopsis = Tools::noHtml(($this->synopsis ?? ''));
 
         if (false ===  is_numeric($this->isbn)) {
             $this->message->error('El ISBN debe ser un número.');
