@@ -156,6 +156,21 @@ class Member extends AppModel
     }
 
     /**
+     * Indicates if the member has a loan pending of return.
+     *
+     * @return bool
+     */
+    public function hasLoan(): bool
+    {
+        $where = [
+            new DataBaseWhere('member_id', $this->id),
+            new DataBaseWhere('return_date', null, 'IS')
+        ];
+        $loan = new Loan();
+        return $loan->loadFromCode('', $where);
+    }
+
+    /**
      * Assign the values of the $data array to the model properties.
      *
      * @param array $data
@@ -232,11 +247,6 @@ class Member extends AppModel
             return false;
         }
 
-        if (false === preg_match("/^\d{10}$/", $this->phone)) {
-            $this->message->warning('El número de teléfono no es válido.');
-            return false;
-        }
-
         return parent::test();
     }
 
@@ -248,7 +258,7 @@ class Member extends AppModel
     protected function insert(): bool
     {
         $sql = 'INSERT INTO ' . static::tableName()
-            . ' (address, creationdate, document, email, enabled, name, notes, phone, verified)'
+            . ' (address, creationdate, document, email, enabled, name, notes, password, phone, verified)'
             . ' VALUES ('
             . self::$dataBase->var2str($this->address) . ','
             . self::$dataBase->var2str($this->creationdate) . ','
@@ -257,6 +267,7 @@ class Member extends AppModel
             . self::$dataBase->var2str($this->enabled) . ','
             . self::$dataBase->var2str($this->name) . ','
             . self::$dataBase->var2str($this->notes) . ','
+            . self::$dataBase->var2str($this->password) . ','
             . self::$dataBase->var2str($this->phone) . ','
             . self::$dataBase->var2str($this->verified)
             . ')';
@@ -270,7 +281,7 @@ class Member extends AppModel
      */
     protected function requiredFields(): array
     {
-        return ['address', 'document', 'email', 'name', 'phone'];
+        return ['address', 'document', 'email', 'name', 'phone', 'password'];
     }
 
     /**

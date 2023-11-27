@@ -56,6 +56,11 @@ class Contact extends FrontPageController
         return true;
     }
 
+    /**
+     * Return the basic data for this page.
+     *
+     * @return array
+     */
     public function getPageData(): array
     {
         $data = parent::getPageData();
@@ -75,8 +80,6 @@ class Contact extends FrontPageController
         if ($action == 'contact') {
             if ($this->contactAction()) {
                 $this->message->info('Contacto realizado correctamente');
-            } else {
-                $this->message->error('¡Error! Revise los datos introducidos');
             }
         }
 

@@ -78,4 +78,15 @@ trait BookTrait
         $url = $bookImage->getFullPath();
         return (file_exists($url)) ? $url : '';
     }
+
+    /**
+     * Indicates if the book has a loan.
+     *
+     * @param Book $book
+     * @return bool
+     */
+    public function hasLoan(Book $book): bool
+    {
+        return $book->hasLoan();
+    }
 }

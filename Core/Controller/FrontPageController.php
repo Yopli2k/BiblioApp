@@ -58,16 +58,8 @@ abstract class FrontPageController extends PageController
             return false;
         }
 
-        // Check for logout action before loading member
-        $action = $this->request->request->get('action', $this->request->query->get('action', ''));
-        if ($action === 'logout') {
-            AppCookies::clearCookie($this->response, 'biblioMemberID');
-            AppCookies::clearCookie($this->response, 'biblioMemberLogKey');
-        }
-
-        // Load member from cookies
         $this->member = $this->cookieAuth();
-        if (isset($this->member)) {
+        if (false === empty($this->member)) {
             $this->multiRequestProtection->addSeed($this->member->primaryColumnValue());
         }
         return true;
@@ -78,6 +70,14 @@ abstract class FrontPageController extends PageController
      */
     private function cookieAuth(): ?Member
     {
+        // Check for logout action before loading member
+        $action = $this->request->request->get('action', $this->request->query->get('action', ''));
+        if ($action === 'logout') {
+            AppCookies::clearCookie($this->response, 'biblioMemberID');
+            AppCookies::clearCookie($this->response, 'biblioMemberLogKey');
+            return null;
+        }
+
         $memberId = AppCookies::getCookie($this->request, 'biblioMemberID');
         $logKey = AppCookies::getCookie($this->request, 'biblioMemberLogKey');
         if (empty($memberId) || empty($logKey)) {

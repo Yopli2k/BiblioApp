@@ -38,7 +38,7 @@ class AppCookies
      */
     public static function clearCookie(Response $response, string $cookie): void
     {
-        $response->headers->clearCookie($cookie, APP_ROUTE);
+        $response->headers->clearCookie($cookie);
     }
 
     /**

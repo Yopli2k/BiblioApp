@@ -10,7 +10,7 @@
     <meta property="og:description" content="Permite realizar el proceso de alta a nuevos miembros de la comunidad"/>
     <meta property="og:image" content="{{ asset('Assets/Images/biblio-card.png') }}"/>
 
-    <title>Registro de miembros</title>
+    <title>Nuevo miembro</title>
 {% endblock %}
 
 {% block css %}
@@ -27,39 +27,51 @@
 
 {% block body %}
     {{ parent() }}
-    {% from 'Macro/Utils.html.twig' import pageBanner, formInput %}
+    {% from 'Macro/Forms.html.twig' import formInput, formRGPD %}
+    {% from 'Macro/Utils.html.twig' import pageBanner, message %}
+
+    {% set formData = controller.formData %}
 
     <!--banner-->
     {{ pageBanner(controller) }}
 
-    <!--login panels-->
+    <!--form register-->
     <section class="content-inner border-bottom bg-grey">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 m-b40">
+                    <!--message-->
+                    <div class="row m-r10 m-md-r0">
+                        <div class="col-12">
+                            {{ message(controller, 'info', 'success', false) }}
+                            {{ message(controller, 'warning', 'warning', false) }}
+                            {{ message(controller, 'error', 'danger', false) }}
+                        </div>
+                    </div>
+                    <!-- form data -->
                     <div class="contact-area1 m-r20 m-md-r0">
                         <div class="section-head style-1">
                             <h6 class="sub-title text-primary">Registrar</h6>
                             <h3 class="title m-b20">Completar el formulario</h3>
                         </div>
 
-                        <form id="formRegister" class="form-floating" method="POST" action="RegisterMember">
-                            <input id="action" name="action" type="hidden" class="form-control" value="new">
+                        <form id="formRegister" action="{{ asset('RegisterMember') }}" class="form-floating" method="post">
+                            <input id="action" name="action" type="hidden" class="form-control" value="new-member">
                             <div class="row g-2">
                                 <div class="col-md-8">
-                                    {{ formInput(controller, 'text', 'name', 'Nombre completo', '', true) }}
+                                    {{ formInput(controller, 'text', 'name', 'Nombre completo', formData.name, true) }}
                                 </div>
                                 <div class="col-md-4">
-                                    {{ formInput(controller, 'text', 'document', 'Documento Oficial', '', true) }}
+                                    {{ formInput(controller, 'text', 'document', 'Documento Oficial', formData.document, true) }}
                                 </div>
                             </div>
-                            {{ formInput(controller, 'text', 'address', 'Dirección', '', true) }}
+                            {{ formInput(controller, 'text', 'address', 'Dirección', formData.address, true) }}
                             <div class="row g-2">
                                 <div class="col-md-8">
-                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico', '', true) }}
+                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico', formData.email, true) }}
                                 </div>
                                 <div class="col-md-4">
-                                    {{ formInput(controller, 'tel', 'phone', 'Teléfono', '', true) }}
+                                    {{ formInput(controller, 'tel', 'phone', 'Teléfono', formData.phone, true) }}
                                 </div>
                             </div>
 

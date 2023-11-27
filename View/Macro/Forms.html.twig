@@ -37,6 +37,23 @@
     </div>
 {% endmacro %}
 
+
+{% macro formRating(controller, name, value) %}
+    {% if value is empty %}{% set value = 5 %}{% endif %}
+    <div class="rating">
+        {% for item in 1..5 %}
+            {% set selected = item == value ? 'checked' : '' %}
+            <label>
+                <input type="radio" name="{{ name }}" value="{{ value }}" {{ selected }} />
+                {% for star in 1..item %}
+                    <span class="icon">★</span>
+                {% endfor %}
+            </label>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+
 {% macro formRGPD(controller) %}
     <div class="row">
         <div class="col-lg-8">

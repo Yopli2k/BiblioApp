@@ -102,18 +102,21 @@ class Home extends FrontPageController
      */
     public function getBookList(): array
     {
-        $book_ids = $this->getBookIds();
-        $books = new Book();
-        $where = empty($book_ids)
-            ? []
-            : [ new DataBaseWhere('id', implode(',', $book_ids), 'IN') ];
+        if (empty($this->filterCategory)){
+            return [];
+        }
 
+        $book_ids = $this->getBookIds();
+        $where = [ new DataBaseWhere('id', implode(',', $book_ids), 'IN') ];
         $orderBy = $this->filterOrderBy === self::ORDERBY_AUTHOR
             ? ['author' => 'ASC']
             : ['id' => 'DESC'];
 
+        $books = new Book();
         $this->bookCount = $books->count($where);
-        return $books->select($where, $orderBy, $this->offset, $this->limit);
+        return $this->bookCount > 0
+            ? $books->select($where, $orderBy, $this->offset, $this->limit)
+            : [];
     }
 
     /**
@@ -187,21 +190,19 @@ class Home extends FrontPageController
      */
     private function getBookIds(): array
     {
-        $category_ids = [];
-        foreach ($this->filterCategory as $category_id) {
-            $category_ids[] = $category_id;
+        $category_ids = implode(',', $this->filterCategory);
+        $sql = 'SELECT book_id, GROUP_CONCAT(category_id) as categories FROM books_categories'
+            . ' WHERE category_id IN (' . $category_ids . ')'
+            . ' GROUP BY book_id';
+
+        $bookIds = [ 0 ];
+        foreach ($this->dataBase->select($sql) as $row) {
+            $categories = explode(',', $row['categories']);
+            if (count($categories) === count($this->filterCategory)) {
+                $bookIds[] = $row['book_id'];
+            }
         }
 
-        if (empty($category_ids)) {
-            return [];
-        }
-
-        $bookIds = [];
-        $bookCategories = new BookCategory();
-        $where = [ new DataBaseWhere('category_id', implode(',', $category_ids), 'IN') ];
-        foreach ($bookCategories->select($where) as $bookCategory) {
-            $bookIds[] = $bookCategory->book_id;
-        }
         return $bookIds;
     }
 }

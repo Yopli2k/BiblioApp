@@ -199,6 +199,8 @@ class Rating extends AppModel
     protected function update(): bool
     {
         $sql = 'UPDATE ' . static::tableName() . ' SET '
+            . 'book_id = ' . $this->book_id . ','
+            . 'member_id = ' . $this->member_id . ','
             . 'rating = ' . $this->rating . ','
             . 'valoration = ' . self::$dataBase->var2str($this->valoration)
             . ' WHERE id = ' . self::$dataBase->var2str($this->id);

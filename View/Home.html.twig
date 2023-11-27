@@ -18,14 +18,8 @@
 {% endblock %}
 
 {% block preloader %}
-    <div id="loading-area" class="preloader-wrapper-1">
-        <div class="preloader-inner">
-            <div class="preloader-shade"></div>
-            <div class="preloader-wrap"></div>
-            <div class="preloader-wrap wrap2"></div>
-            <div class="preloader-wrap wrap3"></div>
-        </div>
-    </div>
+    {% from 'Macro/Utils.html.twig' import pageLoading %}
+    {{ pageLoading(controller) }}
 {% endblock %}
 
 {% block header %}
@@ -107,7 +101,7 @@
         </div>
     </section>
     <!-- Book List (Grid) -->
-    <section class="content-inner border-bottom bg-grey">
+    <section id="booklist" class="content-inner border-bottom bg-grey">
         <div class="container">
             {{ pageHeader(
                     controller,
@@ -128,7 +122,7 @@
                     </div>
                 </div>
                 <div class="category">
-                    <form id="filterOrderBy" method="post">
+                    <form id="filterOrderBy" action="#booklist" method="post">
                         <input name="action" type="hidden" class="form-control" value="filter-orderby">
                         <div class="form-group">
                             <i class="fas fa-sort-amount-down me-2 text-secondary"></i>
@@ -149,6 +143,12 @@
             <div class="row book-grid-row">
                 {% for book in bookList %}
                     {{ _self.renderBook(controller, book) }}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-danger" role="alert">
+                            No hay libros que cumplan los criterios de filtrado.
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
             {% if bookCount > controller.limit %}
@@ -165,7 +165,7 @@
                                 {% for page in pages %}
                                     {% set active = page.active ? 'active' : '' %}
                                     {% set url = loop.first ? 'index.php' : 'index.php?offset=' ~ page.offset %}
-                                    <li class="page-item"><a class="page-link {{ active }}" href="{{ url }}">{{ page.num }}</a></li>
+                                    <li class="page-item"><a class="page-link {{ active }}" href="{{ url ~ '#booklist' }}">{{ page.num }}</a></li>
                                 {% endfor %}
                             </ul>
                         </nav>
@@ -188,7 +188,7 @@
     {% from 'Macro/Book.html.twig' import ranking %}
 
     <div class="col-book style-1">
-        <div class="dz-shop-card style-1">
+        <div class="dz-shop-card style-1 text-center">
             <img class="home-book-image" src="{{ controller.getUrlBookImage(book) }}" alt="book">
             <div class="dz-content">
                 <h5 class="home-book-title title"><a href="BookDetail?code={{ book.id }}">{{ book.name }}</a></h5>
@@ -201,7 +201,7 @@
 {% endmacro %}
 
 {% macro renderCategoryFilter(controller) %}
-    <form id="filterCategory" method="post">
+    <form id="filterCategory" action="#booklist" method="post">
         <input name="action" type="hidden" class="form-control" value="filter-category">
         {% for category in controller.getCategories() %}
             {% set checkID = 'categoryCheck_' ~ category.id %}

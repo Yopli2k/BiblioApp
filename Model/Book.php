@@ -144,6 +144,21 @@ class Book extends AppModel
     }
 
     /**
+     * Indicates if the book has a loan without return.
+     *
+     * @return bool
+     */
+    public function hasLoan(): bool
+    {
+        $where = [
+            new DataBaseWhere('book_id', $this->id),
+            new DataBaseWhere('return_date', null, 'IS')
+        ];
+        $loan = new Loan();
+        return $loan->loadFromCode('', $where);
+    }
+
+    /**
      * Assign the values of the $data array to the model properties.
      *
      * @param array $data

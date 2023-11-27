@@ -15,6 +15,7 @@
 
 {% block css %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('Assets/CSS/rating.css') }}"/>
     <style>
         #notes { height: 150px; }
         #recaptcha { display:none; }
@@ -22,14 +23,8 @@
 {% endblock %}
 
 {% block preloader %}
-    <div id="loading-area" class="preloader-wrapper-1">
-        <div class="preloader-inner">
-            <div class="preloader-shade"></div>
-            <div class="preloader-wrap"></div>
-            <div class="preloader-wrap wrap2"></div>
-            <div class="preloader-wrap wrap3"></div>
-        </div>
-    </div>
+    {% from 'Macro/Utils.html.twig' import pageLoading %}
+    {{ pageLoading(controller) }}
 {% endblock %}
 
 {% block header %}
@@ -39,19 +34,38 @@
 {% block body %}
     {{ parent() }}
     {% from 'Macro/Book.html.twig' import comment, ranking %}
-    {% from 'Macro/Forms.html.twig' import formInput, formRGPD %}
+    {% from 'Macro/Forms.html.twig' import formInput, formRating, formRGPD %}
     {% from 'Macro/Utils.html.twig' import message, pageHeader %}
     {% set book = controller.book %}
     {% set formData = controller.formData %}
+    {% set isMember = controller.member is not empty and controller.member.primaryColumnValue() is not empty %}
 
     <!-- Book Detail -->
     <section class="content-inner bg-grey">
         <div class="container">
             <div class="row justify-content-center book-grid-row style-4">
+                <!-- result messages -->
+                <div class="col-lg-10">
+                    {{ message(controller, 'info', 'success', false) }}
+                    {{ message(controller, 'warning', 'warning', false) }}
+                    {{ message(controller, 'error', 'danger', false) }}
+                </div>
+                <!-- book detail -->
                 <div class="col-lg-10">
                     <div class="dz-box bg-white shadow">
                         <div class="dz-media p-3">
-                            <img src="{{ controller.getUrlBookImage(book) }}" alt="{{ book.name }}">
+                            <img class="m-b10" src="{{ controller.getUrlBookImage(book) }}" alt="{{ book.name }}">
+                            <div class="d-grid gap-2">
+                                <a href="/index.php" class="btn btn-secondary btnhover" tabindex="-1" role="button" aria-disabled="true">V O L V E R</a>
+                                {% if isMember and not controller.hasLoan(book) %}
+                                    <form id="formLoan" action="{{ asset('BookDetail') ~ '?code=' ~ book.id }}" method="post">
+                                        <input name="action" type="hidden" value="new-loan">
+                                        <input name="member_id" type="hidden" value="{{ controller.member.id }}">
+                                        <input name="book_id" type="hidden" value="{{ book.id }}">
+                                        <button name="submit" type="submit" value="submit" class="btn w-100 btn-primary btnhover">R E S E R V A R</button>
+                                    </form>
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="dz-content">
                             <div class="dz-header">
@@ -90,7 +104,7 @@
         </div>
     </section>
 
-    <!-- comment lists -->
+    <!-- rating lists -->
     <section class="content-inner p-t20 p-b20">
         <div class="container">
             <div class="row justify-content-center">
@@ -104,8 +118,8 @@
                         {% for item in valorations %}
                             {{ comment(controller,
                                 item.member.name,
-                                item.rating.valoration,
-                                item.rating.rating_date ~ '  ' ~ item.rating.rating_time
+                                item.rating.valoration|raw,
+                                item.rating.rating_date|date("d-m-Y") ~ '  ' ~ item.rating.rating_time
                             ) }}
                         {% endfor %}
                     </div>
@@ -114,7 +128,8 @@
         </div>
     </section>
 
-    {% if controller.member is not empty and controller.member.primaryColumnValue() is not empty %}
+    {% if isMember %}
+    <span id="comment"></span>
     <!-- comment form -->
     <section class="content-inner p-t40 border-bottom bg-grey">
         <div class="container">
@@ -131,16 +146,23 @@
 
                     <!-- form -->
                     <div class="contact-area1">
-                        <form id="formComment" action="{{ asset('BookDetail') }}" class="form-floating tab-pane active col-12" method="post">
-                            <input name="action" type="hidden" class="form-control" value="comment">
+                        <form id="formComment" action="#comment" class="form-floating tab-pane active col-12" method="post">
+                            <input name="action" type="hidden" value="comment">
+                            <input name="member_id" type="hidden" value="{{ controller.member.id }}">
+                            <input name="book_id" type="hidden" value="{{ book.id }}">
                             <div class="shop-bx shop-profile">
                                 <div class="shop-bx-title clearfix">
                                     <h3>Comparte tu opinión</h3>
                                 </div>
                                 <p>El correo electrónico debe coincidir con el correo de su perfil.</p>
 
-                                <div class="form-floating mb-3">
-                                    {{ formInput(controller, 'email', 'email', 'Correo electrónico', formData.email, true) }}
+                                <div class="row g-2">
+                                    <div class="col-md-8">
+                                        {{ formInput(controller, 'email', 'email', 'Correo electrónico', formData.email, true) }}
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        {{ formRating(controller, 'rating', formData.rating) }}
+                                    </div>
                                 </div>
 
                                 <div class="form-floating mb-3">
