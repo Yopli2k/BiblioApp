@@ -32,5 +32,11 @@
         <column name="devolucion" title="devolución" numcolumns="2" order="140">
             <widget type="date" fieldname="return_date" />
         </column>
+        <column name="entregado" numcolumns="2" order="150">
+            <widget type="select" fieldname="collected" required="true">
+                <values title="No">0</values>
+                <values title="Sí">1</values>
+            </widget>
+        </column>
     </columns>
 </view>

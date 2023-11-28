@@ -1,0 +1,106 @@
+{% extends "Master/FrontTemplate.html.twig" %}
+
+{% block meta %}
+    {{ parent() }}
+    <meta name="author" content="BiblioApp" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Reservas del Miembro"/>
+    <meta name="keywords" content="reserva, miembro, biblioteca, alquiler, libros" />
+    <meta property="og:title" content="Reservas del Miembro"/>
+    <meta property="og:description" content="Reservas del miembro"/>
+    <meta property="og:image" content="{{ asset('Assets/Images/biblio-card.png') }}"/>
+
+    <title>Mis reservas</title>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .banner { background-image: url(/Assets/Images/background/about.jpg); }
+    </style>
+{% endblock %}
+
+{% block header %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    {% from 'Macro/Forms.html.twig' import formInput %}
+    {% from 'Macro/Utils.html.twig' import message, pageBanner %}
+    {% set member = controller.member %}
+
+    <!--banner-->
+    {{ pageBanner(controller) }}
+
+    <!--main data-->
+    <section class="content-inner border-bottom bg-grey">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 m-b40">
+                    <!--message-->
+                    <div class="row">
+                        <div class="col-12">
+                            {{ message(controller, 'info', 'success', false) }}
+                            {{ message(controller, 'warning', 'warning', false) }}
+                            {{ message(controller, 'error', 'danger', false) }}
+                        </div>
+                    </div>
+                    <!--Loan table-->
+                    <div class="col-lg-12 m-b40">
+                        <div class="table-responsive">
+                            <table class="table check-tbl table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">Libro</th>
+                                    <th>Título</th>
+                                    <th class="text-center">Reserva</th>
+                                    <th class="text-center">Fin Reserva</th>
+                                    <th class="text-center">Devolución</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in controller.getLoans() %}
+                                        {% set isLoan = item.loan.isLoan() %}
+                                        {% set returnClass = isLoan ? 'text-center text-danger' : 'text-center' %}
+                                        {% set returnText = isLoan ? 'Pendiente' : item.loan.return_date|date('d-m-Y') %}
+                                        <tr>
+                                            <td class="product-item-img"><img src="{{ controller.getUrlBookImage(item.book) }}" alt="{{ item.book.name }}"></td>
+                                            <td class="">{{ item.book.name }}</td>
+                                            <td class="text-center">{{ item.loan.loan_date|date('d-m-Y') }}</td>
+                                            <td class="text-center">{{ item.loan.loan_date|date_modify("+1 month")|date("d-m-Y") }}</td>
+                                            <td class="{{ returnClass }}">{{ returnText }}</td>
+                                            <td class="text-end">
+                                                {% if item.loan.isCollected() %}
+                                                    Entregado
+                                                {% else %}
+                                                    <form id="formLoan" action="{{ asset('MemberLoan') }}" method="post">
+                                                        <input name="action" type="hidden" value="delete-loan">
+                                                        <input name="member_id" type="hidden" value="{{ controller.member.id }}">
+                                                        <input name="book_id" type="hidden" value="{{ item.book.id }}">
+                                                        <input name="loan_id" type="hidden" value="{{ item.loan.id }}">
+                                                        <button name="submit" type="submit" value="submit" class="btn btn-danger btnhover"><i class="fas fa-trash-alt"></i></button>
+                                                    </form>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="/index.php" class="btn btn-secondary btnhover m-t10 w-100" tabindex="-1" role="button" aria-disabled="true">V O L V E R</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

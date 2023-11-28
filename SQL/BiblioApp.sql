@@ -250,6 +250,7 @@ CREATE UNIQUE INDEX books_categories_idx_1 ON books_categories (book_id, categor
  */
 CREATE TABLE loans (
     book_id int NOT NULL,
+    collected bool NOT NULL DEFAULT false,
     id int NOT NULL AUTO_INCREMENT,
     loan_date date NOT NULL,
     member_id int NOT NULL,

@@ -35,6 +35,13 @@ class Loan extends AppModel
     public ?int $book_id;
 
     /**
+     * Indicates if the book has been collected by the member.
+     *
+     * @var bool
+     */
+    public bool $collected;
+
+    /**
      * Primary Key.
      *
      * @var int|null
@@ -68,10 +75,47 @@ class Loan extends AppModel
     public function clear(): void
     {
         $this->book_id = null;
+        $this->collected = false;
         $this->id = null;
         $this->member_id = null;
         $this->loan_date = date('Y-m-d');
         $this->return_date = null;
+    }
+
+    /**
+     * Returns the book loan.
+     *
+     * @return Book
+     */
+    public function getBook(): Book
+    {
+        $book = new Book();
+        $book->loadFromCode($this->book_id);
+        return $book;
+    }
+
+    /**
+     * Indicates if the book has been collected by the member.
+     * If the idbook parameter is empty, it checks into current loan.
+     *
+     * @param int $idbook
+     * @return bool
+     */
+    public function isCollected(int $idbook = 0): bool
+    {
+        if (empty($idbook)) {
+            return (false === $this->isLoan()) || $this->collected;
+        }
+
+        $where = [
+            new DataBaseWhere('book_id', $idbook),
+            new DataBaseWhere('return_date', null, 'IS'),
+        ];
+        $loan = new Loan();
+        if ($loan->loadFromCode('', $where)) {
+            return $loan->collected;
+        }
+        return true;
     }
 
     /**
@@ -103,6 +147,7 @@ class Loan extends AppModel
     public function loadFromData(array $data = []): void
     {
         $this->book_id = (int)$data['book_id'] ?? null;
+        $this->collected = (bool)$data['collected'] ?? true;
         $this->id = (int)$data['id'] ?? null;
         $this->member_id = (int)$data['member_id'] ?? null;
         $this->loan_date = $data['loan_date'] ?? date('Y-m-d');
@@ -173,9 +218,10 @@ class Loan extends AppModel
     protected function insert(): bool
     {
         $sql = 'INSERT INTO ' . static::tableName()
-            . ' (book_id, member_id, loan_date, return_date)'
+            . ' (book_id, collected, member_id, loan_date, return_date)'
             . ' VALUES ('
             . $this->book_id . ','
+            . self::$dataBase->var2str($this->collected) . ','
             . $this->member_id . ','
             . self::$dataBase->var2str($this->loan_date) . ','
             . self::$dataBase->var2str($this->return_date)
@@ -202,6 +248,7 @@ class Loan extends AppModel
     {
         $sql = 'UPDATE ' . static::tableName() . ' SET '
             . 'book_id = ' . $this->book_id . ','
+            . 'collected = ' . self::$dataBase->var2str($this->collected) . ','
             . 'member_id = ' . $this->member_id . ','
             . 'loan_date = ' . self::$dataBase->var2str($this->loan_date) . ','
             . 'return_date = ' . self::$dataBase->var2str($this->return_date)
