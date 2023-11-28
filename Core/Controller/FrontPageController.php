@@ -16,7 +16,7 @@
 namespace BiblioApp\Core\Controller;
 
 use BiblioApp\Core\App\AppCookies;
-use BiblioApp\Model\Category;
+use BiblioApp\Core\Tools\CodeModel;
 use BiblioApp\Model\Member;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -55,8 +55,9 @@ abstract class FrontPageController extends PageController
      */
     public function categoryList(): array
     {
-        $categories = new Category();
-        return $categories->select([]);
+        return CodeModel::all(
+            'categories', 'id', 'name', false
+        );
     }
 
     /**
@@ -77,7 +78,43 @@ abstract class FrontPageController extends PageController
         if (false === empty($this->member)) {
             $this->multiRequestProtection->addSeed($this->member->primaryColumnValue());
         }
+
+        // Get action and execute if not empty
+        $action = $this->request->request->get('action', $this->request->query->get('action', ''));
+        if ($action === 'autocomplete') {
+            $this->setTemplate(false);
+            $results = $this->autocompleteAction();
+            $this->response->setContent(json_encode($results));
+            return false;
+        }
         return true;
+    }
+
+    /**
+     * Run the autocomplete action.
+     * Returns a JSON string for the searched values.
+     *
+     * @return array
+     */
+    private function autocompleteAction(): array
+    {
+        $data = $this->request->request->all();
+        $categoryWhere = empty($data['navCategory'] ?? '') ? '' : ' AND categories.category_id = ' . $data['navCategory'];
+        $query = 'LOWER(\'%' . $data['navQuery'] . '%\')';
+        $sql = 'SELECT books.id, books.name, books.author'
+            . ' FROM books'
+            . ' INNER JOIN books_categories categories ON categories.book_id = books.id' . $categoryWhere
+            . ' WHERE (LOWER(books.name) LIKE ' . $query . ' OR LOWER(books.author) LIKE ' . $query . ')'
+            . ' ORDER BY books.name ASC';
+
+        $result = [];
+        foreach ($this->dataBase->select($sql) as $row) {
+            $result[] = [ 'key' => $row['id'], 'value' => $row['name'] . ' (' . $row['author'] . ')' ];
+        }
+
+        return empty($result)
+            ? [[ 'key' => null, 'value' => 'No se encontraron resultados' ]]
+            : $result;
     }
 
     /**

@@ -17,8 +17,8 @@ namespace BiblioApp\Core\ExtendedController;
 
 use BiblioApp\Core\Controller\BackPageController;
 use BiblioApp\Core\DataBase\DataBaseWhere;
+use BiblioApp\Core\Tools\CodeModel;
 use BiblioApp\Core\Tools\Tools;
-use BiblioApp\Model\CodeModel;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -16,7 +16,7 @@
 namespace BiblioApp\Core\ListFilter;
 
 use BiblioApp\Core\DataBase\DataBaseWhere;
-use BiblioApp\Model\CodeModel;
+use BiblioApp\Core\Tools\CodeModel;
 
 /**
  * Description of SelectFilter

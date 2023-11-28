@@ -15,7 +15,7 @@
  */
 namespace BiblioApp\Core\Widget;
 
-use BiblioApp\Model\CodeModel;
+use BiblioApp\Core\Tools\CodeModel;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

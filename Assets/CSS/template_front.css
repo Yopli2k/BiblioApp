@@ -16,3 +16,9 @@
 .home-form-check-inline {
     width: 22% !important;
 }
+
+.ui-state-hover,
+.ui-state-active,
+.ui-state-focus {
+    background-color: var(--secondary) !important;
+}
