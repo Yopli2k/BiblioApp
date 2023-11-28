@@ -68,10 +68,10 @@
                                     <div class="header-item-search">
                                         <div class="input-group search-input">
                                             <select id="navCategory" name="navCategory" class="default-select">
-                                                <option>Categorías</option>
-                                                <option>Photography </option>
-                                                <option>Arts</option>
-                                                <option>Adventure</option>
+                                                <option value="">Categorías</option>
+                                                {% for category in controller.categoryList() %}
+                                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                                {% endfor %}
                                             </select>
                                             <input id="navQuery" name="navQuery" type="text" class="form-control" aria-label="Búsqueda de libros" placeholder="Introduce el título del libro o autor">
                                             <button class="btn" type="button"><i class="flaticon-loupe"></i></button>

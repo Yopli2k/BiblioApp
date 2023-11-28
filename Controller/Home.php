@@ -19,8 +19,6 @@ use BiblioApp\Core\Controller\FrontPageController;
 use BiblioApp\Core\DataBase\DataBaseWhere;
 use BiblioApp\Core\Tools\Tools;
 use BiblioApp\Model\Book;
-use BiblioApp\Model\BookCategory;
-use BiblioApp\Model\Category;
 use BiblioApp\Controller\Base\BookTrait;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -117,17 +115,6 @@ class Home extends FrontPageController
         return $this->bookCount > 0
             ? $books->select($where, $orderBy, $this->offset, $this->limit)
             : [];
-    }
-
-    /**
-     * Return a list of all categories.
-     *
-     * @return array
-     */
-    public function getCategories(): array
-    {
-        $categories = new Category();
-        return $categories->select([]);
     }
 
     /**

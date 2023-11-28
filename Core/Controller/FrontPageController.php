@@ -16,6 +16,7 @@
 namespace BiblioApp\Core\Controller;
 
 use BiblioApp\Core\App\AppCookies;
+use BiblioApp\Model\Category;
 use BiblioApp\Model\Member;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,6 +46,17 @@ abstract class FrontPageController extends PageController
     {
         parent::__construct($className, $uri);
         $this->member = null;
+    }
+
+    /**
+     * Return a list of all categories.
+     *
+     * @return array
+     */
+    public function categoryList(): array
+    {
+        $categories = new Category();
+        return $categories->select([]);
     }
 
     /**
