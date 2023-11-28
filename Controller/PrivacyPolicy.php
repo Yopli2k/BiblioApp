@@ -16,10 +16,34 @@
 namespace BiblioApp\Controller;
 
 use BiblioApp\Core\Controller\FrontPageController;
+use Symfony\Component\HttpFoundation\Response;
 
 class PrivacyPolicy extends FrontPageController
 {
 
+    /**
+     * Runs the controller's logic.
+     * if return false, the controller break the execution.
+     * Disable the cookie alert.
+     *
+     * @param Response $response
+     * @return bool
+     */
+    public function exec(Response &$response): bool
+    {
+        if (false === parent::exec($response)) {
+            return false;
+        }
+
+        $this->acceptCookie = true;
+        return true;
+    }
+
+    /**
+     * Return the basic data for this page.
+     *
+     * @return array
+     */
     public function getPageData(): array
     {
         $data = parent::getPageData();

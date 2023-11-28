@@ -33,6 +33,8 @@ abstract class FrontPageController extends PageController
      */
     public ?Member $member;
 
+    public ?string $acceptCookie;
+
     /**
      * Initialize all objects and properties.
      *
@@ -58,6 +60,7 @@ abstract class FrontPageController extends PageController
             return false;
         }
 
+        $this->acceptCookie = AppCookies::getCookie($this->request, 'biblioAcceptCookie');
         $this->member = $this->cookieAuth();
         if (false === empty($this->member)) {
             $this->multiRequestProtection->addSeed($this->member->primaryColumnValue());
@@ -94,6 +97,7 @@ abstract class FrontPageController extends PageController
             return $member;
         }
 
+        $this->ipWarning();
         AppCookies::clearCookie($this->response, 'biblioMemberID');
         AppCookies::clearCookie($this->response, 'biblioMemberLogKey');
         return null;

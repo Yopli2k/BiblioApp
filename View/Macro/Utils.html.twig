@@ -16,6 +16,52 @@
 #}
 
 {#
+    Add a cookie alert to a page.
+
+    @param controller The controller object.
+#}
+{% macro cookieAlert(controller) %}
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="staticBackdropLabel">Aviso Legal</h2>
+                </div>
+                <div class="modal-body">
+                    <h3>¡Bienvenido a BiblioApp!</h3>
+                    <p>Este sitio web utiliza cookies para mejorar tu experiencia de usuario y proporcionar contenido personalizado. <strong>Al hacer clic en "Aceptar", aceptas el uso de todas las cookies</strong>. Puedes personalizar tu configuración de cookies en cualquier momento desde la configuración del navegador.</p>
+                    <p>Algunas cookies son esenciales para el funcionamiento del sitio, mientras que otras nos ayudan a mejorar tu experiencia al proporcionar información sobre cómo se utiliza el sitio. Para obtener más detalles sobre las cookies que utilizamos, consulta nuestra Política de Cookies.</p>
+                    <p><strong>¡Gracias por elegir BiblioApp y disfruta de tu experiencia de lectura!</strong></p>
+                    <br>
+                    <div class="text-center">
+                        <a href="LegalNotice" class="btn btn-outline-secondary btnhover">Aviso Legal</a>
+                        <a href="PrivacyPolicy" class="btn btn-outline-secondary btnhover">Política Privacidad</a>
+                        <a href="CookiesPolicy" class="btn btn-outline-secondary btnhover">Política Cookies</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="acceptCookies();" class="btn btn-primary btnhover w-100">A C E P T O</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function acceptCookies() {
+            const cookieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('staticBackdrop'));
+            cookieModal.hide();
+            document.cookie = "biblioAcceptCookie=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/";
+        }
+
+        window.onload = function () {
+            const cookieModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('staticBackdrop'));
+            cookieModal.show();
+        }
+    </script>
+{% endmacro %}
+
+{#
     Add a collapse card with a title and body to a page.
     The card can be expanded and collapsed with a icon into header.
 
