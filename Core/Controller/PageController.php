@@ -15,9 +15,11 @@
  */
 namespace BiblioApp\Core\Controller;
 
+use BiblioApp\Core\App\IPFilter;
 use BiblioApp\Core\App\Message;
 use BiblioApp\Core\App\MultiRequestProtection;
 use BiblioApp\Core\DataBase\DataBase;
+use BiblioApp\Core\Tools\Tools;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -193,6 +195,15 @@ abstract class PageController
     protected function getClassName(): string
     {
         return $this->className;
+    }
+
+    /**
+     * Add or increase the attempt counter of the current client IP address.
+     */
+    protected function ipWarning(): void
+    {
+        $ipFilter = new IPFilter();
+        $ipFilter->setAttempt(Tools::getClientIp());
     }
 
     /**

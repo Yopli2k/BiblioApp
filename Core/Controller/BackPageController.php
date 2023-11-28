@@ -100,6 +100,7 @@ abstract class BackPageController extends PageController
             return $user;
         }
 
+        $this->ipWarning();
         AppCookies::clearCookie($this->response, 'biblioUserName');
         AppCookies::clearCookie($this->response, 'biblioUserLogKey');
         return null;

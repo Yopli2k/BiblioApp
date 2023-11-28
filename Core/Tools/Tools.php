@@ -60,6 +60,22 @@ class Tools
     }
 
     /**
+     * Returns the client IP.
+     *
+     * @return string
+     */
+    public static function getClientIp(): string
+    {
+        foreach (['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'] as $field) {
+            if (isset($_SERVER[$field])) {
+                return (string)$_SERVER[$field];
+            }
+        }
+
+        return '::1';
+    }
+
+    /**
      * Return a list of page items for pagination.
      *
      * @return array

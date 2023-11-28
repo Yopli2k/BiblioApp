@@ -48,6 +48,25 @@ final class Message
     }
 
     /**
+     * Adds a message to the list.
+     *
+     * @param string $level
+     * @param string $message
+     */
+    public static function addMessage(string $level, string $message): void
+    {
+        switch ($level) {
+            case 'error':
+            case 'warning':
+                self::$data[$level][] = $message;
+                break;
+
+            default:
+                self::$data['info'][] = $message;
+        }
+    }
+
+    /**
      * Clears all message.
      *
      * @param string $level

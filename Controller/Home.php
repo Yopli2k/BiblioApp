@@ -102,12 +102,12 @@ class Home extends FrontPageController
      */
     public function getBookList(): array
     {
-        if (empty($this->filterCategory)){
-            return [];
+        $where = [];
+        if (false === empty($this->filterCategory)){
+            $book_ids = $this->getBookIds();
+            $where = [ new DataBaseWhere('id', implode(',', $book_ids), 'IN') ];
         }
 
-        $book_ids = $this->getBookIds();
-        $where = [ new DataBaseWhere('id', implode(',', $book_ids), 'IN') ];
         $orderBy = $this->filterOrderBy === self::ORDERBY_AUTHOR
             ? ['author' => 'ASC']
             : ['id' => 'DESC'];

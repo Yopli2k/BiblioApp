@@ -68,6 +68,7 @@ class LoginMember extends FrontPageController
                     $this->redirect('/index.php');
                     return false;
                 }
+                $this->ipWarning();
                 $this->message->error('Usuario o contraseña incorrectos.');
                 break;
 

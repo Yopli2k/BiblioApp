@@ -73,6 +73,7 @@ class LoginUser extends FrontPageController
                     $this->redirect('ListUser');
                     return false;
                 }
+                $this->ipWarning();
                 $this->message->error('Usuario o contraseña incorrectos.');
                 break;
 

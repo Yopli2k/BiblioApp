@@ -28,7 +28,7 @@
 {% block body %}
     {{ parent() }}
     {% from 'Macro/Forms.html.twig' import formInput, recaptcha %}
-    {% from 'Macro/Utils.html.twig' import pageBanner %}
+    {% from 'Macro/Utils.html.twig' import message, pageBanner %}
 
     <!--banner-->
     {{ pageBanner(controller) }}
@@ -37,6 +37,12 @@
     <section class="content-inner border-bottom">
         <div class="container">
             <div class="row">
+                <!-- Messages -->
+                <div class="col-12">
+                    {{ message(controller, 'info', 'success', false) }}
+                    {{ message(controller, 'warning', 'warning', false) }}
+                    {{ message(controller, 'error', 'danger', false) }}
+                </div>
                 <!-- New member -->
                 <div class="col-lg-6 col-md-6 mb-4">
                     <div class="login-area">

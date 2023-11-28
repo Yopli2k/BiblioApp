@@ -15,9 +15,10 @@
  */
 namespace BiblioApp\Core\App;
 
+use BiblioApp\Core\DataBase\DataBase;
+use BiblioApp\Core\Tools\Tools;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use BiblioApp\Core\DataBase\DataBase;
 
 /**
  * Class used for encapsulate common parts of code for the normal BiblioApp execution.
@@ -89,7 +90,7 @@ abstract class AppBase
     /**
      * Save log and disconnects from the database.
      */
-    public function close()
+    public function close(): void
     {
         $this->dataBase->close();
     }
@@ -97,7 +98,7 @@ abstract class AppBase
     /**
      * Returns the data into the standard output.
      */
-    public function render()
+    public function render(): void
     {
         $this->response->send();
     }
@@ -114,13 +115,12 @@ abstract class AppBase
             return false;
         }
 
-        /* TODO: implementar IPBanned
         if ($this->isIPBanned()) {
-            ToolBox::i18nLog()->critical('ip-banned');
+            echo '<h1>Ha sobrepasado el número de intentos permitidos</h1>';
+            echo '<h3>Por motivos de seguridad se ha bloqueado temporalmente el acceso desde su IP.</h3>';
             $this->die(Response::HTTP_TOO_MANY_REQUESTS);
             return false;
         }
-        */
 
         return true;
     }
@@ -135,5 +135,16 @@ abstract class AppBase
     {
         $params = explode('/', substr($this->uri, 1));
         return $params[$num] ?? '';
+    }
+
+    /**
+     * Returns true if the client IP has been banned.
+     *
+     * @return bool
+     */
+    protected function isIPBanned(): bool
+    {
+        $ipFilter = new IPFilter();
+        return $ipFilter->isBanned(Tools::getClientIp());
     }
 }
