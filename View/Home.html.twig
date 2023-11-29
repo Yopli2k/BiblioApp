@@ -204,11 +204,11 @@
     <form id="filterCategory" action="#booklist" method="post">
         <input name="action" type="hidden" class="form-control" value="filter-category">
         {% for category in controller.categoryList() %}
-            {% set checkID = 'categoryCheck_' ~ category.id %}
-            {% set selected = category.id in controller.filterCategory ? ' checked' : '' %}
+            {% set checkID = 'categoryCheck_' ~ category.code %}
+            {% set selected = category.code in controller.filterCategory ? ' checked' : '' %}
             <div class="form-check form-check-inline home-form-check-inline">
-                <input class="form-check-input" type="checkbox" name="category[]" value="{{ category.id }}" id="{{ checkID }}" {{ selected }}>
-                <label class="form-check-label" for="{{ checkID }}">{{ category.name }}</label>
+                <input class="form-check-input" type="checkbox" name="category[]" value="{{ category.code }}" id="{{ checkID }}" {{ selected }}>
+                <label class="form-check-label" for="{{ checkID }}">{{ category.description }}</label>
             </div>
         {% endfor %}
         <hr>
