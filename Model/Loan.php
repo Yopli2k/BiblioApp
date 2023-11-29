@@ -70,6 +70,16 @@ class Loan extends AppModel
     public ?string $return_date;
 
     /**
+     * Number of days to return the book.
+     * Calculated from the loan date.
+     * It is used to show the number of days remaining to return the book.
+     * It is not stored in the database.
+     *
+     * @var int|null
+     */
+    public ?int $return_days;
+
+    /**
      * Reset the values of all model properties.
      */
     public function clear(): void
@@ -80,6 +90,9 @@ class Loan extends AppModel
         $this->member_id = null;
         $this->loan_date = date('Y-m-d');
         $this->return_date = null;
+
+        $endDate = date('d-m-Y', strtotime($this->loan_date . '+ 1 month'));
+        $this->return_days = DateTools::daysBetweenDates(date('d-m-Y'), $endDate);
     }
 
     /**
@@ -152,6 +165,12 @@ class Loan extends AppModel
         $this->member_id = (int)$data['member_id'] ?? null;
         $this->loan_date = $data['loan_date'] ?? date('Y-m-d');
         $this->return_date = $data['return_date'] ?? null;
+
+        $this->return_days = null;
+        if (empty($this->return_date)) {
+            $endDate = date("d-m-Y", strtotime($this->loan_date . "+ 1 month"));
+            $this->return_days = DateTools::daysBetweenDates(date('d-m-Y'), $endDate);
+        }
     }
 
     /**

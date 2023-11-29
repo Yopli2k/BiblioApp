@@ -32,13 +32,22 @@
         <column name="fecha" display="center" order="130">
             <widget type="date" fieldname="loan_date" />
         </column>
+        <column name="entregado" display="center" order="130">
+            <widget type="checkbox" fieldname="collected" />
+        </column>
         <column name="devolucion" title="devolución" display="center" order="140">
             <widget type="date" fieldname="return_date" />
         </column>
+        <column name="dias" title="días" display="center" order="150">
+            <widget type="number" fieldname="return_days" />
+        </column>
     </columns>
     <rows>
-        <row type="status">
-            <option color="warning" title="Sin devolver" fieldname="return_date">null:</option>
+        <row type="status" fieldname="return_days">
+            <option color="white" title="Devuelto">null:</option>
+            <option color="success" title="En tiempo">gte:0</option>
+            <option color="danger" title="Acción Legal">lte:-25</option>
+            <option color="warning" title="Reclamar">lt:0</option>
         </row>
     </rows>
 </view>

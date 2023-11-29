@@ -101,7 +101,7 @@ abstract class FrontPageController extends PageController
         $data = $this->request->request->all();
         $categoryWhere = empty($data['navCategory'] ?? '') ? '' : ' AND categories.category_id = ' . $data['navCategory'];
         $query = 'LOWER(\'%' . $data['navQuery'] . '%\')';
-        $sql = 'SELECT books.id, books.name, books.author'
+        $sql = 'SELECT DISTINCT books.id, books.name, books.author'
             . ' FROM books'
             . ' INNER JOIN books_categories categories ON categories.book_id = books.id' . $categoryWhere
             . ' WHERE (LOWER(books.name) LIKE ' . $query . ' OR LOWER(books.author) LIKE ' . $query . ')'

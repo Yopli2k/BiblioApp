@@ -67,11 +67,11 @@ class VisualItem
      */
     protected function colorToClass(string $color, string $prefix): string
     {
-        $colors = ['danger', 'dark', 'info', 'light', 'outline-danger', 'outline-dark', 'outline-info', 'outline-light', 'outline-primary', 'outline-secondary', 'outline-success', 'outline-warning', 'primary', 'secondary', 'success', 'warning'];
+    $colors = ['danger', 'dark', 'info', 'light', 'outline-danger', 'outline-dark', 'outline-info', 'outline-light', 'outline-primary', 'outline-secondary', 'outline-success', 'outline-warning', 'primary', 'secondary', 'success', 'warning'];
         if (in_array($color, $colors)) {
             return $prefix . $color;
         }
-        return '';
+        return $color;
     }
 
     /**

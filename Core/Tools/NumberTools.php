@@ -33,11 +33,11 @@ class NumberTools
     public static function number(float $number, ?int $decimals = null): string
     {
         if ($decimals === null) {
-            $decimals = Tools::settings('default', 'decimals');
+            $decimals = 0;
         }
 
-        $decimalSeparator = Tools::settings('default', 'decimal_separator');
-        $thousandsSeparator = Tools::settings('default', 'thousands_separator');
+        $decimalSeparator = ',';
+        $thousandsSeparator = '.';
         return number_format($number, $decimals, $decimalSeparator, $thousandsSeparator);
     }
 }

@@ -94,8 +94,7 @@
         {% endif %}
         {# -- Table -- #}
         <div class="table-responsive">
-            {% set tableClass = controller.toolBox().appSettings().get('default', 'tablesize') == 'small' ? 'table-sm' : '' %}
-            <table class="table table-hover mb-0 {{ tableClass }}">
+            <table class="table table-hover mb-0 table-sm">
                 <thead>
                 <tr>
                     {% if (currentView.cursor | length > 0) and (currentView.settings.checkBoxes or currentView.settings.clickable) %}

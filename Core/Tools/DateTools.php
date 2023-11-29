@@ -69,4 +69,10 @@ class DateTools
     {
         return date(self::DATETIME_STYLE, $time);
     }
+
+    public static function daysBetweenDates(string $start, string $end): int
+    {
+        $result = (strtotime($end) - strtotime($start)) / 86400;
+        return floor($result);
+    }
 }
