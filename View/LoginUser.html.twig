@@ -54,8 +54,7 @@
                             {{ formInput(controller, 'text', 'biblioUserName', 'Usuario', '', true) }}
                             {{ formInput(controller, 'password', 'biblioPassword', 'Contraseña', '', true) }}
                             <div class="mb-3">
-                                <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
-                                <!-- <input class="form-control d-none" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->
+                                {{ recaptcha(controller) }}
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-primary btnhover me-2">Iniciar sesión</button>

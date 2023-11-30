@@ -92,22 +92,7 @@
                                 </label>
                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <p class="border border-3 mb-3 p-2">
-                                        La persona responsable del archivo, utilizará esta información para responder a las
-                                        solicitudes de contacto. Los datos se guardarán en nuestros servidores
-                                        dentro de la UE. Puede acceder, rectificar o eliminarlos, enviando un
-                                        mensaje utilizando este mismo formulario, indicando en él la información de contacto
-                                        original, así como la acción deseada.
-                                    </p>
-                                </div>
-
-                                <div class="col-lg-4 mb-3">
-                                    <div class="g-recaptcha" data-sitekey="<!-- Put reCaptcha Site Key -->" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
-                                    <!-- <input class="form-control d-none" id="recaptcha" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> -->
-                                </div>
-                            </div>
+                            {{ formRGPD(controller) }}
 
                             <div>
                                 <button name="submit" type="submit" value="submit" class="btn w-100 btn-primary btnhover">A C E P T A R</button>
