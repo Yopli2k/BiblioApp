@@ -54,7 +54,7 @@
                             {{ formInput(controller, 'text', 'biblioUserName', 'Usuario', '', true) }}
                             {{ formInput(controller, 'password', 'biblioPassword', 'Contraseña', '', true) }}
                             <div class="mb-3">
-                                {{ recaptcha(controller) }}
+                                {{ recaptcha(controller, 'recaptcha_login') }}
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-primary btnhover me-2">Iniciar sesión</button>
@@ -69,7 +69,7 @@
                             {{ formInput(controller, 'password', 'new_passwd', 'Nueva Contraseña', '', true) }}
                             {{ formInput(controller, 'password', 'confirm_passwd', 'Confirmar Contraseña', '', true) }}
                             <div class="mb-3">
-                                {{ recaptcha(controller) }}
+                                {{ recaptcha(controller, 'recaptcha_new_passwd') }}
                             </div>
                             <div class="text-left">
                                 <a class="btn btn-outline-secondary btnhover m-r10" data-bs-toggle="tab" href="#formLogin">Volver</a>

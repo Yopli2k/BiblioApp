@@ -54,7 +54,7 @@
 {% endmacro %}
 
 
-{% macro formRGPD(controller) %}
+{% macro formRGPD(controller, recaptcha_id) %}
     <div class="row">
         <div class="col-lg-8">
             <p class="border border-3 mb-3 p-2">
@@ -67,12 +67,13 @@
         </div>
 
         <div class="col-lg-4 mb-3">
-            {{ _self.recaptcha(controller) }}
+            {{ _self.recaptcha(controller, recaptcha_id) }}
         </div>
     </div>
 {% endmacro %}
 
-{% macro recaptcha(controller) %}
-    <div class="g-recaptcha" data-sitekey="6Le_ayEpAAAAAHTUNTnMcJ6dCKDxm-DCIgrQsrgf" data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
-    <input class="form-control d-none" id="recaptcha" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha">
+{% macro recaptcha(controller, recaptcha_id) %}
+    {# data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback" #}
+    <div class="g-recaptcha" data-sitekey="6Le_ayEpAAAAAHTUNTnMcJ6dCKDxm-DCIgrQsrgf"></div>
+    {# <input class="form-control d-none" id="{{ recaptcha_id }}" name="recaptcha" data-recaptcha="true" required data-error="Por favor completa el Captcha"> #}
 {% endmacro %}

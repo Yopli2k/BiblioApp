@@ -64,7 +64,7 @@
                                 {{ formInput(controller, 'email', 'email', 'Correo electrónico', '', true) }}
                                 {{ formInput(controller, 'password', 'password', 'Contraseña', '', true) }}
                                 <div class="mb-3">
-                                    {{ recaptcha(controller) }}
+                                    {{ recaptcha(controller, 'recaptcha_login_member') }}
                                 </div>
                                 <div>
                                     <button type="submit" class="btn btn-primary btnhover me-2">conectar</button>
@@ -77,7 +77,7 @@
                                 <input name="action" type="hidden" value="change-password">
                                 {{ formInput(controller, 'email', 'email2', 'Correo electrónico', '', true) }}
                                 <div class="mb-3">
-                                    {{ recaptcha(controller) }}
+                                    {{ recaptcha(controller, 'recaptcha_recovery_password') }}
                                 </div>
                                 <div>
                                     <a class="btn btn-outline-secondary btnhover m-r10" data-bs-toggle="tab" href="#formLogin">Volver</a>
