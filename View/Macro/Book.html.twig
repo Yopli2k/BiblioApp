@@ -15,14 +15,29 @@
  */
 #}
 
-{% macro comment(controller, title, message, footer) %}
+{% macro comment(controller, item) %}
     <div class="card border-1 border-primary">
         <div class="card-body">
-            <h6 class="card-title text-secondary"><small>{{ title }}</small></h6>
-            <p class="card-text">{{ message }}</p>
+            <h6 class="card-title text-secondary"><small>{{ item.member.name }}</small></h6>
+            <p class="card-text">{{ item.rating.valoration|raw }}</p>
         </div>
         <div class="card-footer text-body-secondary">
-            <span class="small">{{ footer }}</span>
+            <div class="row">
+                <div class="col-9">
+                    <span class="small">{{ item.rating.rating_date|date("d-m-Y") ~ '  ' ~ item.rating.rating_time }}</span>
+                </div>
+                <div class="col-3">
+                    <div class="shop-item-rating">
+                        <ul class="dz-rating d-inline-flex">
+                            <li><i class="flaticon-star text-yellow"></i></li>
+                            <li><i class="flaticon-star {% if item.rating.rating > 1 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
+                            <li><i class="flaticon-star {% if item.rating.rating > 2 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
+                            <li><i class="flaticon-star {% if item.rating.rating > 3 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
+                            <li><i class="flaticon-star {% if item.rating.rating > 4 %}text-yellow{% else %}text-muted{% endif %}"></i></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endmacro %}

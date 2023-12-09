@@ -116,11 +116,7 @@
                         {% set count = valorations|length %}
                         <h4 class="comments-title">{{ count }} COMENTARIOS</h4>
                         {% for item in valorations %}
-                            {{ comment(controller,
-                                item.member.name,
-                                item.rating.valoration|raw,
-                                item.rating.rating_date|date("d-m-Y") ~ '  ' ~ item.rating.rating_time
-                            ) }}
+                            {{ comment(controller, item) }}
                         {% endfor %}
                     </div>
                 </div>
