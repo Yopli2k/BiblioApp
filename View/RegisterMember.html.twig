@@ -95,7 +95,7 @@
                             {{ formRGPD(controller) }}
 
                             <div>
-                                <button name="submit" type="submit" value="submit" class="btn w-100 btn-primary btnhover">A C E P T A R</button>
+                                <button id="buttonSubmit" type="submit" class="btn w-100 btn-primary btnhover" disabled>A C E P T A R</button>
                             </div>
                         </form>
                     </div>
@@ -111,5 +111,6 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('Assets/JS/Recaptcha.js') }}"></script>
     <script src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock %}

@@ -64,10 +64,10 @@
                                 {{ formInput(controller, 'email', 'email', 'Correo electrónico', '', true) }}
                                 {{ formInput(controller, 'password', 'password', 'Contraseña', '', true) }}
                                 <div class="mb-3">
-                                    {{ recaptcha(controller, 'verifyRecaptchaLogin', 'expiredRecaptchaLogin') }}
+                                    {{ recaptcha(controller, 'verifyRecaptchaSubmit', 'expiredRecaptchaSubmit') }}
                                 </div>
                                 <div>
-                                    <button id="loginSubmit" type="submit" class="btn btn-primary btnhover me-2" disabled>conectar</button>
+                                    <button id="buttonSubmit" type="submit" class="btn btn-primary btnhover me-2" disabled>conectar</button>
                                     <a data-bs-toggle="tab" href="#formPassword" class="m-l5"><i class="fas fa-unlock-alt"></i> Olvidé la contraseña</a>
                                 </div>
                             </form>

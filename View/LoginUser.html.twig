@@ -54,10 +54,10 @@
                             {{ formInput(controller, 'text', 'biblioUserName', 'Usuario', '', true) }}
                             {{ formInput(controller, 'password', 'biblioPassword', 'Contraseña', '', true) }}
                             <div class="mb-3">
-                                {{ recaptcha(controller, 'verifyRecaptchaLogin', 'expiredRecaptchaLogin') }}
+                                {{ recaptcha(controller, 'verifyRecaptchaSubmit', 'expiredRecaptchaSubmit') }}
                             </div>
                             <div>
-                                <button id="loginSubmit" type="submit" class="btn btn-primary btnhover me-2" disabled>Iniciar sesión</button>
+                                <button id="buttonSubmit" type="submit" class="btn btn-primary btnhover me-2" disabled>Iniciar sesión</button>
                                 <a data-bs-toggle="tab" href="#formPassword" class="m-l5"><i class="fas fa-unlock-alt"></i> Olvidé la contraseña</a>
                             </div>
                         </form>

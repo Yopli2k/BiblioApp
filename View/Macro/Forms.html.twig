@@ -54,7 +54,7 @@
 {% endmacro %}
 
 
-{% macro formRGPD(controller, recaptcha_id) %}
+{% macro formRGPD(controller) %}
     <div class="row">
         <div class="col-lg-8">
             <p class="border border-3 mb-3 p-2">
@@ -67,7 +67,7 @@
         </div>
 
         <div class="col-lg-4 mb-3">
-            {{ _self.recaptcha(controller, recaptcha_id) }}
+            {{ _self.recaptcha(controller, 'verifyRecaptchaSubmit', 'expiredRecaptchaSubmit') }}
         </div>
     </div>
 {% endmacro %}

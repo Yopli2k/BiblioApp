@@ -12,18 +12,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-function expiredRecaptchaLogin() {
-    document.getElementById('loginSubmit').setAttribute('disabled', true);
+function expiredRecaptchaSubmit() {
+    document.getElementById('buttonSubmit').setAttribute('disabled', true);
 };
 
 function expiredRecaptchaPassword() {
-    document.getElementById('loginSubmit').setAttribute('disabled', true);
+    document.getElementById('passwordSubmit').setAttribute('disabled', true);
 };
 
 function verifyRecaptchaPassword() {
     document.getElementById('passwordSubmit').removeAttribute('disabled');
 };
 
-function verifyRecaptchaLogin() {
-    document.getElementById('loginSubmit').removeAttribute('disabled');
+function verifyRecaptchaSubmit() {
+    document.getElementById('buttonSubmit').removeAttribute('disabled');
 };
