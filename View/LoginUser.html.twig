@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-6 col-xl-4">
                 <div class="login-area">
                     <div class="tab-content nav">
                         <form id="formLogin" action="{{ asset('LoginUser') }}" class="form-floating tab-pane active col-12" method="POST">
@@ -54,10 +54,10 @@
                             {{ formInput(controller, 'text', 'biblioUserName', 'Usuario', '', true) }}
                             {{ formInput(controller, 'password', 'biblioPassword', 'Contraseña', '', true) }}
                             <div class="mb-3">
-                                {{ recaptcha(controller, 'recaptcha_login') }}
+                                {{ recaptcha(controller, 'verifyRecaptchaLogin', 'expiredRecaptchaLogin') }}
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-primary btnhover me-2">Iniciar sesión</button>
+                                <button id="loginSubmit" type="submit" class="btn btn-primary btnhover me-2" disabled>Iniciar sesión</button>
                                 <a data-bs-toggle="tab" href="#formPassword" class="m-l5"><i class="fas fa-unlock-alt"></i> Olvidé la contraseña</a>
                             </div>
                         </form>
@@ -69,11 +69,11 @@
                             {{ formInput(controller, 'password', 'new_passwd', 'Nueva Contraseña', '', true) }}
                             {{ formInput(controller, 'password', 'confirm_passwd', 'Confirmar Contraseña', '', true) }}
                             <div class="mb-3">
-                                {{ recaptcha(controller, 'recaptcha_new_passwd') }}
+                                {{ recaptcha(controller, 'verifyRecaptchaPassword', 'expiredRecaptchaPassword') }}
                             </div>
                             <div class="text-left">
                                 <a class="btn btn-outline-secondary btnhover m-r10" data-bs-toggle="tab" href="#formLogin">Volver</a>
-                                <button type="submit" class="btn btn-primary btnhover">Enviar</button>
+                                <button id="passwordSubmit" type="submit" class="btn btn-primary btnhover" disabled>Enviar</button>
                             </div>
                         </form>
                     </div>
@@ -85,5 +85,6 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('Assets/JS/Recaptcha.js') }}"></script>
     <script src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock %}
