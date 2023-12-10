@@ -146,6 +146,14 @@ class Rating extends AppModel
     public function test(): bool
     {
         $this->valoration = Tools::noHtml($this->valoration);
+        if (empty($this->rating) || $this->rating < 1) {
+            $this->rating = 1;
+        }
+
+        if ($this->rating > 5) {
+            $this->rating = 5;
+        }
+
         return parent::test();
     }
 
@@ -188,7 +196,7 @@ class Rating extends AppModel
      */
     protected function requiredFields(): array
     {
-        return ['book_id', 'member_id', 'rating', 'valoration'];
+        return ['book_id', 'member_id', 'valoration'];
     }
 
     /**
